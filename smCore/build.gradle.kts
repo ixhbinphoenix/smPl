@@ -5,7 +5,7 @@ plugins {
   id("com.github.johnrengelman.shadow") version "7.1.2"
 }
 
-group = "io.github.ixhbinphoenix"
+group = "me.ixhbinphoenix"
 version = "1.0-SNAPSHOT"
 
 repositories {

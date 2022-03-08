@@ -1,0 +1,10 @@
+#
+# https://help.github.com/articles/dealing-with-line-endings/
+#
+# All files should use lf
+*.sh eol=lf linguist-detectable=false
+* eol=lf
+
+# These are explicitly windows files and should use crlf
+*.bat           text eol=crlf linguist-detectable=false
+

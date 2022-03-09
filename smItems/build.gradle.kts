@@ -5,7 +5,7 @@ plugins {
     id("com.github.johnrengelman.shadow") version "7.1.2"
 }
 
-group = "me.ixhbinphoenix"
+group = "me.ixhbinphoenix.smPl"
 version = "1.0-SNAPSHOT"
 
 repositories {
@@ -17,11 +17,10 @@ repositories {
 
 dependencies {
     compileOnly("org.spigotmc:spigot-api:1.18.2-R0.1-SNAPSHOT")
+    // compileOnly(fileTree(mapOf("dir" to "../smCore/build/libs/", "include" to listOf("*.jar"))))
+    compileOnly(project(":smCore"))
 
     implementation(kotlin("stdlib"))
-
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.6.0")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
 }
 
 tasks.getByName<Test>("test") {

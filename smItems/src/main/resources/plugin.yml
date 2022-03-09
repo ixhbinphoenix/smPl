@@ -1,0 +1,6 @@
+main: me.ixhbinphoenix.smPl.smItems.Main
+name: smItems
+version: 0.0.1
+api-version: 1.18
+depend:
+  - smCore

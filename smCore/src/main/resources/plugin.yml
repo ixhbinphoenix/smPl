@@ -2,3 +2,16 @@ main: me.ixhbinphoenix.smPl.smCore.Main
 name: smCore
 version: 0.0.1
 api-version: 1.18
+commands:
+  ping:
+    usage: /<command>
+    description: Returns pong!
+  pstats:
+    usage: /<command>
+    description: gives psdc info for player
+  setstat:
+    usage: /<command> [hand|player] key value
+    description: sets psdc info
+  delstat:
+    usage: /<command> key
+    description: deletes psdc info

@@ -6,6 +6,6 @@ enum class Rarity{
     COMMON, UNCOMMON, RARE, EPIC, LEGENDARY, MYTHIC
 }
 enum class WeaponTypes{
-    SWORD, LONGBOW, SHORTBOW, WAND
+    SWORD, DAGGER, CROSSBOW, LONGBOW, SHORTBOW, WAND, BOOK
 }
 data class Xp(val points: Double, val levels: Int)

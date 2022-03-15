@@ -14,8 +14,9 @@ import org.bukkit.NamespacedKey
 import org.bukkit.inventory.meta.ItemMeta
 import org.bukkit.persistence.PersistentDataType
 
+@Suppress("deprecation")
 class Commands : CommandExecutor,Listener {
-  val cmds = ArrayList<String>();
+  val cmds = ArrayList<String>()
   init {
     cmds.add("meta")
     cmds.add("customitem")
@@ -30,7 +31,7 @@ class Commands : CommandExecutor,Listener {
             val im = item.itemMeta
             sender.sendMessage(ChatColor.GOLD.toString() + "psdc info for " + ChatColor.RED.toString() + im?.displayName)
             for (key in im?.persistentDataContainer?.keys!!) {
-              var keyVal: Any = -2;
+              var keyVal: Any = -2
               when {
                 key.toString().endsWith("int") -> {
                   keyVal = im.persistentDataContainer.getOrDefault(key, PersistentDataType.INTEGER, -1)
@@ -69,6 +70,6 @@ class Commands : CommandExecutor,Listener {
         }
       }
     }
-    return true;
+    return true
   }
 }

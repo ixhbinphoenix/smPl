@@ -6,6 +6,7 @@ import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
 
+@Suppress("deprecation")
 class Events : Listener {
   @EventHandler
   fun onJoin(event: PlayerJoinEvent) {

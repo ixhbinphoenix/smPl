@@ -5,7 +5,7 @@ import me.ixhbinphoenix.smPl.smItems.events.Events
 import net.md_5.bungee.api.ChatColor
 import org.bukkit.plugin.java.JavaPlugin
 
-@Suppress("unused")
+@Suppress("unused", "deprecation")
 class Main : JavaPlugin() {
     private val cmds = Commands()
     override fun onEnable() {

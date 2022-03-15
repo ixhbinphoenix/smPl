@@ -3,6 +3,7 @@ plugins {
   idea
   kotlin("jvm") version "1.6.10"
   id("com.github.johnrengelman.shadow") version "7.1.2"
+  id("io.papermc.paperweight.userdev") version "1.3.5"
 }
 
 group = "me.ixhbinphoenix.smPl"
@@ -12,13 +13,17 @@ repositories {
   mavenCentral()
 
   maven(url = "https://oss.sonatype.org/content/repositories/snapshots")
-  maven(url = "https://hub.spigotmc.org/nexus/content/repositories/snapshots")
+  maven(url = uri("https://papermc.io/repo/repository/maven-public/"))
 }
 
 dependencies {
-  compileOnly("org.spigotmc:spigot-api:1.18.2-R0.1-SNAPSHOT")
+  paperDevBundle("1.18.2-R0.1-SNAPSHOT")
 
   implementation(kotlin("stdlib"))
+}
+
+java {
+  toolchain.languageVersion.set(JavaLanguageVersion.of(17))
 }
 
 tasks.getByName<Test>("test") {

@@ -1,7 +1,5 @@
 package me.ixhbinphoenix.smPl.smItems.events
 
-import me.ixhbinphoenix.smPl.smItems.Main
-import org.bukkit.Bukkit
 import org.bukkit.NamespacedKey
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -44,7 +42,7 @@ class Events : Listener {
         event.player.persistentDataContainer.set(NamespacedKey.fromString("smcore:player.mana.int")!!, PersistentDataType.INTEGER, mana)
       }
     } else if (olditem is ItemStack && olditem.hasItemMeta()) {
-      val oim = olditem.itemMeta as ItemMeta;
+      val oim = olditem.itemMeta as ItemMeta
       if (oim.persistentDataContainer.get(NamespacedKey.fromString("smitems:item.type.str")!!, PersistentDataType.STRING) == "WEAPON") {
         var damage = event.player.persistentDataContainer.getOrDefault(NamespacedKey.fromString("smcore:player.damage.int")!!, PersistentDataType.INTEGER, 0)
         var mana = event.player.persistentDataContainer.getOrDefault(NamespacedKey.fromString("smcore:player.mana.int")!!, PersistentDataType.INTEGER, 0)

@@ -1,4 +1,4 @@
-package me.ixhbinphoenix.smPl.smCore
+package me.ixhbinphoenix.smPl.smCore.commands
 
 import net.md_5.bungee.api.ChatColor
 import org.bukkit.NamespacedKey
@@ -9,8 +9,9 @@ import org.bukkit.event.Listener
 import org.bukkit.entity.Player
 import org.bukkit.persistence.PersistentDataType
 
+@Suppress("deprecation")
 class Commands : CommandExecutor,Listener {
-  val cmds = ArrayList<String>();
+  val cmds = ArrayList<String>()
   init {
     cmds.add("ping")
     cmds.add("pstats")
@@ -21,12 +22,12 @@ class Commands : CommandExecutor,Listener {
     if (sender is Player) {
       when {
         command.name.lowercase() == "ping" -> {
-          sender.sendMessage(ChatColor.GREEN.toString() + "Pong!");
+          sender.sendMessage(ChatColor.GREEN.toString() + "Pong!")
         }
         command.name.lowercase() == "pstats" -> {
           sender.sendMessage(ChatColor.GOLD.toString() + "psdc info for you:")
           for (key in sender.persistentDataContainer.keys) {
-            var keyVal: Any = -2;
+            var keyVal: Any = -2
             when {
               key.toString().endsWith("int") -> {
                 keyVal = sender.persistentDataContainer.getOrDefault(key, PersistentDataType.INTEGER, -1)
@@ -42,8 +43,8 @@ class Commands : CommandExecutor,Listener {
           if (args.size == 3) {
             when {
               args[0] == "item" -> {
-                val item = sender.equipment?.itemInMainHand
-                if (item != null && item.itemMeta != null) {
+                val item = sender.equipment.itemInMainHand
+                if (item.itemMeta != null) {
                   val im = item.itemMeta
                   when {
                     args[1].endsWith("int") -> {
@@ -79,6 +80,6 @@ class Commands : CommandExecutor,Listener {
         }
       }
     }
-    return true;
+    return true
   }
 }

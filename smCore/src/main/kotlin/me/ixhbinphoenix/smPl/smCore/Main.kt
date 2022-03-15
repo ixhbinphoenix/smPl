@@ -1,5 +1,6 @@
 package me.ixhbinphoenix.smPl.smCore
 
+import me.ixhbinphoenix.smPl.smCore.events.Events
 import org.bukkit.plugin.java.JavaPlugin
 
 class Main : JavaPlugin() {
@@ -8,7 +9,7 @@ class Main : JavaPlugin() {
     for (cmd in cmds.cmds) {
       getCommand(cmd)?.setExecutor(cmds)
     }
-
+    server.pluginManager.registerEvents(Events(), this)
     server.consoleSender.sendMessage("§asmCore enabled")
   }
 }

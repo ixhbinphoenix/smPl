@@ -14,7 +14,6 @@ class Events : Listener {
   // Messy piece of code right here, could definetly be simplified
   @EventHandler
   fun onPlayerEquip(event: PlayerItemHeldEvent) {
-    event.player.sendMessage("event triggered")
     val olditem = event.player.inventory.getItem(event.previousSlot)
     val item = event.player.inventory.getItem(event.newSlot)
     if (item is ItemStack && item.hasItemMeta()) {
@@ -47,8 +46,8 @@ class Events : Listener {
     } else if (olditem is ItemStack && olditem.hasItemMeta()) {
       val oim = olditem.itemMeta as ItemMeta;
       if (oim.persistentDataContainer.get(NamespacedKey.fromString("smitems:item.type.str")!!, PersistentDataType.STRING) == "WEAPON") {
-        var damage = event.player.persistentDataContainer.getOrDefault(NamespacedKey.fromString("smcore:player.mana.int")!!, PersistentDataType.INTEGER, 0)
-        var mana = event.player.persistentDataContainer.getOrDefault(NamespacedKey.fromString("smcore:player.damage.int")!!, PersistentDataType.INTEGER, 0)
+        var damage = event.player.persistentDataContainer.getOrDefault(NamespacedKey.fromString("smcore:player.damage.int")!!, PersistentDataType.INTEGER, 0)
+        var mana = event.player.persistentDataContainer.getOrDefault(NamespacedKey.fromString("smcore:player.mana.int")!!, PersistentDataType.INTEGER, 0)
         damage -= oim.persistentDataContainer.getOrDefault(NamespacedKey.fromString("smitems:weapon.damage.int")!!, PersistentDataType.INTEGER, 0)
         mana -= oim.persistentDataContainer.getOrDefault(NamespacedKey.fromString("smitems:weapon.mana.int")!!, PersistentDataType.INTEGER, 0)
         event.player.persistentDataContainer.set(NamespacedKey.fromString("smcore:player.damage.int")!!, PersistentDataType.INTEGER, damage)

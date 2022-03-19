@@ -2,10 +2,11 @@ package me.ixhbinphoenix.smPl.smItems
 
 import me.ixhbinphoenix.smPl.smItems.commands.Commands
 import me.ixhbinphoenix.smPl.smItems.events.Events
-import net.md_5.bungee.api.ChatColor
+import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.format.NamedTextColor
 import org.bukkit.plugin.java.JavaPlugin
 
-@Suppress("unused", "deprecation")
+@Suppress("unused")
 class Main : JavaPlugin() {
     private val cmds = Commands()
     override fun onEnable() {
@@ -14,6 +15,6 @@ class Main : JavaPlugin() {
         }
         server.pluginManager.registerEvents(Events(), this)
 
-        server.consoleSender.sendMessage(ChatColor.GREEN.toString() + "smItems enabled")
+        server.consoleSender.sendMessage(Component.text("smItems enabled").color(NamedTextColor.GREEN))
     }
 }

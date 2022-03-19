@@ -1,7 +1,9 @@
 package me.ixhbinphoenix.smPl.smItems.commands
 
 import me.ixhbinphoenix.smPl.smItems.Main
-import net.md_5.bungee.api.ChatColor
+import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.format.NamedTextColor
+import net.kyori.adventure.text.format.TextDecoration
 import org.bukkit.Bukkit
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
@@ -14,7 +16,6 @@ import org.bukkit.NamespacedKey
 import org.bukkit.inventory.meta.ItemMeta
 import org.bukkit.persistence.PersistentDataType
 
-@Suppress("deprecation")
 class Commands : CommandExecutor,Listener {
   val cmds = ArrayList<String>()
   init {
@@ -28,9 +29,10 @@ class Commands : CommandExecutor,Listener {
         command.name.lowercase() == "meta" -> {
           val item = sender.inventory.getItem(sender.inventory.heldItemSlot) as ItemStack
           if (item.hasItemMeta()) {
-            val im = item.itemMeta
-            sender.sendMessage(ChatColor.GOLD.toString() + "psdc info for " + ChatColor.RED.toString() + im?.displayName)
-            for (key in im?.persistentDataContainer?.keys!!) {
+            val im = item.itemMeta as ItemMeta
+            var msg = Component.text("psdc info for ").color(NamedTextColor.GOLD)
+              .append(im.displayName()!!.color(NamedTextColor.RED))
+            for (key in im.persistentDataContainer.keys) {
               var keyVal: Any = -2
               when {
                 key.toString().endsWith("int") -> {
@@ -40,10 +42,12 @@ class Commands : CommandExecutor,Listener {
                   keyVal = im.persistentDataContainer.getOrDefault(key, PersistentDataType.STRING, "-1")
                 }
               }
-              sender.sendMessage(ChatColor.GOLD.toString() + key.toString() + " = " + keyVal.toString())
+              msg = msg.append(Component.text("\n$key = $keyVal").color(NamedTextColor.GOLD))
             }
+            sender.sendMessage(msg)
           } else {
-            sender.sendMessage(ChatColor.RED.toString() + "Item " + item.type + " does not have any item meta")
+            val msg = Component.text("Item " + item.type + " does not have any item meta").color(NamedTextColor.RED)
+            sender.sendMessage(msg)
           }
         }
         command.name.lowercase() == "customitem" -> {
@@ -51,18 +55,20 @@ class Commands : CommandExecutor,Listener {
             args[0] == "satans_teachings" -> {
               val item = ItemStack(Material.BOOK, 1)
               val im = item.itemMeta as ItemMeta
-              im.setDisplayName(ChatColor.RED.toString() + "Satan's teachings")
-              val lore = ArrayList<String>()
-              lore.add(ChatColor.GRAY.toString() + "Damage: " + ChatColor.RED +"666")
+              im.displayName(Component.text("Satan's teachings").color(NamedTextColor.RED).decoration(TextDecoration.ITALIC, false))
+              val lore = ArrayList<Component>()
+              lore.add(Component.text("Damage: ").color(NamedTextColor.GRAY)
+                .append(Component.text("666").color(NamedTextColor.RED)).decoration(TextDecoration.ITALIC, false))
               im.persistentDataContainer.set(NamespacedKey.fromString("weapon.damage.int", plugin)!!, PersistentDataType.INTEGER, 666)
-              lore.add(ChatColor.GRAY.toString() + "Mana: " + ChatColor.AQUA + "420")
+              lore.add(Component.text("Mana: ").color(NamedTextColor.GRAY)
+                .append(Component.text("420").color(NamedTextColor.AQUA)).decoration(TextDecoration.ITALIC, false))
               im.persistentDataContainer.set(NamespacedKey.fromString("weapon.mana.int", plugin)!!, PersistentDataType.INTEGER, 420)
-              lore.add("")
-              lore.add(ChatColor.RED.toString() + "LEGENDARY BOOK")
+              lore.add(Component.text(""))
+              lore.add(Component.text("LEGENDARY BOOK").color(NamedTextColor.RED).decoration(TextDecoration.ITALIC, false))
               im.persistentDataContainer.set(NamespacedKey.fromString("item.rarity.str", plugin)!!, PersistentDataType.STRING, "LEGENDARY")
               im.persistentDataContainer.set(NamespacedKey.fromString("item.type.str", plugin)!!, PersistentDataType.STRING, "WEAPON")
               im.persistentDataContainer.set(NamespacedKey.fromString("weapon.type.str", plugin)!!, PersistentDataType.STRING, "BOOK")
-              im.lore = lore
+              im.lore(lore)
               item.itemMeta = im
               sender.inventory.addItem(item)
             }

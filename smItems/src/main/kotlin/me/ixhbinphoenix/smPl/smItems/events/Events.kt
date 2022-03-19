@@ -9,7 +9,7 @@ import org.bukkit.inventory.meta.ItemMeta
 import org.bukkit.persistence.PersistentDataType
 
 class Events : Listener {
-  // Messy piece of code right here, could definetly be simplified
+  // Messy piece of code right here, could definitely be simplified
   @EventHandler
   fun onPlayerEquip(event: PlayerItemHeldEvent) {
     val olditem = event.player.inventory.getItem(event.previousSlot)

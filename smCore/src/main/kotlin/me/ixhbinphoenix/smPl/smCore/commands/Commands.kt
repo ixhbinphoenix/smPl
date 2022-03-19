@@ -1,6 +1,8 @@
 package me.ixhbinphoenix.smPl.smCore.commands
 
-import net.md_5.bungee.api.ChatColor
+import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.TextComponent
+import net.kyori.adventure.text.format.NamedTextColor
 import org.bukkit.NamespacedKey
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
@@ -9,7 +11,6 @@ import org.bukkit.event.Listener
 import org.bukkit.entity.Player
 import org.bukkit.persistence.PersistentDataType
 
-@Suppress("deprecation")
 class Commands : CommandExecutor,Listener {
   val cmds = ArrayList<String>()
   init {
@@ -22,10 +23,11 @@ class Commands : CommandExecutor,Listener {
     if (sender is Player) {
       when {
         command.name.lowercase() == "ping" -> {
-          sender.sendMessage(ChatColor.GREEN.toString() + "Pong!")
+          val msg: TextComponent = Component.text("Pong!").color(NamedTextColor.GREEN)
+          sender.sendMessage(msg)
         }
         command.name.lowercase() == "pstats" -> {
-          sender.sendMessage(ChatColor.GOLD.toString() + "psdc info for you:")
+          var msg: TextComponent = Component.text("psdc info for you:").color(NamedTextColor.GOLD)
           for (key in sender.persistentDataContainer.keys) {
             var keyVal: Any = -2
             when {
@@ -36,8 +38,9 @@ class Commands : CommandExecutor,Listener {
                 keyVal = sender.persistentDataContainer.getOrDefault(key, PersistentDataType.STRING, "-1")
               }
             }
-            sender.sendMessage(ChatColor.GOLD.toString() + key.toString() + " = " + keyVal.toString())
+            msg = msg.append(Component.text("\n$key = $keyVal").color(NamedTextColor.GOLD))
           }
+          sender.sendMessage(msg)
         }
         command.name.lowercase() == "setstat" -> {
           if (args.size == 3) {
@@ -68,14 +71,16 @@ class Commands : CommandExecutor,Listener {
               }
             }
           } else {
-            sender.sendMessage(ChatColor.RED.toString() + "Not enough or too many arguments")
+            val msg = Component.text("Not enough or too many arguments!").color(NamedTextColor.RED)
+            sender.sendMessage(msg)
           }
         }
         command.name.lowercase() == "delstat" -> {
           if (args.size == 1) {
             sender.persistentDataContainer.remove(NamespacedKey.fromString(args[0])!!)
           } else {
-            sender.sendMessage(ChatColor.RED.toString() + "Not enough or too many arguments")
+            val msg = Component.text("Not enough or too many arguments!").color(NamedTextColor.RED)
+            sender.sendMessage(msg)
           }
         }
       }

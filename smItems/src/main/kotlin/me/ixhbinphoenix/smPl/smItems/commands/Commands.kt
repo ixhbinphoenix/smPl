@@ -1,5 +1,6 @@
 package me.ixhbinphoenix.smPl.smItems.commands
 
+import me.ixhbinphoenix.smPl.smCore.player.PlayerHandler
 import me.ixhbinphoenix.smPl.smItems.Main
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
@@ -27,6 +28,20 @@ class Commands : CommandExecutor,Listener {
     if (sender is Player) {
       when {
         command.name.lowercase() == "meta" -> {
+          if(args.size == 1){
+            if(args[0] == "self"){
+              val player = sender
+              val playerHandler = PlayerHandler(player)
+              val message = Component.text("psdc info for ").color(NamedTextColor.GOLD)
+                .append(player.name().color(NamedTextColor.RED))
+                .append(Component.text(
+                  "\nDamage: ${playerHandler.getDamage()}" +
+                          "\nMana: ${playerHandler.getMana()}" +
+                          "\n"
+                ).color(NamedTextColor.GOLD))
+              player.sendMessage(message)
+            }
+          }
           val item = sender.inventory.getItem(sender.inventory.heldItemSlot) as ItemStack
           if (item.hasItemMeta()) {
             val im = item.itemMeta as ItemMeta

@@ -2,6 +2,7 @@ package me.ixhbinphoenix.smPl.smItems.commands
 
 import me.ixhbinphoenix.smPl.smCore.player.PlayerHandler
 import me.ixhbinphoenix.smPl.smItems.Main
+import me.ixhbinphoenix.smPl.smItems.RarityColor
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
 import net.kyori.adventure.text.format.TextDecoration
@@ -70,7 +71,7 @@ class Commands : CommandExecutor,Listener {
             args[0] == "satans_teachings" -> {
               val item = ItemStack(Material.BOOK, 1)
               val im = item.itemMeta as ItemMeta
-              im.displayName(Component.text("Satan's teachings").color(NamedTextColor.RED).decoration(TextDecoration.ITALIC, false))
+              im.displayName(Component.text("Satan's teachings").color(RarityColor.LEGENDARY.color).decoration(TextDecoration.ITALIC, false))
               val lore = ArrayList<Component>()
               lore.add(Component.text("Damage: ").color(NamedTextColor.GRAY)
                 .append(Component.text("666").color(NamedTextColor.RED)).decoration(TextDecoration.ITALIC, false))
@@ -79,7 +80,7 @@ class Commands : CommandExecutor,Listener {
                 .append(Component.text("420").color(NamedTextColor.AQUA)).decoration(TextDecoration.ITALIC, false))
               im.persistentDataContainer.set(NamespacedKey.fromString("weapon.mana.int", plugin)!!, PersistentDataType.INTEGER, 420)
               lore.add(Component.text(""))
-              lore.add(Component.text("LEGENDARY BOOK").color(NamedTextColor.RED).decoration(TextDecoration.ITALIC, false))
+              lore.add(Component.text("LEGENDARY BOOK").color(RarityColor.LEGENDARY.color).decoration(TextDecoration.ITALIC, false))
               im.persistentDataContainer.set(NamespacedKey.fromString("item.rarity.str", plugin)!!, PersistentDataType.STRING, "LEGENDARY")
               im.persistentDataContainer.set(NamespacedKey.fromString("item.type.str", plugin)!!, PersistentDataType.STRING, "WEAPON")
               im.persistentDataContainer.set(NamespacedKey.fromString("weapon.type.str", plugin)!!, PersistentDataType.STRING, "BOOK")

@@ -1,5 +1,7 @@
 package me.ixhbinphoenix.smPl.smCore.events
 
+import io.papermc.paper.event.player.AsyncChatEvent
+import me.ixhbinphoenix.smPl.smCore.chat.Renderer
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
 import org.bukkit.event.EventHandler
@@ -16,5 +18,10 @@ class Events : Listener {
   @EventHandler
   fun onLeave(event: PlayerQuitEvent) {
     event.quitMessage(Component.text("<< ").color(NamedTextColor.RED).append(event.player.displayName().color(NamedTextColor.GRAY)))
+  }
+
+  @EventHandler
+  fun onChat(event: AsyncChatEvent) {
+    event.renderer(Renderer())
   }
 }

@@ -1,9 +1,12 @@
 package me.ixhbinphoenix.smPl.smCore.chat
 
+import me.ixhbinphoenix.smPl.smCore.utils.Rank
+import me.ixhbinphoenix.smPl.smCore.utils.getPlayerRank
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.event.HoverEvent
 import net.kyori.adventure.text.format.NamedTextColor
 import net.kyori.adventure.text.format.TextColor
+import net.kyori.adventure.util.RGBLike
 import org.bukkit.entity.Player
 
 
@@ -11,18 +14,17 @@ fun getPrefix(player: Player, message: Component): Component {
   // TODO: Load custom badges for player
   val badges = ArrayList<Component>()
   badges.add(
-    getRankBadge(player).hoverEvent(HoverEvent.showText(
-      getPlayerInfo(player)
-    ))
+    getRankBadge(getPlayerRank(player))
   )
   var prefix = Component.empty()
   for (badge in badges) {
     prefix = prefix.append(badge)
   }
-  // TODO: Fetch Rank Color
-  val rankColor: TextColor = NamedTextColor.RED
+  val rankColor = getRankColor(getPlayerRank(player))
   return prefix
-    .append(Component.text(player.name).color(rankColor))
+    .append(Component.text(player.name).color(rankColor).hoverEvent(HoverEvent.showText(
+      getPlayerInfo(player)
+    )))
     .append(Component.text(" >> ").color(NamedTextColor.GRAY))
     .append(message.color(NamedTextColor.GRAY))
 }
@@ -36,39 +38,49 @@ fun getPlayerInfo(player: Player): Component {
   // TODO: Fetch Player Guild
   val playerGuild: String? = null
   pinfo = if (playerGuild == null) {
-    pinfo.append(createStatText("Guild", "None!", NamedTextColor.RED))
+    pinfo.append(createStatText("Guild", "None!", NamedTextColor.RED, false))
   } else {
-    pinfo.append(createStatText("Guild", playerGuild, NamedTextColor.YELLOW))
+    pinfo.append(createStatText("Guild", playerGuild, NamedTextColor.YELLOW, false))
   }
-  pinfo = pinfo.append(Component.text("\n"))
-  // val infoBadges = getInfoBadges(player)
-  val infoBadges = ArrayList<Component>()
-  infoBadges.add(
-    Component.text("Staff Member").color(NamedTextColor.RED)
-      .append(Component.text(" (Lead Admin)").color(NamedTextColor.DARK_GRAY))
-  )
-  pinfo = pinfo.append(
-    createPointList(
-      Component.text("Badges").color(NamedTextColor.GREEN),
-      infoBadges
-    )
-  )
   return pinfo
 }
 
-fun getRankBadge(player: Player): Component {
-  // val rank = getPlayerRank(player)
-  val rank = "admin"
-  when(rank) {
-    "admin" -> {
-      return createBadge(NamedTextColor.RED, NamedTextColor.DARK_RED, "\uD83D\uDEE1")
-    }
+fun getRankBadge(rank: Rank): Component {
+  return when(rank) {
+    Rank.ADMIN -> createBadge(TextColor.fromCSSHexString("#21abcd")!!, TextColor.fromCSSHexString("#125F72")!!, "\uD83D\uDEE1").hoverEvent(getRankInfoText(rank))
+    Rank.MODERATOR -> createBadge(NamedTextColor.RED, NamedTextColor.DARK_RED, "\uD83D\uDEE1").hoverEvent(getRankInfoText(rank))
+    Rank.BUILDER -> createBadge(NamedTextColor.GREEN, NamedTextColor.DARK_GREEN, "\uD83D\uDEE1").hoverEvent(getRankInfoText(rank))
+    Rank.SENATOR -> createBadge(TextColor.fromCSSHexString("#efcc00")!!, TextColor.fromCSSHexString("#b89d00")!!, "★").hoverEvent(getRankInfoText(rank))
+    Rank.TRUSTED -> createBadge(NamedTextColor.LIGHT_PURPLE, NamedTextColor.DARK_PURPLE, "⨳").hoverEvent(getRankInfoText(rank))
+    Rank.PLAYER -> createBadge(NamedTextColor.GRAY, NamedTextColor.DARK_GRAY, "⨳")
   }
-  return Component.empty()
 }
 
-fun getInfoBadges(player: Player): Component {
-  TODO("Not implemented yet")
+fun getRankInfoText(rank: Rank): HoverEvent<Component>? {
+  return when(rank) {
+    Rank.ADMIN -> HoverEvent.showText(createRankInfoText(rank, "Staff Member", "Administrator"))
+    Rank.MODERATOR -> HoverEvent.showText(createRankInfoText(rank, "Staff Member", "Moderator"))
+    Rank.BUILDER -> HoverEvent.showText(createRankInfoText(rank, "Staff Member", "Builder"))
+    Rank.SENATOR -> HoverEvent.showText(createRankInfoText(rank, "Senate Member", "Senator"))
+    Rank.TRUSTED -> HoverEvent.showText(createRankInfoText(rank, "Trusted player", "Trusted"))
+    Rank.PLAYER -> null
+  }
+}
+
+fun getRankColor(rank: Rank): TextColor {
+  return when(rank) {
+    Rank.ADMIN -> TextColor.fromCSSHexString("#21abcd")!!
+    Rank.MODERATOR -> NamedTextColor.RED
+    Rank.BUILDER -> NamedTextColor.GREEN
+    Rank.SENATOR -> TextColor.fromCSSHexString("#efcc00")!!
+    Rank.TRUSTED -> NamedTextColor.LIGHT_PURPLE
+    Rank.PLAYER -> NamedTextColor.GRAY
+  }
+}
+
+fun createRankInfoText(rank: Rank, category: String, specific: String): Component {
+  return Component.text(category).color(getRankColor(rank))
+    .append(Component.text(" ($specific)").color(NamedTextColor.DARK_GRAY))
 }
 
 /**
@@ -108,8 +120,9 @@ fun createPointList(title: Component, options: ArrayList<Component>): Component 
  * @param stat Value of the stat
  * @param color Color of the stat value
  */
-fun createStatText(statName: String, stat: String, color: TextColor): Component {
-  return Component.text("$statName: ").color(NamedTextColor.GRAY)
+fun createStatText(statName: String, stat: String, color: TextColor, newline: Boolean = true): Component {
+  var ret = Component.text("$statName: ").color(NamedTextColor.GRAY)
     .append(Component.text(stat).color(color))
-    .append(Component.text("\n"))
+  if (newline) ret = ret.append(Component.text("\n"))
+  return ret
 }

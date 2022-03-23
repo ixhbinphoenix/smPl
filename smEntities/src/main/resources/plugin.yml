@@ -1,0 +1,10 @@
+main: me.ixhbinphoenix.smPl.smEntities.Main
+name: smEntities
+version: 0.0.1
+api-version: 1.18
+commands:
+  npc:
+    usage: /<command> <name> <skinName>
+    description: Summons a NPC
+depend:
+  - smCore

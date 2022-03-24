@@ -17,6 +17,7 @@ import org.bukkit.Material
 import org.bukkit.NamespacedKey
 import org.bukkit.inventory.meta.ItemMeta
 import org.bukkit.persistence.PersistentDataType
+import java.util.UUID
 
 class Commands : CommandExecutor,Listener {
   val cmds = ArrayList<String>()
@@ -90,6 +91,8 @@ class Commands : CommandExecutor,Listener {
               im.persistentDataContainer.set(NamespacedKey.fromString("item.rarity.str", plugin)!!, PersistentDataType.STRING, "LEGENDARY")
               im.persistentDataContainer.set(NamespacedKey.fromString("item.type.str", plugin)!!, PersistentDataType.STRING, "WEAPON")
               im.persistentDataContainer.set(NamespacedKey.fromString("weapon.type.str", plugin)!!, PersistentDataType.STRING, "BOOK")
+              im.persistentDataContainer.set(NamespacedKey.fromString("item.id.str")!!, PersistentDataType.STRING, "satans_teachings")
+              im.persistentDataContainer.set(NamespacedKey.fromString("item.uuid.str")!!, PersistentDataType.STRING, UUID.randomUUID().toString())
               im.lore(lore)
               item.itemMeta = im
               sender.inventory.addItem(item)

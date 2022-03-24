@@ -15,3 +15,7 @@ commands:
   delstat:
     usage: /<command> key
     description: deletes psdc info
+  sc:
+    usage: /<comand> message
+    permission: smcore.staffchat
+    description: Sends a message in staffchat

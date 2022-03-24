@@ -1,6 +1,5 @@
 package me.ixhbinphoenix.smPl.smCore.chat
 
-import io.papermc.paper.adventure.AdventureComponent.Serializer
 import me.ixhbinphoenix.smPl.smCore.utils.Rank
 import me.ixhbinphoenix.smPl.smCore.utils.getPlayerRank
 import net.kyori.adventure.text.Component
@@ -8,7 +7,6 @@ import net.kyori.adventure.text.TextReplacementConfig
 import net.kyori.adventure.text.event.HoverEvent
 import net.kyori.adventure.text.format.NamedTextColor
 import net.kyori.adventure.text.format.TextColor
-import net.kyori.adventure.text.format.TextDecoration
 import org.bukkit.Bukkit
 import org.bukkit.NamespacedKey
 import org.bukkit.entity.Player
@@ -17,7 +15,6 @@ import org.bukkit.persistence.PersistentDataType
 
 
 fun getPrefix(player: Player, message: Component): Component {
-  // TODO: Player mentions
   var msg = message.color(NamedTextColor.GRAY)
   for (onlinePlayer in Bukkit.getOnlinePlayers()) {
     val msgold = msg
@@ -57,17 +54,32 @@ fun getPlayerInfo(player: Player): Component {
   var pinfo = Component.text("Player Info\n").color(NamedTextColor.AQUA)
     .append(createStatText("Name", player.name, NamedTextColor.YELLOW))
     .append(createStatText("Level", playerLevel.toString(), NamedTextColor.YELLOW))
-  // TODO: Fetch Player Guild
-  val playerGuild: String? = null
   val rank = getPlayerRank(player)
   // TODO: Get Actual rank names
   pinfo = pinfo.append(createStatText("Rank", rank.name, getRankColor(rank)))
+  // TODO: Fetch Player Guild
+  val playerGuild: String? = null
   pinfo = if (playerGuild == null) {
     pinfo.append(createStatText("Guild", "None!", NamedTextColor.RED, false))
   } else {
     pinfo.append(createStatText("Guild", playerGuild, NamedTextColor.YELLOW, false))
   }
   return pinfo
+}
+
+fun getDisplayName(player: Player): Component {
+  val rank = getPlayerRank(player)
+  // TODO: Load custom badges
+  val badges = ArrayList<Component>()
+  badges.add(getRankBadge(rank))
+
+  var dp = Component.empty()
+  for (badge in badges) {
+    dp = dp.append(badge)
+  }
+
+  return dp
+    .append(Component.text(player.name).color(getRankColor(rank)))
 }
 
 fun getRankBadge(rank: Rank): Component {

@@ -16,6 +16,9 @@ commands:
     usage: /<command> key
     description: deletes psdc info
   sc:
-    usage: /<comand> message
+    usage: /<command> message
     permission: smcore.staffchat
     description: Sends a message in staffchat
+  toggleping:
+    usage: /<command>
+    description: Toggles the ping sound

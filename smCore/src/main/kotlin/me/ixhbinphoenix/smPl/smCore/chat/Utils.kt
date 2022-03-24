@@ -1,16 +1,38 @@
 package me.ixhbinphoenix.smPl.smCore.chat
 
+import io.papermc.paper.adventure.AdventureComponent.Serializer
 import me.ixhbinphoenix.smPl.smCore.utils.Rank
 import me.ixhbinphoenix.smPl.smCore.utils.getPlayerRank
 import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.TextReplacementConfig
 import net.kyori.adventure.text.event.HoverEvent
 import net.kyori.adventure.text.format.NamedTextColor
 import net.kyori.adventure.text.format.TextColor
-import net.kyori.adventure.util.RGBLike
+import net.kyori.adventure.text.format.TextDecoration
+import org.bukkit.Bukkit
+import org.bukkit.NamespacedKey
 import org.bukkit.entity.Player
+import org.bukkit.Sound
+import org.bukkit.persistence.PersistentDataType
 
 
 fun getPrefix(player: Player, message: Component): Component {
+  // TODO: Player mentions
+  var msg = message.color(NamedTextColor.GRAY)
+  for (onlinePlayer in Bukkit.getOnlinePlayers()) {
+    val msgold = msg
+    msg = msg.replaceText(TextReplacementConfig.builder().matchLiteral("@${onlinePlayer.name}").replacement(
+      Component.text("@${onlinePlayer.name}").color(NamedTextColor.WHITE)
+        .hoverEvent(getPlayerInfo(onlinePlayer))
+        .append(Component.empty().color(NamedTextColor.GRAY))
+    ).build())
+    if (
+      msgold != msg
+      && player.persistentDataContainer.getOrDefault(NamespacedKey.fromString("smcore:chat.ping.toggle.str")!!, PersistentDataType.STRING, "true") == "true"
+    ) {
+      onlinePlayer.playSound(onlinePlayer.location, Sound.ENTITY_ARROW_HIT_PLAYER, 0.2f, 1f)
+    }
+  }
   // TODO: Load custom badges for player
   val badges = ArrayList<Component>()
   badges.add(
@@ -26,7 +48,7 @@ fun getPrefix(player: Player, message: Component): Component {
       getPlayerInfo(player)
     )))
     .append(Component.text(" >> ").color(NamedTextColor.GRAY))
-    .append(message.color(NamedTextColor.GRAY))
+    .append(msg)
 }
 
 fun getPlayerInfo(player: Player): Component {
@@ -37,6 +59,9 @@ fun getPlayerInfo(player: Player): Component {
     .append(createStatText("Level", playerLevel.toString(), NamedTextColor.YELLOW))
   // TODO: Fetch Player Guild
   val playerGuild: String? = null
+  val rank = getPlayerRank(player)
+  // TODO: Get Actual rank names
+  pinfo = pinfo.append(createStatText("Rank", rank.name, getRankColor(rank)))
   pinfo = if (playerGuild == null) {
     pinfo.append(createStatText("Guild", "None!", NamedTextColor.RED, false))
   } else {

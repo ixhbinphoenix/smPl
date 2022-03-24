@@ -23,6 +23,7 @@ class Commands : CommandExecutor,Listener {
     cmds.add("setstat")
     cmds.add("delstat")
     cmds.add("sc")
+    cmds.add("toggleping")
   }
   override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
     if (sender is Player) {
@@ -122,6 +123,16 @@ class Commands : CommandExecutor,Listener {
                 }
               }
             }
+          }
+        }
+        "toggleping" -> {
+          val pingtoggle = sender.persistentDataContainer.getOrDefault(NamespacedKey.fromString("smcore:chat.ping.toggle.str")!!, PersistentDataType.STRING, "true")
+          if (pingtoggle == "true") {
+            sender.persistentDataContainer.set(NamespacedKey.fromString("smcore:chat.ping.toggle.str")!!, PersistentDataType.STRING, "false")
+            sender.sendMessage(Component.text("Disabled chat ping sound!").color(NamedTextColor.RED))
+          } else {
+            sender.persistentDataContainer.set(NamespacedKey.fromString("smcore:chat.ping.toggle.str")!!, PersistentDataType.STRING, "true")
+            sender.sendMessage(Component.text("Enabled chat ping sound!").color(NamedTextColor.GREEN))
           }
         }
       }

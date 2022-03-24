@@ -22,10 +22,12 @@ class IceRunnable(item: ItemStack, slot: Int, player: Player) : BukkitRunnable()
             if(newItem != null && newItem.hasItemMeta()){
                 StatsCalculation().changeStats(newItem.itemMeta, player, false)
             }
-            else if(newItem == null && oldItem.hasItemMeta()){
-                StatsCalculation().changeStats(oldItem.itemMeta, player, true)
+            else if(newItem == null){
+                if(oldItem.hasItemMeta()){
+                    StatsCalculation().changeStats(oldItem.itemMeta, player, true)
+                }
             }
-            else if(newItem!!.hasItemMeta() && oldItem.hasItemMeta()){
+            else if(newItem.hasItemMeta() && oldItem.hasItemMeta()){
                 StatsCalculation().changeStats(oldItem.itemMeta, newItem.itemMeta, player)
             }
         }

@@ -7,7 +7,6 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.entity.EntityPickupItemEvent
 import org.bukkit.event.inventory.InventoryClickEvent
-import org.bukkit.event.player.PlayerDropItemEvent
 import org.bukkit.event.player.PlayerItemHeldEvent
 
 class Events : Listener {
@@ -40,7 +39,7 @@ class Events : Listener {
     val slot = event.slot
     val item = event.currentItem
     if(slot == player.inventory.heldItemSlot && item != null){
-      IceRunnable(item, slot, player).runTaskLater(Bukkit.getPluginManager().getPlugin("smItems") as Main, 3)
+      IceRunnable(item, slot, player).runTaskLater(Bukkit.getPluginManager().getPlugin("smItems") as Main, 1)
     }
   }
 
@@ -49,13 +48,8 @@ class Events : Listener {
     if(event.entity is Player){
       val player = event.entity as Player
       val item = player.inventory.itemInMainHand
-      IceRunnable(item, player.inventory.heldItemSlot, player).runTaskLater(Bukkit.getPluginManager().getPlugin("smItems") as Main, 3)
+      IceRunnable(item, player.inventory.heldItemSlot, player).runTaskLater(Bukkit.getPluginManager().getPlugin("smItems") as Main, 1)
     }
-  }
-
-  @EventHandler
-  fun onPlayerDrop(event: PlayerDropItemEvent){
-    event.isCancelled = true
   }
 
 }

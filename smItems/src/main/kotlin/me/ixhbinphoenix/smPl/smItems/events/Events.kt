@@ -6,7 +6,6 @@ import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.entity.EntityPickupItemEvent
-import org.bukkit.event.inventory.InventoryAction
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.player.PlayerDropItemEvent
 import org.bukkit.event.player.PlayerItemHeldEvent
@@ -27,9 +26,7 @@ class Events : Listener {
   @EventHandler
   fun onPlayerPickUp(event: EntityPickupItemEvent){
     if(event.entity is Player){
-      val player = event.entity as Player
-      val item = player.inventory.itemInMainHand
-      IceRunnable(item, player.inventory.heldItemSlot, player).runTaskLater(Bukkit.getPluginManager().getPlugin("smItems") as Main, 1)
+      StatsCalculation(event.entity as Player).runTaskLater(plugin, 1)
     }
   }
 

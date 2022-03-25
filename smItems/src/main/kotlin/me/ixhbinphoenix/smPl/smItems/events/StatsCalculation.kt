@@ -21,7 +21,6 @@ class StatsCalculation(player: Player) : BukkitRunnable() {
         var mana = 0
         val statsItems = listOf(
             inventory.itemInMainHand,
-            inventory.itemInOffHand,
             inventory.helmet,
             inventory.chestplate,
             inventory.leggings,

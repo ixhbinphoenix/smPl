@@ -5,57 +5,43 @@ import me.ixhbinphoenix.smPl.smItems.ItemTypes
 import me.ixhbinphoenix.smPl.smItems.item.DefaultItem
 import me.ixhbinphoenix.smPl.smItems.item.WeaponItem
 import org.bukkit.entity.Player
-import org.bukkit.inventory.meta.ItemMeta
+import org.bukkit.inventory.ItemStack
+import org.bukkit.scheduler.BukkitRunnable
 
-class StatsCalculation {
-    fun changeStats(oldInventoryItem: ItemMeta, newInventoryItem: ItemMeta, player: Player){
-        val playerHandler = PlayerHandler(player)
-        val newItem = DefaultItem(newInventoryItem.persistentDataContainer)
-        val oldItem = DefaultItem(oldInventoryItem.persistentDataContainer)
-        if(newItem.type == oldItem.type){
-            when(newItem.type){
-                ItemTypes.WEAPON -> {
-                    val oldDamage = playerHandler.getDamage()
-                    val oldMana = playerHandler.getMana()
-
-                    val oldWeapon = WeaponItem(oldInventoryItem.persistentDataContainer)
-                    val newWeapon = WeaponItem(newInventoryItem.persistentDataContainer)
-                    val newDamage = oldDamage + (newWeapon.damage - oldWeapon.damage)
-                    val newMana = oldMana + (newWeapon.mana - oldWeapon.mana)
-
-                    playerHandler.setDamage(newDamage)
-                    playerHandler.setMana(newMana)
-                }
-            }
-        }
+class StatsCalculation(player: Player) : BukkitRunnable() {
+    private val player: Player
+    init {
+        this.player = player
     }
 
-    fun changeStats(inventoryItem: ItemMeta, player: Player, isOld: Boolean){
-        val playerHandler = PlayerHandler(player)
-        val item = DefaultItem(inventoryItem.persistentDataContainer)
-        when(item.type){
-            ItemTypes.WEAPON -> {
-                val oldDamage = playerHandler.getDamage()
-                val oldMana = playerHandler.getMana()
-
-                val weapon = WeaponItem(inventoryItem.persistentDataContainer)
-
-                val newDamage: Int
-                val newMana: Int
-
-                if(isOld){
-                    newDamage = oldDamage - weapon.damage
-                    newMana = oldMana - weapon.mana
+    override fun run() {
+        val inventory = player.inventory
+        val handler = PlayerHandler(player)
+        var damage = 0
+        var mana = 0
+        val statsItems = listOf(
+            inventory.itemInMainHand,
+            inventory.itemInOffHand,
+            inventory.helmet,
+            inventory.chestplate,
+            inventory.leggings,
+            inventory.boots
+        )
+        for(item: ItemStack? in statsItems){
+            if(item != null && item.hasItemMeta()){
+                val pDC = item.itemMeta.persistentDataContainer
+                when(DefaultItem(pDC).type){
+                    ItemTypes.WEAPON -> {
+                        val weapon = WeaponItem(pDC)
+                        damage += weapon.damage
+                        mana += weapon.mana
+                    }
+                    else -> {}
                 }
-                else{
-                    newDamage = oldDamage + weapon.damage
-                    newMana = oldMana + weapon.mana
-                }
-
-                playerHandler.setDamage(newDamage)
-                playerHandler.setMana(newMana)
             }
         }
+        handler.setDamage(damage)
+        handler.setMana(mana)
     }
 
 }

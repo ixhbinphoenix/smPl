@@ -12,46 +12,16 @@ import org.bukkit.event.player.PlayerDropItemEvent
 import org.bukkit.event.player.PlayerItemHeldEvent
 
 class Events : Listener {
+  private val plugin = Bukkit.getPluginManager().getPlugin("smItems") as Main
 
   @EventHandler
   fun onPlayerEquip(event: PlayerItemHeldEvent) {
-    val oldItem = event.player.inventory.getItem(event.previousSlot)
-    val newItem = event.player.inventory.getItem(event.newSlot)
-    @Suppress("SENSELESS_COMPARISON")
-    if(oldItem == null || !oldItem.hasItemMeta()){
-      if(newItem != null && newItem.hasItemMeta()){
-        StatsCalculation().changeStats(newItem.itemMeta, event.player, false)
-      }
-    }
-    else if(newItem == null || !newItem.hasItemMeta()){
-      if(oldItem != null && oldItem.hasItemMeta()){
-        StatsCalculation().changeStats(oldItem.itemMeta, event.player, true)
-      }
-    }
-    else if (newItem != null && oldItem != null) {
-      if(newItem.hasItemMeta() && oldItem.hasItemMeta()){
-        StatsCalculation().changeStats(oldItem.itemMeta, newItem.itemMeta, event.player)
-      }
-    }
+    StatsCalculation(event.player).runTaskLater(plugin, 2)
   }
 
   @EventHandler
   fun onInventoryClick(event: InventoryClickEvent){
-    if(event.inventory.viewers.size >= 2 ||
-      event.action == InventoryAction.DROP_ALL_SLOT ||
-      event.action == InventoryAction.DROP_ONE_SLOT) return
-    if(event.action == InventoryAction.DROP_ALL_CURSOR ||
-      event.action == InventoryAction.DROP_ONE_CURSOR
-      && event.cursor != null && event.cursor!!.hasItemMeta()){
-      StatsCalculation().changeStats(event.cursor!!.itemMeta, event.whoClicked as Player, false)
-      return
-    }
-    val player = event.whoClicked as Player
-    val slot = event.slot
-    val item = event.currentItem
-    if(slot == player.inventory.heldItemSlot && item != null){
-      IceRunnable(item, slot, player).runTaskLater(Bukkit.getPluginManager().getPlugin("smItems") as Main, 1)
-    }
+    StatsCalculation(event.whoClicked as Player).runTaskLater(plugin, 1)
   }
 
   @EventHandler
@@ -65,9 +35,7 @@ class Events : Listener {
 
   @EventHandler
   fun onPlayerDrop(event: PlayerDropItemEvent){
-    if(event.itemDrop.itemStack.hasItemMeta() && event.player.itemOnCursor != event.itemDrop.itemStack){
-      StatsCalculation().changeStats(event.itemDrop.itemStack.itemMeta, event.player, true)
-    }
+    StatsCalculation(event.player).runTaskLater(plugin, 1)
   }
 
 }

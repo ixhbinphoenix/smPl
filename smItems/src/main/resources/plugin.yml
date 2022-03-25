@@ -4,7 +4,7 @@ version: 0.0.2
 api-version: 1.18
 commands:
   meta:
-    usage: /<command>
+    usage: /<command> [self|reset]
     description: Gives persistentDataContainer information of the held item
   customitem:
     usage: /<command> item

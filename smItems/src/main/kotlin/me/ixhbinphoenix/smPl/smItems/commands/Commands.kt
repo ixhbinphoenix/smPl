@@ -1,5 +1,6 @@
 package me.ixhbinphoenix.smPl.smItems.commands
 
+import me.ixhbinphoenix.smPl.smCore.player.PlayerHandler
 import me.ixhbinphoenix.smPl.smItems.Main
 import me.ixhbinphoenix.smPl.smItems.RarityColor
 import net.kyori.adventure.text.Component
@@ -29,27 +30,47 @@ class Commands : CommandExecutor,Listener {
     if (sender is Player) {
       when {
         command.name.lowercase() == "meta" -> {
-          val item = sender.inventory.getItem(sender.inventory.heldItemSlot) as ItemStack
-          if (item.hasItemMeta()) {
-            val im = item.itemMeta as ItemMeta
-            var msg = Component.text("psdc info for ").color(NamedTextColor.GOLD)
-              .append(im.displayName()!!.color(NamedTextColor.RED))
-            for (key in im.persistentDataContainer.keys) {
-              var keyVal: Any = -2
-              when {
-                key.toString().endsWith("int") -> {
-                  keyVal = im.persistentDataContainer.getOrDefault(key, PersistentDataType.INTEGER, -1)
-                }
-                key.toString().endsWith("str") -> {
-                  keyVal = im.persistentDataContainer.getOrDefault(key, PersistentDataType.STRING, "-1")
-                }
-              }
-              msg = msg.append(Component.text("\n$key = $keyVal").color(NamedTextColor.GOLD))
+          if(args.size == 1){
+            if(args[0] == "self"){
+              val player = sender
+              val playerHandler = PlayerHandler(player)
+              val message = Component.text("psdc info for ").color(NamedTextColor.GOLD)
+                .append(player.name().color(NamedTextColor.RED))
+                .append(Component.text(
+                  "\nDamage: ${playerHandler.getDamage()}" +
+                          "\nMana: ${playerHandler.getMana()}"
+                ).color(NamedTextColor.GOLD))
+              player.sendMessage(message)
             }
-            sender.sendMessage(msg)
-          } else {
-            val msg = Component.text("Item " + item.type + " does not have any item meta").color(NamedTextColor.RED)
-            sender.sendMessage(msg)
+            if(args[0] == "reset"){
+              val playerHandler = PlayerHandler(sender)
+              playerHandler.setDamage(0)
+              playerHandler.setMana(0)
+            }
+          }
+          else{
+            val item = sender.inventory.getItem(sender.inventory.heldItemSlot) as ItemStack
+            if (item.hasItemMeta()) {
+              val im = item.itemMeta as ItemMeta
+              var msg = Component.text("psdc info for ").color(NamedTextColor.GOLD)
+                .append(im.displayName()!!.color(NamedTextColor.RED))
+              for (key in im.persistentDataContainer.keys) {
+                var keyVal: Any = -2
+                when {
+                  key.toString().endsWith("int") -> {
+                    keyVal = im.persistentDataContainer.getOrDefault(key, PersistentDataType.INTEGER, -1)
+                  }
+                  key.toString().endsWith("str") -> {
+                    keyVal = im.persistentDataContainer.getOrDefault(key, PersistentDataType.STRING, "-1")
+                  }
+                }
+                msg = msg.append(Component.text("\n$key = $keyVal").color(NamedTextColor.GOLD))
+              }
+              sender.sendMessage(msg)
+            } else {
+              val msg = Component.text("Item " + item.type + " does not have any item meta").color(NamedTextColor.RED)
+              sender.sendMessage(msg)
+            }
           }
         }
         command.name.lowercase() == "customitem" -> {

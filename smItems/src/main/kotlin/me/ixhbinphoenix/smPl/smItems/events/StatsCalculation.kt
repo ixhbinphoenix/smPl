@@ -5,12 +5,14 @@ import me.ixhbinphoenix.smPl.smItems.ItemTypes
 import me.ixhbinphoenix.smPl.smItems.item.ArmorHandler
 import me.ixhbinphoenix.smPl.smItems.item.DefaultItemHandler
 import me.ixhbinphoenix.smPl.smItems.item.WeaponHandler
+import me.ixhbinphoenix.smPl.smItems.item.sets.SetHelper
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.bukkit.scheduler.BukkitRunnable
 
 class StatsCalculation(player: Player) : BukkitRunnable() {
     private val player: Player
+    private val setHandler = SetHelper()
     init {
         this.player = player
     }
@@ -22,13 +24,17 @@ class StatsCalculation(player: Player) : BukkitRunnable() {
         var mana = 0
         var maxHealth = 0
         var defence = 0
-        val statsItems = listOf(
-            inventory.itemInMainHand,
+        handler.reset()
+        val Armor: ArrayList<ItemStack?> = arrayListOf(
             inventory.helmet,
             inventory.chestplate,
             inventory.leggings,
             inventory.boots
         )
+        val statsItems: ArrayList<ItemStack?> = arrayListOf(
+            inventory.itemInMainHand
+        )
+        statsItems.addAll(Armor)
         for(item: ItemStack? in statsItems){
             if(item != null && item.hasItemMeta()){
                 val pDC = item.itemMeta.persistentDataContainer
@@ -38,6 +44,8 @@ class StatsCalculation(player: Player) : BukkitRunnable() {
                             val weapon = WeaponHandler(pDC)
                             damage += weapon.damage
                             mana += weapon.mana
+                            handler.setDamage(damage)
+                            handler.setMana(mana)
                         }
                     }
                     ItemTypes.ARMOR -> {
@@ -50,16 +58,15 @@ class StatsCalculation(player: Player) : BukkitRunnable() {
                             val armor = ArmorHandler(pDC)
                             maxHealth += armor.maxHealth
                             defence += armor.defence
+                            handler.setMaxHealth(maxHealth)
+                            handler.setDefence(defence)
                         }
                     }
                     else -> {}
                 }
             }
         }
-        handler.setDamage(damage)
-        handler.setMana(mana)
-        handler.setMaxHealth(maxHealth)
-        handler.setDefence(defence)
+        setHandler.calcSet(Armor, player)
     }
 
 }

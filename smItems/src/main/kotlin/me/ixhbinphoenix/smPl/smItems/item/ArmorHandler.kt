@@ -7,9 +7,11 @@ import org.bukkit.persistence.PersistentDataType
 class ArmorHandler(pdc: PersistentDataContainer) : DefaultItemHandler(pdc) {
     var defence: Int
     var maxHealth: Int
+    var set: String
     init{
         this.defence = getItemDefence()
         this.maxHealth = getItemMaxHealth()
+        this.set = getItemSet()
     }
 
     private fun getItemDefence(): Int{
@@ -24,6 +26,14 @@ class ArmorHandler(pdc: PersistentDataContainer) : DefaultItemHandler(pdc) {
             NamespacedKey.fromString("smitems:armor.maxhealth.int")!!,
             PersistentDataType.INTEGER,
             0
+        )
+    }
+
+    private fun getItemSet(): String {
+        return pdc.getOrDefault(
+            NamespacedKey.fromString("smitems:item.set.str")!!,
+            PersistentDataType.STRING,
+            "NONE"
         )
     }
 }

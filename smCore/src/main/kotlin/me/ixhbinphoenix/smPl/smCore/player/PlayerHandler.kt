@@ -7,8 +7,28 @@ import org.bukkit.persistence.PersistentDataType
 
 class PlayerHandler(player: Player) {
     private val player: Player
+    private val stats: ArrayList<String>
     init{
         this.player = player
+        this.stats = ArrayList()
+        stats.add("smcore:player.mana.int")
+        stats.add("smcore:player.damage.int")
+        stats.add("smcore:player.maxhealth.int")
+        stats.add("smcore:player.defence.int")
+    }
+
+    fun reset() {
+        for (stat in stats) {
+            val keys = stat.split('.')
+            val type = keys[keys.size - 1]
+            when (type) {
+                "int" -> {
+                    if (player.persistentDataContainer.has(NamespacedKey.fromString(stat)!!)) {
+                        player.persistentDataContainer.set(NamespacedKey.fromString(stat)!!, PersistentDataType.INTEGER, 0)
+                    }
+                }
+            }
+        }
     }
 
     fun setMana(mana: Int){

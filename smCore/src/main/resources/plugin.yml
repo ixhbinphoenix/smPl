@@ -22,3 +22,7 @@ commands:
   toggleping:
     usage: /<command>
     description: Toggles the ping sound
+permissions:
+  smcore.staffchat:
+    description: Allows to use /sc
+    default: op

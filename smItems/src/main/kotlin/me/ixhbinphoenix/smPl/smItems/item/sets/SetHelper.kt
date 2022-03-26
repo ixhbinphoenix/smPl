@@ -18,7 +18,7 @@ class SetHelper {
           return "NONE"
         } else {
           items++
-          val handler = ArmorHandler(piece.itemMeta.persistentDataContainer)
+          val handler = ArmorHandler(piece)
           val set = handler.set
           if (set == "NONE") {
             return "NONE"

@@ -1,7 +1,7 @@
 package me.ixhbinphoenix.smPl.smItems.events
 
 import me.ixhbinphoenix.smPl.smCore.player.PlayerHandler
-import me.ixhbinphoenix.smPl.smItems.ItemTypes
+import me.ixhbinphoenix.smPl.smItems.ItemCategories
 import me.ixhbinphoenix.smPl.smItems.item.ArmorHandler
 import me.ixhbinphoenix.smPl.smItems.item.DefaultItemHandler
 import me.ixhbinphoenix.smPl.smItems.item.WeaponHandler
@@ -37,25 +37,24 @@ class StatsCalculation(player: Player) : BukkitRunnable() {
         statsItems.addAll(Armor)
         for(item: ItemStack? in statsItems){
             if(item != null && item.hasItemMeta()){
-                val pDC = item.itemMeta.persistentDataContainer
-                when(DefaultItemHandler(pDC).type){
-                    ItemTypes.WEAPON -> {
+                when(DefaultItemHandler(item).category){
+                    ItemCategories.WEAPON -> {
                         if (item == inventory.itemInMainHand) {
-                            val weapon = WeaponHandler(pDC)
+                            val weapon = WeaponHandler(item)
                             damage += weapon.damage
                             mana += weapon.mana
                             handler.setDamage(damage)
                             handler.setMana(mana)
                         }
                     }
-                    ItemTypes.ARMOR -> {
+                    ItemCategories.ARMOR -> {
                         if (
                             item == inventory.helmet ||
                             item == inventory.chestplate ||
                             item == inventory.leggings ||
                             item == inventory.boots
                         ) {
-                            val armor = ArmorHandler(pDC)
+                            val armor = ArmorHandler(item)
                             maxHealth += armor.maxHealth
                             defence += armor.defence
                             handler.setMaxHealth(maxHealth)

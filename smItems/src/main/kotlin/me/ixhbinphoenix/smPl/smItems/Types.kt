@@ -17,13 +17,28 @@ enum class RarityColor(val color: TextColor) {
     MYTHIC(NamedTextColor.AQUA)
 }
 
-
-enum class ItemTypes{
+enum class ItemCategories{
     WEAPON, ARMOR, ACCESSORY
+}
+
+enum class ArmorTypes {
+    HELMET, CHESTPLATE, LEGGINGS, BOOTS
 }
 
 enum class WeaponTypes{
     SWORD, DAGGER, CROSSBOW, LONGBOW, SHORTBOW, WAND, BOOK
 }
 
-data class Xp(val points: Double, val levels: Int)
+enum class Types(val category: ItemCategories) {
+    HELMET(ItemCategories.ARMOR),
+    CHESTPLATE(ItemCategories.ARMOR),
+    LEGGINGS(ItemCategories.ARMOR),
+    BOOTS(ItemCategories.ARMOR),
+    SWORD(ItemCategories.WEAPON),
+    DAGGER(ItemCategories.WEAPON),
+    CROSSBOW(ItemCategories.WEAPON),
+    LONGBOW(ItemCategories.WEAPON),
+    SHORTBOW(ItemCategories.WEAPON),
+    WAND(ItemCategories.WEAPON),
+    BOOK(ItemCategories.WEAPON)
+}

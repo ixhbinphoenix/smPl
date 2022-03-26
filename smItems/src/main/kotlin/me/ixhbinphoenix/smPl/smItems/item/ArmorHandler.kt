@@ -1,10 +1,11 @@
 package me.ixhbinphoenix.smPl.smItems.item
 
 import org.bukkit.NamespacedKey
+import org.bukkit.inventory.ItemStack
 import org.bukkit.persistence.PersistentDataContainer
 import org.bukkit.persistence.PersistentDataType
 
-class ArmorHandler(pdc: PersistentDataContainer) : DefaultItemHandler(pdc) {
+class ArmorHandler(item: ItemStack) : DefaultItemHandler(item) {
     var defence: Int
     var maxHealth: Int
     var set: String

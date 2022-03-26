@@ -2,9 +2,9 @@ package me.ixhbinphoenix.smPl.smItems.commands
 
 import me.ixhbinphoenix.smPl.smCore.chat.createStatText
 import me.ixhbinphoenix.smPl.smCore.commands.BaseCommand
-import me.ixhbinphoenix.smPl.smItems.RarityColor
-import me.ixhbinphoenix.smPl.smItems.getInstance
+import me.ixhbinphoenix.smPl.smItems.*
 import me.ixhbinphoenix.smPl.smItems.item.ItemUtils
+import me.ixhbinphoenix.smPl.smItems.item.SetBonus
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
 import net.kyori.adventure.text.format.TextDecoration
@@ -30,148 +30,82 @@ class giveItemCommand : BaseCommand {
     if (sender is Player) {
       when {
         args[0] == "satans_teachings" -> {
-          val item = ItemStack(Material.BOOK, 1)
-          val im = item.itemMeta as ItemMeta
-          im.displayName(
-            Component.text("Satan's teachings").color(RarityColor.LEGENDARY.color).decoration(
-              TextDecoration.ITALIC, false))
-          val lore = ArrayList<Component>()
-          lore.add(
-            Component.text("Damage: ").color(NamedTextColor.GRAY)
-            .append(Component.text("666").color(NamedTextColor.RED)).decoration(TextDecoration.ITALIC, false))
-          im.persistentDataContainer.set(NamespacedKey.fromString("weapon.damage.int", plugin)!!, PersistentDataType.INTEGER, 666)
-          lore.add(
-            Component.text("Mana: ").color(NamedTextColor.GRAY)
-            .append(Component.text("420").color(NamedTextColor.AQUA)).decoration(TextDecoration.ITALIC, false))
-          im.persistentDataContainer.set(NamespacedKey.fromString("weapon.mana.int", plugin)!!, PersistentDataType.INTEGER, 420)
-          lore.add(Component.text(""))
-          lore.add(Component.text("LEGENDARY BOOK").color(RarityColor.LEGENDARY.color).decoration(TextDecoration.ITALIC, false))
-          im.persistentDataContainer.set(NamespacedKey.fromString("item.rarity.str", plugin)!!, PersistentDataType.STRING, "LEGENDARY")
-          im.persistentDataContainer.set(NamespacedKey.fromString("item.type.str", plugin)!!, PersistentDataType.STRING, "WEAPON")
-          im.persistentDataContainer.set(NamespacedKey.fromString("weapon.type.str", plugin)!!, PersistentDataType.STRING, "BOOK")
-          im.persistentDataContainer.set(NamespacedKey.fromString("item.id.str")!!, PersistentDataType.STRING, "satans_teachings")
-          im.persistentDataContainer.set(NamespacedKey.fromString("item.uuid.str")!!, PersistentDataType.STRING, UUID.randomUUID().toString())
-          im.lore(lore)
-          item.itemMeta = im
+          val item = itemUtils.createWeapon(Material.BOOK, "Satan's teachings", "satans_teachings", Rarity.LEGENDARY, WeaponTypes.BOOK, 666, 420, null)
           itemUtils.giveItem(item, sender)
         }
         args[0] == "programmers_cat_ears" -> {
-          val item = ItemStack(Material.LEATHER_HELMET, 1)
+          val set = SetBonus
+          set.bonusName = "Programmer"
+          set.set = "PROGRAMMER"
+
+          val setLore = ArrayList<Component>()
+          setLore.add(Component.text("The ultimate outfit for a Programmer").color(NamedTextColor.DARK_GRAY))
+          set.setLore = setLore
+
+          val effect = ArrayList<Component>()
+          effect.add(Component.text("Gain 10,000 Mana").color(NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false))
+          set.setEffect = effect
+
+          val item = itemUtils.createArmor(Material.LEATHER_HELMET, "Programmer's Cat ears", "programmers_cat_ears", Rarity.MYTHIC, ArmorTypes.HELMET, 1000, 1000, set)
           val im = item.itemMeta as LeatherArmorMeta
-          im.isUnbreakable = true
-          im.displayName(Component.text("Programmer's Cat ears").color(RarityColor.MYTHIC.color).decoration(TextDecoration.ITALIC, false))
           im.setColor(Color.FUCHSIA)
-          val lore = ArrayList<Component>()
-          lore.add(createStatText("Defence", "1000", NamedTextColor.GREEN, false).decoration(TextDecoration.ITALIC, false))
-          im.persistentDataContainer.set(NamespacedKey.fromString("smitems:armor.defence.int")!!, PersistentDataType.INTEGER, 1000)
-          lore.add(createStatText("Max Health", "1000", NamedTextColor.RED, false).decoration(TextDecoration.ITALIC, false))
-          im.persistentDataContainer.set(NamespacedKey.fromString("smitems:armor.maxhealth.int")!!, PersistentDataType.INTEGER, 1000)
-          lore.add(Component.text(""))
-          lore.add(Component.text("Set Bonus: Programmer ").color(NamedTextColor.GOLD).append(Component.text("(4/4)").color(NamedTextColor.GREEN)).decoration(TextDecoration.ITALIC, false))
-          lore.add(Component.text("The ultimate outfit for a Programmer").color(NamedTextColor.DARK_GRAY))
-          lore.add(Component.text("Gain 10,000 Mana").color(NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false))
-          lore.add(Component.text(""))
-          lore.add(Component.text("MYTHIC HELMET").color(RarityColor.MYTHIC.color).decoration(TextDecoration.ITALIC, false))
-          im.persistentDataContainer.set(NamespacedKey.fromString("smitems:item.rarity.str")!!, PersistentDataType.STRING, "MYTHIC")
-          im.persistentDataContainer.set(NamespacedKey.fromString("smitems:item.type.str")!!, PersistentDataType.STRING, "ARMOR")
-          im.persistentDataContainer.set(NamespacedKey.fromString("smitems:armor.type.str")!!, PersistentDataType.STRING, "HELMET")
-          im.persistentDataContainer.set(NamespacedKey.fromString("smitems:item.set.str")!!, PersistentDataType.STRING, "PROGRAMMER")
-          im.persistentDataContainer.set(NamespacedKey.fromString("smitems:item.id.str")!!, PersistentDataType.STRING, "programmers_cat_ears")
-          im.persistentDataContainer.set(NamespacedKey.fromString("smitems:item.uuid.str")!!, PersistentDataType.STRING, UUID.randomUUID().toString())
-          im.lore(lore)
-          im.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
-          im.addItemFlags(ItemFlag.HIDE_DYE)
-          im.addItemFlags(ItemFlag.HIDE_UNBREAKABLE)
           item.itemMeta = im
           itemUtils.giveItem(item, sender)
         }
         args[0] == "programmers_croptop" -> {
-          val item = ItemStack(Material.LEATHER_CHESTPLATE, 1)
+          val set = SetBonus
+          set.bonusName = "Programmer"
+          set.set = "PROGRAMMER"
+
+          val setLore = ArrayList<Component>()
+          setLore.add(Component.text("The ultimate outfit for a Programmer").color(NamedTextColor.DARK_GRAY))
+          set.setLore = setLore
+
+          val effect = ArrayList<Component>()
+          effect.add(Component.text("Gain 10,000 Mana").color(NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false))
+          set.setEffect = effect
+
+          val item = itemUtils.createArmor(Material.LEATHER_CHESTPLATE, "Programmer's Crop-top", "programmers_crop_top", Rarity.MYTHIC, ArmorTypes.CHESTPLATE, 1000, 1000, set)
           val im = item.itemMeta as LeatherArmorMeta
-          im.isUnbreakable = true
-          im.displayName(Component.text("Programmer's Crop-top").color(RarityColor.MYTHIC.color).decoration(TextDecoration.ITALIC, false))
           im.setColor(Color.FUCHSIA)
-          val lore = ArrayList<Component>()
-          lore.add(createStatText("Defence", "1000", NamedTextColor.GREEN, false).decoration(TextDecoration.ITALIC, false))
-          im.persistentDataContainer.set(NamespacedKey.fromString("smitems:armor.defence.int")!!, PersistentDataType.INTEGER, 1000)
-          lore.add(createStatText("Max Health", "1000", NamedTextColor.RED, false).decoration(TextDecoration.ITALIC, false))
-          im.persistentDataContainer.set(NamespacedKey.fromString("smitems:armor.maxhealth.int")!!, PersistentDataType.INTEGER, 1000)
-          lore.add(Component.text(""))
-          lore.add(Component.text("Set Bonus: Programmer ").color(NamedTextColor.GOLD).append(Component.text("(4/4)").color(NamedTextColor.GREEN)).decoration(TextDecoration.ITALIC, false))
-          lore.add(Component.text("The ultimate outfit for a Programmer").color(NamedTextColor.DARK_GRAY))
-          lore.add(Component.text("Gain 10,000 Mana").color(NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false))
-          lore.add(Component.text(""))
-          lore.add(Component.text("MYTHIC CHESTPLATE").color(RarityColor.MYTHIC.color).decoration(TextDecoration.ITALIC, false))
-          im.persistentDataContainer.set(NamespacedKey.fromString("smitems:item.rarity.str")!!, PersistentDataType.STRING, "MYTHIC")
-          im.persistentDataContainer.set(NamespacedKey.fromString("smitems:item.type.str")!!, PersistentDataType.STRING, "ARMOR")
-          im.persistentDataContainer.set(NamespacedKey.fromString("smitems:armor.type.str")!!, PersistentDataType.STRING, "CHESTPLATE")
-          im.persistentDataContainer.set(NamespacedKey.fromString("smitems:item.set.str")!!, PersistentDataType.STRING, "PROGRAMMER")
-          im.persistentDataContainer.set(NamespacedKey.fromString("smitems:item.id.str")!!, PersistentDataType.STRING, "programmers_croptop")
-          im.persistentDataContainer.set(NamespacedKey.fromString("smitems:item.uuid.str")!!, PersistentDataType.STRING, UUID.randomUUID().toString())
-          im.lore(lore)
-          im.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
-          im.addItemFlags(ItemFlag.HIDE_DYE)
-          im.addItemFlags(ItemFlag.HIDE_UNBREAKABLE)
           item.itemMeta = im
           itemUtils.giveItem(item, sender)
         }
         args[0] == "programmers_skirt" -> {
-          val item = ItemStack(Material.LEATHER_LEGGINGS, 1)
+          val set = SetBonus
+          set.bonusName = "Programmer"
+          set.set = "PROGRAMMER"
+
+          val setLore = ArrayList<Component>()
+          setLore.add(Component.text("The ultimate outfit for a Programmer").color(NamedTextColor.DARK_GRAY))
+          set.setLore = setLore
+
+          val effect = ArrayList<Component>()
+          effect.add(Component.text("Gain 10,000 Mana").color(NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false))
+          set.setEffect = effect
+
+          val item = itemUtils.createArmor(Material.LEATHER_LEGGINGS, "Programmer's Skirt", "programmers_skirt", Rarity.MYTHIC, ArmorTypes.LEGGINGS, 1000, 1000, set)
           val im = item.itemMeta as LeatherArmorMeta
-          im.isUnbreakable = true
-          im.displayName(Component.text("Programmer's Skirt").color(RarityColor.MYTHIC.color).decoration(TextDecoration.ITALIC, false))
           im.setColor(Color.FUCHSIA)
-          val lore = ArrayList<Component>()
-          lore.add(createStatText("Defence", "1000", NamedTextColor.GREEN, false).decoration(TextDecoration.ITALIC, false))
-          im.persistentDataContainer.set(NamespacedKey.fromString("smitems:armor.defence.int")!!, PersistentDataType.INTEGER, 1000)
-          lore.add(createStatText("Max Health", "1000", NamedTextColor.RED, false).decoration(TextDecoration.ITALIC, false))
-          im.persistentDataContainer.set(NamespacedKey.fromString("smitems:armor.maxhealth.int")!!, PersistentDataType.INTEGER, 1000)
-          lore.add(Component.text(""))
-          lore.add(Component.text("Set Bonus: Programmer ").color(NamedTextColor.GOLD).append(Component.text("(4/4)").color(NamedTextColor.GREEN)).decoration(TextDecoration.ITALIC, false))
-          lore.add(Component.text("The ultimate outfit for a Programmer").color(NamedTextColor.DARK_GRAY))
-          lore.add(Component.text("Gain 10,000 Mana").color(NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false))
-          lore.add(Component.text(""))
-          lore.add(Component.text("MYTHIC SKIRT").color(RarityColor.MYTHIC.color).decoration(TextDecoration.ITALIC, false))
-          im.persistentDataContainer.set(NamespacedKey.fromString("smitems:item.rarity.str")!!, PersistentDataType.STRING, "MYTHIC")
-          im.persistentDataContainer.set(NamespacedKey.fromString("smitems:item.type.str")!!, PersistentDataType.STRING, "ARMOR")
-          im.persistentDataContainer.set(NamespacedKey.fromString("smitems:armor.type.str")!!, PersistentDataType.STRING, "LEGGINGS")
-          im.persistentDataContainer.set(NamespacedKey.fromString("smitems:item.set.str")!!, PersistentDataType.STRING, "PROGRAMMER")
-          im.persistentDataContainer.set(NamespacedKey.fromString("smitems:item.id.str")!!, PersistentDataType.STRING, "programmers_skirt")
-          im.persistentDataContainer.set(NamespacedKey.fromString("smitems:item.uuid.str")!!, PersistentDataType.STRING, UUID.randomUUID().toString())
-          im.lore(lore)
-          im.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
-          im.addItemFlags(ItemFlag.HIDE_DYE)
-          im.addItemFlags(ItemFlag.HIDE_UNBREAKABLE)
           item.itemMeta = im
           itemUtils.giveItem(item, sender)
         }
         args[0] == "programmers_thigh_highs" -> {
-          val item = ItemStack(Material.LEATHER_BOOTS, 1)
+          val set = SetBonus
+          set.bonusName = "Programmer"
+          set.set = "PROGRAMMER"
+
+          val setLore = ArrayList<Component>()
+          setLore.add(Component.text("The ultimate outfit for a Programmer").color(NamedTextColor.DARK_GRAY))
+          set.setLore = setLore
+
+          val effect = ArrayList<Component>()
+          effect.add(Component.text("Gain 10,000 Mana").color(NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false))
+          set.setEffect = effect
+
+          val item = itemUtils.createArmor(Material.LEATHER_BOOTS, "Programmer's Thigh-highs", "programmers_thigh_highs", Rarity.MYTHIC, ArmorTypes.BOOTS, 1000, 1000, set)
           val im = item.itemMeta as LeatherArmorMeta
-          im.isUnbreakable = true
-          im.displayName(Component.text("Programmer's Thigh-highs").color(RarityColor.MYTHIC.color).decoration(TextDecoration.ITALIC, false))
           im.setColor(Color.FUCHSIA)
-          val lore = ArrayList<Component>()
-          lore.add(createStatText("Defence", "1000", NamedTextColor.GREEN, false).decoration(TextDecoration.ITALIC, false))
-          im.persistentDataContainer.set(NamespacedKey.fromString("smitems:armor.defence.int")!!, PersistentDataType.INTEGER, 1000)
-          lore.add(createStatText("Max Health", "1000", NamedTextColor.RED, false).decoration(TextDecoration.ITALIC, false))
-          im.persistentDataContainer.set(NamespacedKey.fromString("smitems:armor.maxhealth.int")!!, PersistentDataType.INTEGER, 1000)
-          lore.add(Component.text(""))
-          lore.add(Component.text("Set Bonus: Programmer ").color(NamedTextColor.GOLD).append(Component.text("(4/4)").color(NamedTextColor.GREEN)).decoration(TextDecoration.ITALIC, false))
-          lore.add(Component.text("The ultimate outfit for a Programmer").color(NamedTextColor.DARK_GRAY))
-          lore.add(Component.text("Gain 10,000 Mana").color(NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false))
-          lore.add(Component.text(""))
-          lore.add(Component.text("MYTHIC SOCKS").color(RarityColor.MYTHIC.color).decoration(TextDecoration.ITALIC, false))
-          im.persistentDataContainer.set(NamespacedKey.fromString("smitems:item.rarity.str")!!, PersistentDataType.STRING, "MYTHIC")
-          im.persistentDataContainer.set(NamespacedKey.fromString("smitems:item.type.str")!!, PersistentDataType.STRING, "ARMOR")
-          im.persistentDataContainer.set(NamespacedKey.fromString("smitems:armor.type.str")!!, PersistentDataType.STRING, "BOOTS")
-          im.persistentDataContainer.set(NamespacedKey.fromString("smitems:item.set.str")!!, PersistentDataType.STRING, "PROGRAMMER")
-          im.persistentDataContainer.set(NamespacedKey.fromString("smitems:item.id.str")!!, PersistentDataType.STRING, "programmers_thigh_highs")
-          im.persistentDataContainer.set(NamespacedKey.fromString("smitems:item.uuid.str")!!, PersistentDataType.STRING, UUID.randomUUID().toString())
-          im.lore(lore)
-          im.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
-          im.addItemFlags(ItemFlag.HIDE_DYE)
-          im.addItemFlags(ItemFlag.HIDE_UNBREAKABLE)
           item.itemMeta = im
           itemUtils.giveItem(item, sender)
         }

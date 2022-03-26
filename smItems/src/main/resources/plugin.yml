@@ -6,7 +6,7 @@ commands:
   meta:
     usage: /<command> [self|reset]
     description: Gives persistentDataContainer information of the held item
-  customitem:
+  giveitem:
     usage: /<command> item
     description: Gives a test item
 depend:

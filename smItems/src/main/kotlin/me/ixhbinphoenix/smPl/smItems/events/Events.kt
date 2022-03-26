@@ -20,6 +20,7 @@ class Events : Listener {
 
   @EventHandler
   fun onInventoryClick(event: InventoryClickEvent){
+    // More like event.whoAsked
     StatsCalculation(event.whoClicked as Player).runTaskLater(plugin, 1)
   }
 

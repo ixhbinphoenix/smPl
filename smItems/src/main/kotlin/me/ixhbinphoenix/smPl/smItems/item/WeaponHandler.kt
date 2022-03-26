@@ -4,22 +4,22 @@ import org.bukkit.NamespacedKey
 import org.bukkit.persistence.PersistentDataContainer
 import org.bukkit.persistence.PersistentDataType
 
-class WeaponItem(persistentDataContainer: PersistentDataContainer) : DefaultItem(persistentDataContainer) {
+class WeaponHandler(pdc: PersistentDataContainer) : DefaultItemHandler(pdc) {
     var damage: Int
     var mana: Int
     init {
-        this.damage = getDamage(persistentDataContainer)
-        this.mana = getMana(persistentDataContainer)
+        this.damage = getItemDamage()
+        this.mana = getItemMana()
     }
 
-    private fun getDamage(pdc: PersistentDataContainer): Int{
+    private fun getItemDamage(): Int{
         return pdc.getOrDefault(
             NamespacedKey.fromString("smitems:weapon.damage.int")!!,
             PersistentDataType.INTEGER,
             0)
     }
 
-    private fun getMana(pdc: PersistentDataContainer): Int{
+    private fun getItemMana(): Int{
         return pdc.getOrDefault(
             NamespacedKey.fromString("smitems:weapon.mana.int")!!,
             PersistentDataType.INTEGER,

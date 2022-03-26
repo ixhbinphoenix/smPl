@@ -5,13 +5,13 @@ import org.bukkit.NamespacedKey
 import org.bukkit.persistence.PersistentDataContainer
 import org.bukkit.persistence.PersistentDataType
 
-open class DefaultItem(persistentDataContainer: PersistentDataContainer) {
+open class DefaultItemHandler(val pdc: PersistentDataContainer) {
     var type: ItemTypes? = null
     init{
-        this.type = getType(persistentDataContainer)
+        this.type = getItemType()
     }
 
-    private fun getType(pdc: PersistentDataContainer): ItemTypes? {
+    private fun getItemType(): ItemTypes? {
         val stringType = pdc.getOrDefault(
             NamespacedKey.fromString("smitems:item.type.str")!!,
             PersistentDataType.STRING,

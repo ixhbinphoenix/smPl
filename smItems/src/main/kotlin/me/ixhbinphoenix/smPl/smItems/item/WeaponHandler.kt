@@ -1,11 +1,12 @@
 package me.ixhbinphoenix.smPl.smItems.item
 
 import org.bukkit.NamespacedKey
+import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.bukkit.persistence.PersistentDataContainer
 import org.bukkit.persistence.PersistentDataType
 
-class WeaponHandler(item: ItemStack) : DefaultItemHandler(item) {
+class WeaponHandler(item: ItemStack, player: Player) : DefaultItemHandler(item, player) {
     var damage: Int
     var mana: Int
     init {

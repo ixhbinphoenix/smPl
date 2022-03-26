@@ -10,12 +10,8 @@ import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.bukkit.scheduler.BukkitRunnable
 
-class StatsCalculation(player: Player) : BukkitRunnable() {
-    private val player: Player
+class StatsCalculation(private val player: Player, private val refreshLore: Boolean = false) : BukkitRunnable() {
     private val setHandler = SetHelper()
-    init {
-        this.player = player
-    }
 
     override fun run() {
         val inventory = player.inventory
@@ -37,14 +33,15 @@ class StatsCalculation(player: Player) : BukkitRunnable() {
         statsItems.addAll(Armor)
         for(item: ItemStack? in statsItems){
             if(item != null && item.hasItemMeta()){
-                when(DefaultItemHandler(item).category){
+                when(DefaultItemHandler(item, player).category){
                     ItemCategories.WEAPON -> {
                         if (item == inventory.itemInMainHand) {
-                            val weapon = WeaponHandler(item)
+                            val weapon = WeaponHandler(item, player)
                             damage += weapon.damage
                             mana += weapon.mana
                             handler.setDamage(damage)
                             handler.setMana(mana)
+                            if (refreshLore) weapon.updateLore()
                         }
                     }
                     ItemCategories.ARMOR -> {
@@ -54,11 +51,12 @@ class StatsCalculation(player: Player) : BukkitRunnable() {
                             item == inventory.leggings ||
                             item == inventory.boots
                         ) {
-                            val armor = ArmorHandler(item)
+                            val armor = ArmorHandler(item, player)
                             maxHealth += armor.maxHealth
                             defence += armor.defence
                             handler.setMaxHealth(maxHealth)
                             handler.setDefence(defence)
+                            if (refreshLore) armor.updateLore()
                         }
                     }
                     else -> {}

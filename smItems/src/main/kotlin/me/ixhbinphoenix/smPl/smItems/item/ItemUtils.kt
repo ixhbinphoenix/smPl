@@ -9,9 +9,11 @@ import net.kyori.adventure.text.format.TextDecoration
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
 import org.bukkit.entity.Player
+import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
 import org.bukkit.persistence.PersistentDataType
+import org.bukkit.scheduler.BukkitRunnable
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -20,6 +22,23 @@ object SetBonus {
   var bonusName: String = "Unknown"
   var setLore: ArrayList<Component>? = null
   var setEffect: ArrayList<Component> = arrayListOf(Component.text("Has no effect!"))
+}
+
+class LoreRefresh(private val event: InventoryClickEvent) : BukkitRunnable() {
+  override fun run() {
+    val player = event.whoClicked as Player
+    val slot = event.slot
+    if (player.inventory.getItem(slot) is ItemStack && player.inventory.getItem(slot)!!.hasItemMeta()) {
+      val item = player.inventory.getItem(slot)!!
+      val handler = DefaultItemHandler(item, player)
+      handler.updateLore()
+    }
+    if (event.currentItem is ItemStack && event.currentItem!!.hasItemMeta()) {
+      val item = event.currentItem!!
+      val handler = DefaultItemHandler(item, player)
+      handler.updateLore()
+    }
+  }
 }
 
 class ItemUtils {

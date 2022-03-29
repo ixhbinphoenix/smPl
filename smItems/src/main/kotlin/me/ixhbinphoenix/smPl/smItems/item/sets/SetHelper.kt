@@ -1,6 +1,6 @@
 package me.ixhbinphoenix.smPl.smItems.item.sets
 
-import me.ixhbinphoenix.smPl.smItems.item.ArmorHandler
+import me.ixhbinphoenix.smPl.smItems.item.ItemHandler
 import me.ixhbinphoenix.smPl.smItems.item.SetBonus
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
@@ -14,7 +14,7 @@ class SetHelper {
         if (piece !is ItemStack) {
           return "NONE"
         } else {
-          val handler = ArmorHandler(piece, player)
+          val handler = ItemHandler(piece, player)
           val set = handler.set
           if (set == "NONE") {
             return "NONE"
@@ -39,7 +39,7 @@ class SetHelper {
       )
       for (piece in armor) {
         if (piece is ItemStack) {
-          val handler = ArmorHandler(piece, player)
+          val handler = ItemHandler(piece, player)
           if (handler.set == set) comp++
         }
       }
@@ -55,11 +55,11 @@ class SetHelper {
 
   fun calcSet(armor: ArrayList<ItemStack?>, player: Player): Boolean {
     val set = getSet(armor, player)
-    if (Handlers.containsKey(set)) {
+    return if (Handlers.containsKey(set)) {
       Handlers[set]?.onRecalc(player)
-      return true
+      true
     } else {
-      return false
+      false
     }
   }
 }

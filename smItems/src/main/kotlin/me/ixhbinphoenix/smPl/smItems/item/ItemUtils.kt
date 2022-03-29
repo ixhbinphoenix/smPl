@@ -30,12 +30,12 @@ class LoreRefresh(private val event: InventoryClickEvent) : BukkitRunnable() {
     val slot = event.slot
     if (player.inventory.getItem(slot) is ItemStack && player.inventory.getItem(slot)!!.hasItemMeta()) {
       val item = player.inventory.getItem(slot)!!
-      val handler = DefaultItemHandler(item, player)
+      val handler = ItemHandler(item, player)
       handler.updateLore()
     }
     if (event.currentItem is ItemStack && event.currentItem!!.hasItemMeta()) {
       val item = event.currentItem!!
-      val handler = DefaultItemHandler(item, player)
+      val handler = ItemHandler(item, player)
       handler.updateLore()
     }
   }
@@ -56,10 +56,10 @@ class ItemUtils {
     im.displayName(Component.text(name).color(RarityColor.valueOf(rarity.name).color).decoration(TextDecoration.ITALIC, false))
     val statTexts = ArrayList<Component>()
     statTexts.add(createStatText("Damage", dmg.toString(), NamedTextColor.RED, false).decoration(TextDecoration.ITALIC, false))
-    im.persistentDataContainer.set(NamespacedKey.fromString("smitems:weapon.damage.int")!!, PersistentDataType.INTEGER, dmg)
+    im.persistentDataContainer.set(NamespacedKey.fromString("smitems:equipment.damage.int")!!, PersistentDataType.INTEGER, dmg)
     if (mana > 0) {
       statTexts.add(createStatText("Mana", mana.toString(), NamedTextColor.AQUA, false).decoration(TextDecoration.ITALIC, false))
-      im.persistentDataContainer.set(NamespacedKey.fromString("smitems:weapon.mana.int")!!, PersistentDataType.INTEGER, mana)
+      im.persistentDataContainer.set(NamespacedKey.fromString("smitems:equipment.mana.int")!!, PersistentDataType.INTEGER, mana)
     }
     im.persistentDataContainer.set(NamespacedKey.fromString("smitems:item.rarity.str")!!, PersistentDataType.STRING, rarity.name)
     im.persistentDataContainer.set(NamespacedKey.fromString("smitems:item.type.str")!!, PersistentDataType.STRING, ItemCategories.WEAPON.name)
@@ -82,11 +82,11 @@ class ItemUtils {
     val statTexts = ArrayList<Component>()
     if (defence > 0) {
       statTexts.add(createStatText("Defence", defence.toString(), NamedTextColor.GREEN, false).decoration(TextDecoration.ITALIC, false))
-      im.persistentDataContainer.set(NamespacedKey.fromString("smitems:armor.defence.int")!!, PersistentDataType.INTEGER, defence)
+      im.persistentDataContainer.set(NamespacedKey.fromString("smitems:equipment.defence.int")!!, PersistentDataType.INTEGER, defence)
     }
     if (maxHealth > 0) {
       statTexts.add(createStatText("Max Health", maxHealth.toString(), NamedTextColor.RED, false).decoration(TextDecoration.ITALIC, false))
-      im.persistentDataContainer.set(NamespacedKey.fromString("smitems:armor.maxhealth.int")!!, PersistentDataType.INTEGER, maxHealth)
+      im.persistentDataContainer.set(NamespacedKey.fromString("smitems:equipment.maxhealth.int")!!, PersistentDataType.INTEGER, maxHealth)
     }
     if (set is SetBonus) {
       im.persistentDataContainer.set(NamespacedKey.fromString("smitems:item.set.str")!!, PersistentDataType.STRING, set.set)

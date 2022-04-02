@@ -2,7 +2,6 @@ package me.ixhbinphoenix.smPl.smCore.player
 
 import org.bukkit.NamespacedKey
 import org.bukkit.entity.Player
-import org.bukkit.inventory.ItemStack
 import org.bukkit.persistence.PersistentDataType
 
 class PlayerHandler(player: Player) {
@@ -10,11 +9,12 @@ class PlayerHandler(player: Player) {
     private val stats: ArrayList<String>
     init{
         this.player = player
-        this.stats = ArrayList()
-        stats.add("smcore:player.mana.int")
-        stats.add("smcore:player.damage.int")
-        stats.add("smcore:player.maxhealth.int")
-        stats.add("smcore:player.defence.int")
+        this.stats = arrayListOf(
+            "smcore:player.mana.int",
+            "smcore:player.damage.int",
+            "smcore:player.maxhealth.int",
+            "smcore:player.defence.int"
+        )
     }
 
     fun reset() {
@@ -67,6 +67,7 @@ class PlayerHandler(player: Player) {
         )
     }
 
+    @Suppress("unused")
     fun getMaxHealth(): Int {
         return player.persistentDataContainer.getOrDefault(
             NamespacedKey.fromString("smcore:player.maxhealth.int")!!,
@@ -83,6 +84,7 @@ class PlayerHandler(player: Player) {
         )
     }
 
+    @Suppress("unused")
     fun getDefence(): Int {
         return player.persistentDataContainer.getOrDefault(
             NamespacedKey.fromString("smcore:player.defence.int")!!,

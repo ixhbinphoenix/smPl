@@ -11,7 +11,6 @@ import net.kyori.adventure.text.format.TextColor
 import net.kyori.adventure.text.format.TextDecoration
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
-import org.bukkit.entity.Item
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.bukkit.persistence.PersistentDataContainer
@@ -19,14 +18,13 @@ import org.bukkit.persistence.PersistentDataType
 
 open class DefaultItemHandler(val item: ItemStack, val player: Player) {
     var category: ItemCategories? = null
-    val mat: Material
+    val mat: Material = item.type
     val pdc: PersistentDataContainer = item.itemMeta.persistentDataContainer
     val setHelper = SetHelper()
     var set: String
     private val ItemUtils = ItemUtils()
     init{
         this.category = getItemCategory()
-        this.mat = item.type
         this.set = getItemSet()
     }
 

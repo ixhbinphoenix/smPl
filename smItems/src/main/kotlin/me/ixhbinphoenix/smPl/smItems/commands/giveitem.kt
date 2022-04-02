@@ -1,6 +1,5 @@
 package me.ixhbinphoenix.smPl.smItems.commands
 
-import me.ixhbinphoenix.smPl.smCore.chat.createStatText
 import me.ixhbinphoenix.smPl.smCore.commands.BaseCommand
 import me.ixhbinphoenix.smPl.smItems.*
 import me.ixhbinphoenix.smPl.smItems.item.ItemUtils
@@ -10,21 +9,14 @@ import net.kyori.adventure.text.format.NamedTextColor
 import net.kyori.adventure.text.format.TextDecoration
 import org.bukkit.Color
 import org.bukkit.Material
-import org.bukkit.NamespacedKey
 import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
-import org.bukkit.inventory.ItemFlag
-import org.bukkit.inventory.ItemStack
-import org.bukkit.inventory.meta.ItemMeta
 import org.bukkit.inventory.meta.LeatherArmorMeta
-import org.bukkit.persistence.PersistentDataType
-import java.util.*
 import kotlin.collections.ArrayList
 
 class giveItemCommand : BaseCommand {
   private val itemUtils = ItemUtils()
-  private val plugin = getInstance()
 
   override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
     if (sender is Player) {
@@ -49,6 +41,7 @@ class giveItemCommand : BaseCommand {
           val item = itemUtils.createArmor(Material.LEATHER_HELMET, "Programmer's Cat ears", "programmers_cat_ears", Rarity.MYTHIC, ArmorTypes.HELMET, 1000, 1000, set)
           val im = item.itemMeta as LeatherArmorMeta
           im.setColor(Color.FUCHSIA)
+          im.isUnbreakable = true
           item.itemMeta = im
           itemUtils.giveItem(item, sender)
         }
@@ -68,6 +61,7 @@ class giveItemCommand : BaseCommand {
           val item = itemUtils.createArmor(Material.LEATHER_CHESTPLATE, "Programmer's Crop-top", "programmers_crop_top", Rarity.MYTHIC, ArmorTypes.CHESTPLATE, 1000, 1000, set)
           val im = item.itemMeta as LeatherArmorMeta
           im.setColor(Color.FUCHSIA)
+          im.isUnbreakable = true
           item.itemMeta = im
           itemUtils.giveItem(item, sender)
         }
@@ -87,6 +81,7 @@ class giveItemCommand : BaseCommand {
           val item = itemUtils.createArmor(Material.LEATHER_LEGGINGS, "Programmer's Skirt", "programmers_skirt", Rarity.MYTHIC, ArmorTypes.LEGGINGS, 1000, 1000, set)
           val im = item.itemMeta as LeatherArmorMeta
           im.setColor(Color.FUCHSIA)
+          im.isUnbreakable = true
           item.itemMeta = im
           itemUtils.giveItem(item, sender)
         }
@@ -106,6 +101,7 @@ class giveItemCommand : BaseCommand {
           val item = itemUtils.createArmor(Material.LEATHER_BOOTS, "Programmer's Thigh-highs", "programmers_thigh_highs", Rarity.MYTHIC, ArmorTypes.BOOTS, 1000, 1000, set)
           val im = item.itemMeta as LeatherArmorMeta
           im.setColor(Color.FUCHSIA)
+          im.isUnbreakable = true
           item.itemMeta = im
           itemUtils.giveItem(item, sender)
         }

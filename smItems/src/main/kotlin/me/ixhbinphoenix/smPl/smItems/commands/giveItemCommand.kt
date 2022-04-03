@@ -1,6 +1,5 @@
 package me.ixhbinphoenix.smPl.smItems.commands
 
-import me.ixhbinphoenix.smPl.smCore.chat.createStatText
 import me.ixhbinphoenix.smPl.smCore.commands.BaseCommand
 import me.ixhbinphoenix.smPl.smItems.*
 import me.ixhbinphoenix.smPl.smItems.item.ItemUtils
@@ -10,21 +9,14 @@ import net.kyori.adventure.text.format.NamedTextColor
 import net.kyori.adventure.text.format.TextDecoration
 import org.bukkit.Color
 import org.bukkit.Material
-import org.bukkit.NamespacedKey
 import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
-import org.bukkit.inventory.ItemFlag
-import org.bukkit.inventory.ItemStack
-import org.bukkit.inventory.meta.ItemMeta
 import org.bukkit.inventory.meta.LeatherArmorMeta
-import org.bukkit.persistence.PersistentDataType
-import java.util.*
 import kotlin.collections.ArrayList
 
 class giveItemCommand : BaseCommand {
   private val itemUtils = ItemUtils()
-  private val plugin = getInstance()
 
   override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
     if (sender is Player) {

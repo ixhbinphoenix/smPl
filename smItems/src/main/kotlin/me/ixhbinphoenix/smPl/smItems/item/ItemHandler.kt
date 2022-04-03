@@ -14,11 +14,13 @@ import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.bukkit.persistence.PersistentDataContainer
 import org.bukkit.persistence.PersistentDataType
+import kotlin.math.sqrt
 
-open class ItemHandler(val item: ItemStack, val player: Player) {
+open class ItemHandler(val item: ItemStack, private val player: Player) {
     private val setHelper = SetHelper()
     private val itemUtils = ItemUtils()
 
+    val rarity: Rarity
     var category: ItemCategories? = null
     val mat: Material
     val pdc: PersistentDataContainer = item.itemMeta.persistentDataContainer
@@ -27,7 +29,11 @@ open class ItemHandler(val item: ItemStack, val player: Player) {
     // Stats
     val stats = HashMap<String, Int>()
 
+    var xp: Int
+    var level: Double
+
     init{
+        this.rarity = getItemRarity()
         this.category = getItemCategory()
         this.mat = item.type
         this.set = getItemSet()
@@ -36,6 +42,8 @@ open class ItemHandler(val item: ItemStack, val player: Player) {
         for (stat in allStats) {
             this.stats[stat.key] = pdc.getOrDefault(NamespacedKey.fromString(stat.value)!!, PersistentDataType.INTEGER, 0)
         }
+        this.xp = getItemXP()
+        this.level = calcLevel()
     }
 
     fun updateLore() {
@@ -64,8 +72,12 @@ open class ItemHandler(val item: ItemStack, val player: Player) {
             }
         }
         val im = item.itemMeta
-        im.lore(itemUtils.genLore(rarity, type, statTexts, SetHelper.getCompletion(player, set), setHelper.setObjects[set]))
+        im.lore(itemUtils.genLore(rarity, type, statTexts, this.level, SetHelper.getCompletion(player, set), setHelper.setObjects[set]))
         item.itemMeta = im
+    }
+
+    private fun getItemRarity(): Rarity {
+        return Rarity.valueOf(pdc.getOrDefault(NamespacedKey.fromString("smitems:item.rarity.str")!!, PersistentDataType.STRING, "COMMON"))
     }
 
     private fun getItemCategory(): ItemCategories? {
@@ -94,6 +106,50 @@ open class ItemHandler(val item: ItemStack, val player: Player) {
             PersistentDataType.STRING,
             "NONE"
         )
+    }
+
+    private fun getItemXP(): Int {
+        return pdc.getOrDefault(
+            NamespacedKey.fromString("smitems:item.xp.int")!!,
+            PersistentDataType.INTEGER,
+            0
+        )
+    }
+
+    fun setXP(xp: Int) {
+        pdc.set(
+            NamespacedKey.fromString("smitems:item.xp.int")!!,
+            PersistentDataType.INTEGER,
+            0
+        )
+        this.xp = xp
+        this.level = calcLevel()
+        updateLore()
+    }
+
+    private fun calcLevel(): Double {
+        var num = 0.0
+        when (rarity) {
+            Rarity.COMMON -> {
+                num = sqrt(this.xp.toDouble() / 500)
+            }
+            Rarity.UNCOMMON -> {
+                num = sqrt(this.xp.toDouble() / 750)
+            }
+            Rarity.RARE -> {
+                num = sqrt(this.xp.toDouble() / 1250)
+            }
+            Rarity.EPIC -> {
+                num = sqrt(this.xp.toDouble() / 2000)
+            }
+            Rarity.LEGENDARY -> {
+                num = sqrt(this.xp.toDouble() / 3000)
+            }
+            Rarity.MYTHIC -> {
+                num = sqrt(this.xp.toDouble() / 5000)
+            }
+        }
+        return if (num > 20.0) 20.0 else num
     }
 
 }

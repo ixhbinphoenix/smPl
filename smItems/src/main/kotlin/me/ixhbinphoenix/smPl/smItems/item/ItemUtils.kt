@@ -1,5 +1,6 @@
 package me.ixhbinphoenix.smPl.smItems.item
 
+import me.ixhbinphoenix.smPl.smCore.chat.createProgressBar
 import me.ixhbinphoenix.smPl.smCore.chat.createStatText
 import me.ixhbinphoenix.smPl.smItems.*
 import me.ixhbinphoenix.smPl.smItems.events.StatsCalculation
@@ -16,6 +17,8 @@ import org.bukkit.persistence.PersistentDataType
 import org.bukkit.scheduler.BukkitRunnable
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.math.floor
+import kotlin.math.roundToInt
 
 object SetBonus {
   var set: String = "NONE"
@@ -66,7 +69,7 @@ class ItemUtils {
     im.persistentDataContainer.set(NamespacedKey.fromString("smitems:weapon.type.str")!!, PersistentDataType.STRING, weaponType.name)
     im.persistentDataContainer.set(NamespacedKey.fromString("smitems:item.id.str")!!, PersistentDataType.STRING, id)
     im.persistentDataContainer.set(NamespacedKey.fromString("smitems:item.uuid.str")!!, PersistentDataType.STRING, UUID.randomUUID().toString())
-    im.lore(genLore(rarity, Types.valueOf(weaponType.name), statTexts, 0, set))
+    im.lore(genLore(rarity, Types.valueOf(weaponType.name), statTexts, 0.0, 0, set))
     im.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
     im.addItemFlags(ItemFlag.HIDE_UNBREAKABLE)
     im.addItemFlags(ItemFlag.HIDE_DYE)
@@ -96,7 +99,7 @@ class ItemUtils {
     im.persistentDataContainer.set(NamespacedKey.fromString("smitems:armor.type.str")!!, PersistentDataType.STRING, armorType.name)
     im.persistentDataContainer.set(NamespacedKey.fromString("smitems:item.id.str")!!, PersistentDataType.STRING, id)
     im.persistentDataContainer.set(NamespacedKey.fromString("smitems:item.uuid.str")!!, PersistentDataType.STRING, UUID.randomUUID().toString())
-    im.lore(genLore(rarity, Types.valueOf(armorType.name), statTexts, 0, set))
+    im.lore(genLore(rarity, Types.valueOf(armorType.name), statTexts, 0.0, 0, set))
     im.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
     im.addItemFlags(ItemFlag.HIDE_UNBREAKABLE)
     im.addItemFlags(ItemFlag.HIDE_DYE)
@@ -104,10 +107,22 @@ class ItemUtils {
     return item
   }
 
-  fun genLore(rarity: Rarity, type: Types, stats: ArrayList<Component>, setCompletion: Int = 0, set: SetBonus?): ArrayList<Component> {
+  fun genLore(rarity: Rarity, type: Types, stats: ArrayList<Component>, level: Double, setCompletion: Int = 0, set: SetBonus?): ArrayList<Component> {
     val lore = ArrayList<Component>()
     lore.addAll(stats)
     lore.add(Component.text("").decoration(TextDecoration.ITALIC, false))
+    lore.add(Component.text("Level: ").color(NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false))
+    val percent = "%.2f".format((level - floor(level)) * 100).toDouble()
+    lore.add(
+      Component.text(floor(level).roundToInt()).color(NamedTextColor.GREEN)
+        .append(Component.text(" → ").color(NamedTextColor.GRAY))
+        .append(Component.text(floor(level).roundToInt() + 1).color(NamedTextColor.DARK_GREEN))
+        .append(Component.text(" "))
+        .append(createProgressBar(20, percent))
+        .append(Component.text(" ${percent}%").color(NamedTextColor.GREEN))
+        .decoration(TextDecoration.ITALIC, false)
+    )
+    lore.add(Component.text(""))
     if (set is SetBonus) {
       if (setCompletion == 4) {
         lore.add(Component.text("Set Bonus: ${set.bonusName}").color(NamedTextColor.GOLD).append(Component.text(" ($setCompletion/4)").color(NamedTextColor.GREEN)).decoration(TextDecoration.ITALIC, false))

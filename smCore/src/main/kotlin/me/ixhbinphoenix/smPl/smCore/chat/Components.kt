@@ -12,6 +12,7 @@ import org.bukkit.NamespacedKey
 import org.bukkit.entity.Player
 import org.bukkit.Sound
 import org.bukkit.persistence.PersistentDataType
+import kotlin.math.floor
 
 
 fun getPrefix(player: Player, message: Component): Component {
@@ -113,6 +114,26 @@ fun getRankColor(rank: Rank): TextColor {
     Rank.TRUSTED -> NamedTextColor.LIGHT_PURPLE
     Rank.PLAYER -> NamedTextColor.GRAY
   }
+}
+
+fun createProgressBar(bars: Int, progress: Double): Component {
+  val barPercent: Double = (100 / bars).toDouble()
+  var prog = progress
+  var barsWritten = bars
+
+  var bar = Component.text("[").color(NamedTextColor.DARK_GRAY)
+
+  while (prog > barPercent) {
+    prog -= barPercent
+    bar = bar.append(Component.text("|").color(NamedTextColor.GREEN))
+    barsWritten -= 1
+  }
+  while (barsWritten > 0) {
+    bar = bar.append(Component.text("|").color(NamedTextColor.GRAY))
+    barsWritten -= 1
+  }
+
+  return bar.append(Component.text("]").color(NamedTextColor.DARK_GRAY))
 }
 
 fun createRankInfoText(rank: Rank, category: String, specific: String): Component {

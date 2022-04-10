@@ -11,6 +11,6 @@ commands:
     description: Gives a test item
   setitemxp:
     usage: /<command> xp
-    description: Sets xp of the currently equiped item
+    description: Sets xp of the held item
 depend:
   - smCore

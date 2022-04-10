@@ -46,17 +46,17 @@ class SetHelper {
       return comp
     }
   }
-  val Handlers = HashMap<String, BaseSetHandler>()
+  private val handlers = HashMap<String, BaseSetHandler>()
   val setObjects = HashMap<String, SetBonus>()
   init {
-    Handlers["PROGRAMMER"] = ProgrammerSet()
+    handlers["PROGRAMMER"] = ProgrammerSet()
     setObjects["PROGRAMMER"] = ProgrammerSet.getBonus()
   }
 
   fun calcSet(armor: ArrayList<ItemStack?>, player: Player): Boolean {
     val set = getSet(armor, player)
-    return if (Handlers.containsKey(set)) {
-      Handlers[set]?.onRecalc(player)
+    return if (handlers.containsKey(set)) {
+      handlers[set]?.onRecalc(player)
       true
     } else {
       false

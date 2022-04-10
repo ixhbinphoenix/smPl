@@ -43,7 +43,7 @@ open class ItemHandler(val item: ItemStack, private val player: Player) {
             this.stats[stat.key] = pdc.getOrDefault(NamespacedKey.fromString(stat.value)!!, PersistentDataType.INTEGER, 0)
         }
         this.xp = getItemXP()
-        this.level = calcLevel()
+        this.level = itemUtils.calcRarityLevel(xp, itemUtils.getRarityMultiplier(rarity))
     }
 
     fun updateLore() {
@@ -72,7 +72,7 @@ open class ItemHandler(val item: ItemStack, private val player: Player) {
             }
         }
         val im = item.itemMeta
-        im.lore(itemUtils.genLore(rarity, type, statTexts, this.level, SetHelper.getCompletion(player, set), setHelper.setObjects[set]))
+        im.lore(itemUtils.genLore(rarity, type, statTexts, xp, SetHelper.getCompletion(player, set), setHelper.setObjects[set]))
         item.itemMeta = im
     }
 
@@ -117,39 +117,14 @@ open class ItemHandler(val item: ItemStack, private val player: Player) {
     }
 
     fun setXP(xp: Int) {
-        pdc.set(
+        val im = item.itemMeta
+        im.persistentDataContainer.set(
             NamespacedKey.fromString("smitems:item.xp.int")!!,
             PersistentDataType.INTEGER,
-            0
+            xp
         )
+        item.itemMeta = im
         this.xp = xp
-        this.level = calcLevel()
         updateLore()
     }
-
-    private fun calcLevel(): Double {
-        var num = 0.0
-        when (rarity) {
-            Rarity.COMMON -> {
-                num = sqrt(this.xp.toDouble() / 500)
-            }
-            Rarity.UNCOMMON -> {
-                num = sqrt(this.xp.toDouble() / 750)
-            }
-            Rarity.RARE -> {
-                num = sqrt(this.xp.toDouble() / 1250)
-            }
-            Rarity.EPIC -> {
-                num = sqrt(this.xp.toDouble() / 2000)
-            }
-            Rarity.LEGENDARY -> {
-                num = sqrt(this.xp.toDouble() / 3000)
-            }
-            Rarity.MYTHIC -> {
-                num = sqrt(this.xp.toDouble() / 5000)
-            }
-        }
-        return if (num > 20.0) 20.0 else num
-    }
-
 }

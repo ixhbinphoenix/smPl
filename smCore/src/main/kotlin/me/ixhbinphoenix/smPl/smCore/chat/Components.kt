@@ -12,7 +12,6 @@ import org.bukkit.NamespacedKey
 import org.bukkit.entity.Player
 import org.bukkit.Sound
 import org.bukkit.persistence.PersistentDataType
-import kotlin.math.floor
 
 
 fun getPrefix(player: Player, message: Component): Component {
@@ -116,29 +115,30 @@ fun getRankColor(rank: Rank): TextColor {
   }
 }
 
-fun createProgressBar(bars: Int, progress: Double): Component {
-  val barPercent: Double = (100 / bars).toDouble()
-  var prog = progress
-  var barsWritten = bars
-
-  var bar = Component.text("[").color(NamedTextColor.DARK_GRAY)
-
-  while (prog > barPercent) {
-    prog -= barPercent
-    bar = bar.append(Component.text("|").color(NamedTextColor.GREEN))
-    barsWritten -= 1
-  }
-  while (barsWritten > 0) {
-    bar = bar.append(Component.text("|").color(NamedTextColor.GRAY))
-    barsWritten -= 1
-  }
-
-  return bar.append(Component.text("]").color(NamedTextColor.DARK_GRAY))
-}
-
 fun createRankInfoText(rank: Rank, category: String, specific: String): Component {
   return Component.text(category).color(getRankColor(rank))
     .append(Component.text(" ($specific)").color(NamedTextColor.DARK_GRAY))
+}
+
+fun createProgressBar(bars: Int, progress: Double): Component {
+  // Shadowing is useful here, since params cannot be vars
+  @Suppress("NAME_SHADOWING") var bars = bars
+  val barPercent = 100 / bars
+  var prog = progress + 0.001
+
+  var comp = Component.text("[").color(NamedTextColor.DARK_GRAY)
+
+  while (prog > barPercent) {
+    prog -= barPercent
+    comp = comp.append(Component.text("|").color(NamedTextColor.GREEN))
+    bars -= 1
+  }
+
+  while (bars > 0) {
+    comp = comp.append(Component.text("|").color(NamedTextColor.DARK_GREEN))
+    bars -= 1
+  }
+  return comp.append(Component.text("]").color(NamedTextColor.DARK_GRAY))
 }
 
 /**

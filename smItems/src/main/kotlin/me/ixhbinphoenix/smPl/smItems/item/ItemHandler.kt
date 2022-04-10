@@ -125,6 +125,7 @@ open class ItemHandler(val item: ItemStack, private val player: Player) {
         )
         item.itemMeta = im
         this.xp = xp
+        this.level = itemUtils.calcRarityLevel(xp, itemUtils.getRarityMultiplier(rarity))
         updateLore()
     }
 }

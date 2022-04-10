@@ -116,15 +116,21 @@ class ItemUtils {
     lore.add(Component.text("Level: ").color(NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false))
     val level = calcRarityLevel(xp, getRarityMultiplier(rarity))
     val percent = "%.2f".format((level - floor(level)) * 100).toDouble()
-    lore.add(
-      Component.text(floor(level).roundToInt()).color(NamedTextColor.GREEN)
-        .append(Component.text(" → ").color(NamedTextColor.GRAY))
-        .append(Component.text(floor(level).roundToInt() + 1).color(NamedTextColor.DARK_GREEN))
-        .append(Component.text(" "))
-        .append(createProgressBar(20, level))
-        .append(Component.text(" ${percent}%").color(NamedTextColor.GREEN))
-        .decoration(TextDecoration.ITALIC, false)
-    )
+    var levelprog = Component.text(floor(level).roundToInt()).color(NamedTextColor.GREEN)
+    levelprog = if (floor(level).roundToInt() != 20) {
+      levelprog.append(
+        Component.text(" → ").color(NamedTextColor.GRAY)
+          .append(Component.text(floor(level).roundToInt() + 1).color(NamedTextColor.DARK_GREEN))
+          .append(Component.text(" "))
+          .append(createProgressBar(20, (level - floor(level)) * 100))
+          .append(Component.text(" ${percent}%").color(NamedTextColor.GREEN))
+      )
+    } else {
+      levelprog.append(
+        Component.text(" MAX!").color(NamedTextColor.GREEN).decoration(TextDecoration.BOLD, true)
+      )
+    }
+    lore.add(levelprog.decoration(TextDecoration.ITALIC, false))
     lore.add(Component.text(""))
     if (set is SetBonus) {
       if (setCompletion == 4) {

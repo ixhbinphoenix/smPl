@@ -126,7 +126,7 @@ fun createProgressBar(bars: Int, progress: Double): Component {
   val barPercent = 100 / bars
   var prog = progress + 0.001
 
-  var comp = Component.text("[").color(NamedTextColor.DARK_GRAY)
+  var comp = Component.text("[").color(NamedTextColor.GRAY)
 
   while (prog > barPercent) {
     prog -= barPercent
@@ -135,10 +135,10 @@ fun createProgressBar(bars: Int, progress: Double): Component {
   }
 
   while (bars > 0) {
-    comp = comp.append(Component.text("|").color(NamedTextColor.DARK_GREEN))
+    comp = comp.append(Component.text("|").color(NamedTextColor.DARK_GRAY))
     bars -= 1
   }
-  return comp.append(Component.text("]").color(NamedTextColor.DARK_GRAY))
+  return comp.append(Component.text("]").color(NamedTextColor.GRAY))
 }
 
 /**

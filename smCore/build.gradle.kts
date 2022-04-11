@@ -1,7 +1,7 @@
 plugins {
   java
   idea
-  kotlin("jvm") version "1.6.10"
+  kotlin("jvm") version "1.6.20"
   id("com.github.johnrengelman.shadow") version "7.1.2"
   id("io.papermc.paperweight.userdev") version "1.3.5"
 }
@@ -24,6 +24,18 @@ dependencies {
 
 java {
   toolchain.languageVersion.set(JavaLanguageVersion.of(17))
+}
+
+tasks {
+  assemble {
+    dependsOn(reobfJar)
+  }
+
+  compileJava {
+    options.encoding = Charsets.UTF_8.name()
+
+    options.release.set(17)
+  }
 }
 
 tasks.getByName<Test>("test") {

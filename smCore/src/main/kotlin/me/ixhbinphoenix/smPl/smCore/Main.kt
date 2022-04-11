@@ -18,7 +18,6 @@ class Main : JavaPlugin() {
     commands["pstats"] = pstatsCommand()
     commands["setstat"] = setstatCommand()
     commands["delstat"] = delstatCommand()
-    commands["sc"] = scCommand()
     commands["toggleping"] = togglepingCommand()
     for (cmd in commands) {
       getCommand(cmd.key)?.setExecutor(cmd.value)

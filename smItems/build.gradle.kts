@@ -1,7 +1,7 @@
 plugins {
     java
     idea
-    kotlin("jvm") version "1.6.10"
+    kotlin("jvm") version "1.6.20"
     `java-library`
     id("com.github.johnrengelman.shadow") version "7.1.2"
     id("io.papermc.paperweight.userdev") version "1.3.5"

@@ -12,7 +12,7 @@ class ZombieCommand : BaseCommand {
         if(sender is Player){
             Zombie().spawn(sender.world, sender.location)
         }
-        return false
+        return true
     }
 
     override fun onTabComplete(

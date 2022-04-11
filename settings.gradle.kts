@@ -10,3 +10,4 @@ rootProject.name = "smPl"
 include("smCore")
 include("smItems")
 include("smEntities")
+include("smProxy")

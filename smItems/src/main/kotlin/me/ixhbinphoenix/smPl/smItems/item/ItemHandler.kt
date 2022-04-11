@@ -22,7 +22,7 @@ open class ItemHandler(val item: ItemStack, private val player: Player) {
 
     val rarity: Rarity
     var category: ItemCategories? = null
-    val mat: Material
+    val mat: Material = item.type
     val pdc: PersistentDataContainer = item.itemMeta.persistentDataContainer
     var set: String
 
@@ -35,7 +35,6 @@ open class ItemHandler(val item: ItemStack, private val player: Player) {
     init{
         this.rarity = getItemRarity()
         this.category = getItemCategory()
-        this.mat = item.type
         this.set = getItemSet()
 
         val allStats = StatsCalculation.getAllStats()

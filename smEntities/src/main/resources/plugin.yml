@@ -3,8 +3,8 @@ name: smEntities
 version: 0.0.1
 api-version: 1.18
 commands:
-  npc:
-    usage: /<command> <name> <skinName>
-    description: Summons a NPC
+  zombie:
+    usage: /<command>
+    description: Summons a Zombie at your location
 depend:
   - smCore

@@ -16,10 +16,11 @@ class Main : JavaPlugin() {
     }
 
     override fun onEnable() {
-        val commands = HashMap<String, BaseCommand>()
-        commands["giveitem"] = giveItemCommand()
-        commands["meta"] = metaCommand()
-        commands["setitemxp"] = setItemXPCommand()
+        val commands: HashMap<String, BaseCommand> = hashMapOf(
+            "giveitem" to giveItemCommand(),
+            "meta" to metaCommand(),
+            "setitemxp" to setItemXPCommand()
+        )
         for (cmd in commands) {
             getCommand(cmd.key)?.setExecutor(cmd.value)
             getCommand(cmd.key)?.tabCompleter = cmd.value

@@ -41,6 +41,7 @@ class giveItemCommand : BaseCommand {
           val item = itemUtils.createArmor(Material.LEATHER_HELMET, "Programmer's Cat ears", "programmers_cat_ears", Rarity.MYTHIC, ArmorTypes.HELMET, 1000, 1000, set)
           val im = item.itemMeta as LeatherArmorMeta
           im.setColor(Color.FUCHSIA)
+          im.isUnbreakable = true
           item.itemMeta = im
           itemUtils.giveItem(item, sender)
         }
@@ -60,6 +61,7 @@ class giveItemCommand : BaseCommand {
           val item = itemUtils.createArmor(Material.LEATHER_CHESTPLATE, "Programmer's Crop-top", "programmers_crop_top", Rarity.MYTHIC, ArmorTypes.CHESTPLATE, 1000, 1000, set)
           val im = item.itemMeta as LeatherArmorMeta
           im.setColor(Color.FUCHSIA)
+          im.isUnbreakable = true
           item.itemMeta = im
           itemUtils.giveItem(item, sender)
         }
@@ -79,6 +81,7 @@ class giveItemCommand : BaseCommand {
           val item = itemUtils.createArmor(Material.LEATHER_LEGGINGS, "Programmer's Skirt", "programmers_skirt", Rarity.MYTHIC, ArmorTypes.LEGGINGS, 1000, 1000, set)
           val im = item.itemMeta as LeatherArmorMeta
           im.setColor(Color.FUCHSIA)
+          im.isUnbreakable = true
           item.itemMeta = im
           itemUtils.giveItem(item, sender)
         }
@@ -98,6 +101,7 @@ class giveItemCommand : BaseCommand {
           val item = itemUtils.createArmor(Material.LEATHER_BOOTS, "Programmer's Thigh-highs", "programmers_thigh_highs", Rarity.MYTHIC, ArmorTypes.BOOTS, 1000, 1000, set)
           val im = item.itemMeta as LeatherArmorMeta
           im.setColor(Color.FUCHSIA)
+          im.isUnbreakable = true
           item.itemMeta = im
           itemUtils.giveItem(item, sender)
         }

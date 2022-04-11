@@ -55,7 +55,6 @@ fun getPlayerInfo(player: Player): Component {
     .append(createStatText("Name", player.name, NamedTextColor.YELLOW))
     .append(createStatText("Level", playerLevel.toString(), NamedTextColor.YELLOW))
   val rank = getPlayerRank(player)
-  // TODO: Get Actual rank names
   pinfo = pinfo.append(createStatText("Rank", rank.name, getRankColor(rank)))
   // TODO: Fetch Player Guild
   val playerGuild: String? = null

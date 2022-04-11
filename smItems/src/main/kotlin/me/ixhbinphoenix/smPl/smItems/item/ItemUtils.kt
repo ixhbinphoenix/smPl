@@ -164,12 +164,8 @@ class ItemUtils {
     // These ARE constants that could have been pre-calculated, however that would look ugly as fuck and it takes
     // literal nanoseconds to calculate this (i hope lmao)
     if (xp < 1) return 0.0
-    val levelReqs = ArrayList<Double>()
     for (x in 0..19) {
-      levelReqs.add(a * x.toDouble().pow(2))
-    }
-    for (x in 0 until levelReqs.size) {
-      val fraction = xp / levelReqs[x]
+      val fraction = xp / (a * x.toDouble().pow(2))
       if (x == 19 && fraction > 1) return 20.0
       if (fraction > 1) continue
       return fraction + x - 1

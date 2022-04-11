@@ -9,5 +9,8 @@ commands:
   giveitem:
     usage: /<command> item
     description: Gives a test item
+  setitemxp:
+    usage: /<command> xp
+    description: Sets xp of the held item
 depend:
   - smCore

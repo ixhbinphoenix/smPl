@@ -21,7 +21,10 @@ commands:
     description: Sends a message in staffchat
   toggleping:
     usage: /<command>
-    description: Toggles the ping sound
+    description: Toggles the ping
+  progbar:
+    usage: /<command>
+    description: Displays a progress bar
 permissions:
   smcore.staffchat:
     description: Allows to use /sc

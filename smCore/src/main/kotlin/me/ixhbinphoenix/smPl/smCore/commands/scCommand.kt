@@ -4,7 +4,6 @@ import me.ixhbinphoenix.smPl.smCore.chat.getPlayerInfo
 import me.ixhbinphoenix.smPl.smCore.chat.getRankColor
 import me.ixhbinphoenix.smPl.smCore.utils.getPlayerRank
 import net.kyori.adventure.text.Component
-import net.kyori.adventure.text.event.HoverEvent
 import net.kyori.adventure.text.format.NamedTextColor
 import org.bukkit.Bukkit
 import org.bukkit.NamespacedKey

@@ -20,8 +20,7 @@ class PlayerHandler(player: Player) {
     fun reset() {
         for (stat in stats) {
             val keys = stat.split('.')
-            val type = keys[keys.size - 1]
-            when (type) {
+            when (keys[keys.size - 1]) {
                 "int" -> {
                     if (player.persistentDataContainer.has(NamespacedKey.fromString(stat)!!)) {
                         player.persistentDataContainer.set(NamespacedKey.fromString(stat)!!, PersistentDataType.INTEGER, 0)

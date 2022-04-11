@@ -55,7 +55,6 @@ fun getPlayerInfo(player: Player): Component {
     .append(createStatText("Name", player.name, NamedTextColor.YELLOW))
     .append(createStatText("Level", playerLevel.toString(), NamedTextColor.YELLOW))
   val rank = getPlayerRank(player)
-  // TODO: Get Actual rank names
   pinfo = pinfo.append(createStatText("Rank", rank.name, getRankColor(rank)))
   // TODO: Fetch Player Guild
   val playerGuild: String? = null
@@ -118,6 +117,27 @@ fun getRankColor(rank: Rank): TextColor {
 fun createRankInfoText(rank: Rank, category: String, specific: String): Component {
   return Component.text(category).color(getRankColor(rank))
     .append(Component.text(" ($specific)").color(NamedTextColor.DARK_GRAY))
+}
+
+fun createProgressBar(bars: Int, progress: Double): Component {
+  // Shadowing is useful here, since params cannot be vars
+  @Suppress("NAME_SHADOWING") var bars = bars
+  val barPercent = 100 / bars
+  var prog = progress + 0.001
+
+  var comp = Component.text("[").color(NamedTextColor.GRAY)
+
+  while (prog > barPercent) {
+    prog -= barPercent
+    comp = comp.append(Component.text("|").color(NamedTextColor.GREEN))
+    bars -= 1
+  }
+
+  while (bars > 0) {
+    comp = comp.append(Component.text("|").color(NamedTextColor.DARK_GRAY))
+    bars -= 1
+  }
+  return comp.append(Component.text("]").color(NamedTextColor.GRAY))
 }
 
 /**

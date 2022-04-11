@@ -3,6 +3,7 @@ package me.ixhbinphoenix.smPl.smItems
 import me.ixhbinphoenix.smPl.smCore.commands.BaseCommand
 import me.ixhbinphoenix.smPl.smItems.commands.giveItemCommand
 import me.ixhbinphoenix.smPl.smItems.commands.metaCommand
+import me.ixhbinphoenix.smPl.smItems.commands.setItemXPCommand
 import me.ixhbinphoenix.smPl.smItems.events.Events
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
@@ -17,7 +18,8 @@ class Main : JavaPlugin() {
     override fun onEnable() {
         val commands: HashMap<String, BaseCommand> = hashMapOf(
             "giveitem" to giveItemCommand(),
-            "meta" to metaCommand()
+            "meta" to metaCommand(),
+            "setitemxp" to setItemXPCommand()
         )
         for (cmd in commands) {
             getCommand(cmd.key)?.setExecutor(cmd.value)

@@ -4,10 +4,9 @@ import me.ixhbinphoenix.smPl.smCore.chat.createStatText
 import me.ixhbinphoenix.smPl.smItems.ItemCategories
 import me.ixhbinphoenix.smPl.smItems.Rarity
 import me.ixhbinphoenix.smPl.smItems.Types
+import me.ixhbinphoenix.smPl.smItems.events.StatsCalculation
 import me.ixhbinphoenix.smPl.smItems.item.sets.SetHelper
 import net.kyori.adventure.text.Component
-import net.kyori.adventure.text.format.NamedTextColor
-import net.kyori.adventure.text.format.TextColor
 import net.kyori.adventure.text.format.TextDecoration
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
@@ -15,17 +14,35 @@ import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.bukkit.persistence.PersistentDataContainer
 import org.bukkit.persistence.PersistentDataType
+import kotlin.math.sqrt
 
-open class DefaultItemHandler(val item: ItemStack, val player: Player) {
+open class ItemHandler(val item: ItemStack, private val player: Player) {
+    private val setHelper = SetHelper()
+    private val itemUtils = ItemUtils()
+
+    val rarity: Rarity
     var category: ItemCategories? = null
     val mat: Material = item.type
     val pdc: PersistentDataContainer = item.itemMeta.persistentDataContainer
-    val setHelper = SetHelper()
     var set: String
-    private val ItemUtils = ItemUtils()
+
+    // Stats
+    val stats = HashMap<String, Int>()
+
+    var xp: Int
+    var level: Double
+
     init{
+        this.rarity = getItemRarity()
         this.category = getItemCategory()
         this.set = getItemSet()
+
+        val allStats = StatsCalculation.getAllStats()
+        for (stat in allStats) {
+            this.stats[stat.key] = pdc.getOrDefault(NamespacedKey.fromString(stat.value)!!, PersistentDataType.INTEGER, 0)
+        }
+        this.xp = getItemXP()
+        this.level = itemUtils.calcRarityLevel(xp, itemUtils.getRarityMultiplier(rarity))
     }
 
     fun updateLore() {
@@ -41,37 +58,25 @@ open class DefaultItemHandler(val item: ItemStack, val player: Player) {
                 throw NotImplementedError("Only WEAPON and ARMOR is Implemented")
             }
         }
+        val map = StatsCalculation.getAllStats()
         val stats = HashMap<String, Int>()
-        stats["Damage"] = pdc.getOrDefault(NamespacedKey.fromString("smitems:weapon.damage.int")!!, PersistentDataType.INTEGER, 0)
-        stats["Mana"] = pdc.getOrDefault(NamespacedKey.fromString("smitems:weapon.mana.int")!!, PersistentDataType.INTEGER, 0)
-        stats["Defence"] = pdc.getOrDefault(NamespacedKey.fromString("smitems:armor.defence.int")!!, PersistentDataType.INTEGER, 0)
-        stats["Max Health"] = pdc.getOrDefault(NamespacedKey.fromString("smitems:armor.maxhealth.int")!!, PersistentDataType.INTEGER, 0)
+        for (stat in map) {
+            stats[stat.key] = pdc.getOrDefault(NamespacedKey.fromString(stat.value)!!, PersistentDataType.INTEGER, 0)
+        }
         val statTexts = ArrayList<Component>()
         for (stat in stats) {
             if (stat.value > 0) {
-                val color: TextColor = when (stat.key) {
-                    "Damage" -> {
-                        NamedTextColor.RED
-                    }
-                    "Mana" -> {
-                        NamedTextColor.AQUA
-                    }
-                    "Defence" -> {
-                        NamedTextColor.GREEN
-                    }
-                    "Max Health" -> {
-                        NamedTextColor.RED
-                    }
-                    else -> {
-                        NamedTextColor.YELLOW
-                    }
-                }
-                statTexts.add(createStatText(stat.key, stat.value.toString(), color, false).decoration(TextDecoration.ITALIC, false))
+                val color = StatsCalculation.statColor(stat.key)
+                statTexts.add(createStatText(StatsCalculation.statNameToDisplayName(stat.key), stat.value.toString(), color, false).decoration(TextDecoration.ITALIC, false))
             }
         }
         val im = item.itemMeta
-        im.lore(ItemUtils.genLore(rarity, type, statTexts, SetHelper.getCompletion(player, set), setHelper.setObjects[set]))
+        im.lore(itemUtils.genLore(rarity, type, statTexts, xp, SetHelper.getCompletion(player, set), setHelper.setObjects[set]))
         item.itemMeta = im
+    }
+
+    private fun getItemRarity(): Rarity {
+        return Rarity.valueOf(pdc.getOrDefault(NamespacedKey.fromString("smitems:item.rarity.str")!!, PersistentDataType.STRING, "COMMON"))
     }
 
     private fun getItemCategory(): ItemCategories? {
@@ -102,4 +107,24 @@ open class DefaultItemHandler(val item: ItemStack, val player: Player) {
         )
     }
 
+    private fun getItemXP(): Int {
+        return pdc.getOrDefault(
+            NamespacedKey.fromString("smitems:item.xp.int")!!,
+            PersistentDataType.INTEGER,
+            0
+        )
+    }
+
+    fun setXP(xp: Int) {
+        val im = item.itemMeta
+        im.persistentDataContainer.set(
+            NamespacedKey.fromString("smitems:item.xp.int")!!,
+            PersistentDataType.INTEGER,
+            xp
+        )
+        item.itemMeta = im
+        this.xp = xp
+        this.level = itemUtils.calcRarityLevel(xp, itemUtils.getRarityMultiplier(rarity))
+        updateLore()
+    }
 }

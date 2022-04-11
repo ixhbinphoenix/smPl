@@ -1,18 +1,14 @@
 package me.ixhbinphoenix.smPl.smEntities.entities.hostiles
 
-import me.ixhbinphoenix.smPl.smCore.commands.BaseCommand
 import me.ixhbinphoenix.smPl.smEntities.entities.updateName
 import org.bukkit.Location
 import org.bukkit.World
-import org.bukkit.command.Command
-import org.bukkit.command.CommandExecutor
-import org.bukkit.command.CommandSender
+import org.bukkit.attribute.Attribute
 import org.bukkit.entity.Damageable
 import org.bukkit.entity.Entity
 import org.bukkit.entity.EntityType
-import org.bukkit.entity.Player
 
-class Zombie : Hostiles(), CommandExecutor, BaseCommand {
+class Zombie : Hostiles() {
     override val name = "Zombie"
     override val damage = 100.0
     override val grantingXp = 10
@@ -24,30 +20,11 @@ class Zombie : Hostiles(), CommandExecutor, BaseCommand {
         entity = world.spawnEntity(location, entityType)
         updateName(entity as Damageable, health, name)
         val zombie = entity as org.bukkit.entity.Zombie
-        zombie.maxHealth = health
+        zombie.getAttribute(Attribute.GENERIC_MAX_HEALTH)!!.baseValue = health
         zombie.health = health
         zombie.setShouldBurnInDay(false)
         saveDamage(damage)
         saveHealth(health)
         saveName(name)
-    }
-
-    override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
-        if(label == "zombie"){
-            if(sender is Player){
-                spawn(sender.world, sender.location)
-                return true
-            }
-        }
-        return false
-    }
-
-    override fun onTabComplete(
-        sender: CommandSender,
-        command: Command,
-        label: String,
-        args: Array<out String>
-    ): MutableList<String>? {
-        return null
     }
 }

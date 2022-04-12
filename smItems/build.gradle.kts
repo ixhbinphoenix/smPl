@@ -22,6 +22,7 @@ dependencies {
 
     compileOnly(project(":smCore"))
     compileOnly(project(":smChat"))
+    compileOnly(project(":smEntities"))
 
     implementation(kotlin("stdlib"))
 }

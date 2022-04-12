@@ -74,3 +74,18 @@ fun updateName(entity: Damageable, health: Double, name: String){
         Component.text((health.toInt()).toString()).color(NamedTextColor.RED)
             .append(Component.text(" $name").color(NamedTextColor.WHITE)))
 }
+fun showDamage(damageable: Damageable, damage: Double){
+    val health: Double = if(damageable.health - damage > 0) damageable.health - damage else 0.0
+    updateName(damageable, health, damageable.persistentDataContainer.getOrDefault(
+        NamespacedKey.fromString("smentities:entity.name.str")!!,
+        PersistentDataType.STRING,
+        "Damageable"
+    ))
+}
+fun damage(entity: Damageable, damage: Double, source: Entity?) {
+    if (source is Entity) {
+        entity.damage(damage, source)
+    } else {
+        entity.damage(damage)
+    }
+}

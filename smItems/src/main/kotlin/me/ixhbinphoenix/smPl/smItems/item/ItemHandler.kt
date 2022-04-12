@@ -20,9 +20,10 @@ open class ItemHandler(val item: ItemStack, private val player: Player) {
     private val itemUtils = ItemUtils()
 
     val rarity: Rarity
-    var category: ItemCategories? = null
     val mat: Material = item.type
     val pdc: PersistentDataContainer = item.itemMeta.persistentDataContainer
+    var category: ItemCategories?
+    var type: Types
     var set: String
 
     // Stats
@@ -34,6 +35,7 @@ open class ItemHandler(val item: ItemStack, private val player: Player) {
     init{
         this.rarity = getItemRarity()
         this.category = getItemCategory()
+        this.type = getItemType()
         this.set = getItemSet()
 
         val allStats = StatsCalculation.getAllStats()
@@ -46,17 +48,6 @@ open class ItemHandler(val item: ItemStack, private val player: Player) {
 
     fun updateLore() {
         val rarity = Rarity.valueOf(pdc.getOrDefault(NamespacedKey.fromString("smitems:item.rarity.str")!!, PersistentDataType.STRING, "COMMON"))
-        val type = when (category) {
-            ItemCategories.WEAPON -> {
-                Types.valueOf(pdc.getOrDefault(NamespacedKey.fromString("smitems:weapon.type.str")!!, PersistentDataType.STRING, "SWORD"))
-            }
-            ItemCategories.ARMOR -> {
-                Types.valueOf(pdc.getOrDefault(NamespacedKey.fromString("smitems:armor.type.str")!!, PersistentDataType.STRING, "HELMET"))
-            }
-            else -> {
-                throw NotImplementedError("Only WEAPON and ARMOR is Implemented")
-            }
-        }
         val map = StatsCalculation.getAllStats()
         val stats = HashMap<String, Int>()
         for (stat in map) {
@@ -76,6 +67,31 @@ open class ItemHandler(val item: ItemStack, private val player: Player) {
 
     private fun getItemRarity(): Rarity {
         return Rarity.valueOf(pdc.getOrDefault(NamespacedKey.fromString("smitems:item.rarity.str")!!, PersistentDataType.STRING, "COMMON"))
+    }
+
+    private fun getItemType(): Types {
+        when (category) {
+            ItemCategories.WEAPON -> {
+                val stringType = pdc.getOrDefault(
+                    NamespacedKey.fromString("smitems:weapon.type.str")!!,
+                    PersistentDataType.STRING,
+                    ""
+                )
+                return Types.valueOf(stringType)
+            }
+            ItemCategories.ARMOR -> {
+                val stringType = pdc.getOrDefault(
+                    NamespacedKey.fromString("smitems:armor.type.str")!!,
+                    PersistentDataType.STRING,
+                    ""
+                )
+                return Types.valueOf(stringType)
+            }
+            else -> {
+                throw NotImplementedError("Only WEAPON and ARMOR is Implemented")
+            }
+        }
+
     }
 
     private fun getItemCategory(): ItemCategories? {

@@ -14,3 +14,5 @@ commands:
     description: Sets xp of the held item
 depend:
   - smCore
+  - smChat
+  - smEntities

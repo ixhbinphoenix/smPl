@@ -1,15 +1,37 @@
 package me.ixhbinphoenix.smPl.smItems.events
 
+import com.destroystokyo.paper.event.player.PlayerAttackEntityCooldownResetEvent
+import me.ixhbinphoenix.smPl.smCore.player.PlayerHandler
+import me.ixhbinphoenix.smPl.smEntities.entities.damage
+import me.ixhbinphoenix.smPl.smEntities.entities.showDamage
 import me.ixhbinphoenix.smPl.smItems.Main
+import me.ixhbinphoenix.smPl.smItems.Types
+import me.ixhbinphoenix.smPl.smItems.getInstance
+import me.ixhbinphoenix.smPl.smItems.item.ItemHandler
 import me.ixhbinphoenix.smPl.smItems.item.LoreRefresh
-import org.bukkit.Bukkit
+import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.format.NamedTextColor
+import org.bukkit.*
+import org.bukkit.block.Block
+import org.bukkit.entity.Damageable
 import org.bukkit.entity.Player
+import org.bukkit.entity.Snowball
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
+import org.bukkit.event.block.Action
+import org.bukkit.event.entity.EntityDamageByEntityEvent
+import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.event.entity.EntityPickupItemEvent
+import org.bukkit.event.entity.ProjectileHitEvent
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.player.PlayerDropItemEvent
+import org.bukkit.event.player.PlayerInteractAtEntityEvent
+import org.bukkit.event.player.PlayerInteractEntityEvent
+import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerItemHeldEvent
+import org.bukkit.inventory.ItemStack
+import org.bukkit.persistence.PersistentDataType
+import kotlin.math.roundToInt
 
 class Events : Listener {
   private val plugin = Bukkit.getPluginManager().getPlugin("smItems") as Main
@@ -38,6 +60,100 @@ class Events : Listener {
   @EventHandler
   fun onPlayerDrop(event: PlayerDropItemEvent){
     StatsCalculation(event.player).runTaskLater(plugin, 1)
+  }
+
+  @EventHandler
+  fun onEntityHurt(event: EntityDamageEvent){
+    if(event.cause != EntityDamageEvent.DamageCause.ENTITY_ATTACK && event.cause != EntityDamageEvent.DamageCause.ENTITY_SWEEP_ATTACK){
+      showDamage(event.entity as Damageable, event.damage)
+    }
+    if (event.cause == EntityDamageEvent.DamageCause.FIRE_TICK) {
+      event.isCancelled = false
+    }
+  }
+
+  @EventHandler
+  fun onEntityAttack(event: EntityDamageByEntityEvent){
+    if(event.damager !is Player && event.entity is Player){
+      val player = event.entity as Player
+      val damage = event.damager.persistentDataContainer.getOrDefault(
+        NamespacedKey.fromString("smentities:entity.damage.dou")!!,
+        PersistentDataType.DOUBLE,
+        event.damage
+      )
+      var maxHealth = event.entity.persistentDataContainer.getOrDefault(
+        NamespacedKey.fromString("smcore:player.maxhealth.int")!!,
+        PersistentDataType.INTEGER,
+        20)
+      if(maxHealth <= 20) maxHealth = 20
+      event.damage = 20.0 * (damage / maxHealth)
+      player.sendMessage(
+        Component.text("Health: ${((player.health - (20.0 * (damage / maxHealth))) * (maxHealth / 20)).roundToInt()}/$maxHealth")
+        .color(NamedTextColor.RED))
+    }
+    else if (event.damager is Player){
+      if (event.cause == EntityDamageEvent.DamageCause.ENTITY_ATTACK) {
+        val damager = event.damager as Player
+        if (damager.inventory.itemInMainHand.hasItemMeta()) {
+          val handler = ItemHandler(damager.inventory.itemInMainHand, damager)
+          if (handler.type == Types.BOOK) {
+            event.isCancelled = true
+            val projectile = damager.launchProjectile(Snowball::class.java)
+            projectile.item = ItemStack(Material.FIRE_CHARGE)
+            projectile.persistentDataContainer.set(NamespacedKey.fromString("smitems:projectile.type.str")!!, PersistentDataType.STRING, "SATANS_TEACHINGS_PRIMARY")
+            projectile.persistentDataContainer.set(NamespacedKey.fromString("smitems:projectile.owner.str")!!, PersistentDataType.STRING, damager.name)
+            projectile.persistentDataContainer.set(NamespacedKey.fromString("smitems:projectile.damage.int")!!, PersistentDataType.INTEGER, PlayerHandler(damager).getDamage())
+            event.isCancelled = true
+            return
+          }
+        }
+      }
+      val damage = event.damager.persistentDataContainer.getOrDefault(
+        NamespacedKey.fromString("smcore:player.damage.int")!!,
+        PersistentDataType.INTEGER,
+        event.damage.toInt()
+      )
+      event.damage = damage.toDouble()
+      showDamage(event.entity as Damageable, event.damage)
+    }
+    else{
+      showDamage(event.entity as Damageable, event.damage)
+    }
+  }
+
+  @EventHandler
+  fun onPlayerClick(event: PlayerInteractEvent) {
+    if (event.hasItem()) {
+      if (event.item!!.hasItemMeta()) {
+        val handler = ItemHandler(event.item!!, event.player)
+        val player = PlayerHandler(event.player)
+        if (handler.type == Types.BOOK) {
+          if (event.action == Action.LEFT_CLICK_AIR || event.action == Action.LEFT_CLICK_BLOCK) {
+            val projectile = event.player.launchProjectile(Snowball::class.java)
+            projectile.item = ItemStack(Material.FIRE_CHARGE)
+            projectile.persistentDataContainer.set(NamespacedKey.fromString("smitems:projectile.type.str")!!, PersistentDataType.STRING, "SATANS_TEACHINGS_PRIMARY")
+            projectile.persistentDataContainer.set(NamespacedKey.fromString("smitems:projectile.owner.str")!!, PersistentDataType.STRING, event.player.name)
+            projectile.persistentDataContainer.set(NamespacedKey.fromString("smitems:projectile.damage.int")!!, PersistentDataType.INTEGER, player.getDamage())
+            event.isCancelled = true
+          }
+        }
+      }
+    }
+  }
+
+  @EventHandler
+  fun onProjectileCollision(event: ProjectileHitEvent) {
+    if (event.hitEntity is Damageable) {
+      val location = event.hitEntity!!.location
+      val projectile = event.entity
+      val damage = projectile.persistentDataContainer.getOrDefault(NamespacedKey.fromString("smitems:projectile.damage.int")!!, PersistentDataType.INTEGER, 0)
+      damage(event.hitEntity!! as Damageable, damage.toDouble(), null)
+      location.world.spawnParticle(Particle.LAVA, location, 5)
+    } else if (event.hitBlock is Block) {
+      val location = event.hitBlock!!.location
+      location.y += 1
+      location.world.spawnParticle(Particle.LAVA, location, 5)
+    }
   }
 
 }

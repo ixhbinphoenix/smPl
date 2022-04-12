@@ -15,17 +15,17 @@ class metaCommand : BaseCommand {
   override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
     if (sender is Player) {
       if(args.size == 1){
-        if(args[0] == "self"){
-          val player = sender
-          val playerHandler = PlayerHandler(player)
+        if(args[0] == "self") {
+          val playerHandler = PlayerHandler(sender)
           val message = Component.text("psdc info for ").color(NamedTextColor.GOLD)
-            .append(player.name().color(NamedTextColor.RED))
+            .append(sender.name().color(NamedTextColor.RED))
             .append(
               Component.text(
-              "\nDamage: ${playerHandler.getDamage()}" +
-                      "\nMana: ${playerHandler.getMana()}"
-            ).color(NamedTextColor.GOLD))
-          player.sendMessage(message)
+                "\nDamage: ${playerHandler.getDamage()}" +
+                        "\nMana: ${playerHandler.getMana()}"
+              ).color(NamedTextColor.GOLD)
+            )
+          sender.sendMessage(message)
         }
         if(args[0] == "reset"){
           val playerHandler = PlayerHandler(sender)

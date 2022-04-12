@@ -3,9 +3,6 @@ name: smCore
 version: 0.0.2
 api-version: 1.18
 commands:
-  ping:
-    usage: /<command>
-    description: Returns pong!
   pstats:
     usage: /<command>
     description: gives psdc info for player
@@ -15,16 +12,8 @@ commands:
   delstat:
     usage: /<command> key
     description: deletes psdc info
-  sc:
-    usage: /<command> message
-    permission: smcore.staffchat
-    description: Sends a message in staffchat
-  toggleping:
-    usage: /<command>
-    description: Toggles the ping
-  progbar:
-    usage: /<command>
-    description: Displays a progress bar
+depend:
+  - smChat
 permissions:
   smcore.staffchat:
     description: Allows to use /sc

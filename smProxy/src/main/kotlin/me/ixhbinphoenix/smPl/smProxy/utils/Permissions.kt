@@ -1,6 +1,8 @@
-package me.ixhbinphoenix.smPl.smCore.utils
+package me.ixhbinphoenix.smPl.smProxy.utils
 
-import org.bukkit.entity.Player
+import com.velocitypowered.api.proxy.Player
+import net.kyori.adventure.text.format.NamedTextColor
+import net.kyori.adventure.text.format.TextColor
 
 // GROUPS
 // - Team
@@ -39,4 +41,15 @@ fun getPlayerRank(player: Player): Rank {
     }
   }
   return Rank.PLAYER
+}
+
+fun getRankColor(rank: Rank): TextColor {
+  return when(rank) {
+    Rank.ADMIN -> TextColor.fromCSSHexString("#21abcd")!!
+    Rank.MODERATOR -> NamedTextColor.RED
+    Rank.BUILDER -> NamedTextColor.GREEN
+    Rank.SENATOR -> TextColor.fromCSSHexString("#efcc00")!!
+    Rank.TRUSTED -> NamedTextColor.LIGHT_PURPLE
+    Rank.PLAYER -> NamedTextColor.GRAY
+  }
 }

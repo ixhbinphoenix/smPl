@@ -14,12 +14,9 @@ class Main : JavaPlugin() {
 
   override fun onEnable() {
     val commands = HashMap<String, BaseCommand>()
-    commands["ping"] = pingCommand()
     commands["pstats"] = pstatsCommand()
     commands["setstat"] = setstatCommand()
     commands["delstat"] = delstatCommand()
-    commands["sc"] = scCommand()
-    commands["toggleping"] = togglepingCommand()
     for (cmd in commands) {
       getCommand(cmd.key)?.setExecutor(cmd.value)
       getCommand(cmd.key)?.tabCompleter = cmd.value

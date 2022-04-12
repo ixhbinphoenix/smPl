@@ -6,7 +6,7 @@ Note: These plugins are not intended for private use.
 
 To compile, run the following command in the root folder
 ```shell
-./gradlew reobfJar
+./gradlew assemble
 ```
 
 You can then copy the compiled Jar from its respective subfolders in /build/libs into your servers plugins folder.

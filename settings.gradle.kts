@@ -7,6 +7,8 @@ pluginManagement {
 }
 
 rootProject.name = "smPl"
+include("smChat")
 include("smCore")
 include("smItems")
 include("smEntities")
+include("smProxy")

@@ -1,13 +1,12 @@
 package me.ixhbinphoenix.smPl.smItems.item
 
-import me.ixhbinphoenix.smPl.smCore.chat.createProgressBar
-import me.ixhbinphoenix.smPl.smCore.chat.createStatText
+import me.ixhbinphoenix.smPl.smChat.utils.createProgressBar
+import me.ixhbinphoenix.smPl.smChat.utils.createStatText
 import me.ixhbinphoenix.smPl.smItems.*
 import me.ixhbinphoenix.smPl.smItems.events.StatsCalculation
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
 import net.kyori.adventure.text.format.TextDecoration
-import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
 import org.bukkit.entity.Player

@@ -1,4 +1,4 @@
-package me.ixhbinphoenix.smPl.smCore.commands
+package me.ixhbinphoenix.smPl.smChat.commands
 
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
@@ -11,12 +11,12 @@ import org.bukkit.persistence.PersistentDataType
 class togglepingCommand : BaseCommand {
   override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
     if (sender is Player) {
-      val pingtoggle = sender.persistentDataContainer.getOrDefault(NamespacedKey.fromString("smcore:chat.ping.toggle.str")!!, PersistentDataType.STRING, "true")
+      val pingtoggle = sender.persistentDataContainer.getOrDefault(NamespacedKey.fromString("smchat:ping.toggle.str")!!, PersistentDataType.STRING, "true")
       if (pingtoggle == "true") {
-        sender.persistentDataContainer.set(NamespacedKey.fromString("smcore:chat.ping.toggle.str")!!, PersistentDataType.STRING, "false")
+        sender.persistentDataContainer.set(NamespacedKey.fromString("smchat:ping.toggle.str")!!, PersistentDataType.STRING, "false")
         sender.sendMessage(Component.text("Disabled chat ping sound!").color(NamedTextColor.RED))
       } else {
-        sender.persistentDataContainer.set(NamespacedKey.fromString("smcore:chat.ping.toggle.str")!!, PersistentDataType.STRING, "true")
+        sender.persistentDataContainer.set(NamespacedKey.fromString("smchat:ping.toggle.str")!!, PersistentDataType.STRING, "true")
         sender.sendMessage(Component.text("Enabled chat ping sound!").color(NamedTextColor.GREEN))
       }
     }

@@ -1,7 +1,5 @@
-package me.ixhbinphoenix.smPl.smCore.chat
+package me.ixhbinphoenix.smPl.smChat.utils
 
-import me.ixhbinphoenix.smPl.smCore.utils.Rank
-import me.ixhbinphoenix.smPl.smCore.utils.getPlayerRank
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.TextReplacementConfig
 import net.kyori.adventure.text.event.HoverEvent
@@ -25,7 +23,7 @@ fun getPrefix(player: Player, message: Component): Component {
     ).build())
     if (
       msgold != msg
-      && player.persistentDataContainer.getOrDefault(NamespacedKey.fromString("smcore:chat.ping.toggle.str")!!, PersistentDataType.STRING, "true") == "true"
+      && player.persistentDataContainer.getOrDefault(NamespacedKey.fromString("smchat:ping.toggle.str")!!, PersistentDataType.STRING, "true") == "true"
     ) {
       onlinePlayer.playSound(onlinePlayer.location, Sound.ENTITY_ARROW_HIT_PLAYER, 0.2f, 1f)
     }
@@ -50,10 +48,8 @@ fun getPrefix(player: Player, message: Component): Component {
 
 fun getPlayerInfo(player: Player): Component {
   // TODO: Fetch Player level from cache/db
-  val playerLevel = 420
   var pinfo = Component.text("Player Info\n").color(NamedTextColor.AQUA)
     .append(createStatText("Name", player.name, NamedTextColor.YELLOW))
-    .append(createStatText("Level", playerLevel.toString(), NamedTextColor.YELLOW))
   val rank = getPlayerRank(player)
   pinfo = pinfo.append(createStatText("Rank", rank.name, getRankColor(rank)))
   // TODO: Fetch Player Guild
@@ -83,10 +79,18 @@ fun getDisplayName(player: Player): Component {
 
 fun getRankBadge(rank: Rank): Component {
   return when(rank) {
-    Rank.ADMIN -> createBadge(TextColor.fromCSSHexString("#21abcd")!!, TextColor.fromCSSHexString("#125F72")!!, "\uD83D\uDEE1").hoverEvent(getRankInfoText(rank))
-    Rank.MODERATOR -> createBadge(NamedTextColor.RED, NamedTextColor.DARK_RED, "\uD83D\uDEE1").hoverEvent(getRankInfoText(rank))
-    Rank.BUILDER -> createBadge(NamedTextColor.GREEN, NamedTextColor.DARK_GREEN, "\uD83D\uDEE1").hoverEvent(getRankInfoText(rank))
-    Rank.SENATOR -> createBadge(TextColor.fromCSSHexString("#efcc00")!!, TextColor.fromCSSHexString("#b89d00")!!, "★").hoverEvent(getRankInfoText(rank))
+    Rank.ADMIN -> createBadge(TextColor.fromCSSHexString("#21abcd")!!, TextColor.fromCSSHexString("#125F72")!!, "\uD83D\uDEE1").hoverEvent(
+      getRankInfoText(rank)
+    )
+    Rank.MODERATOR -> createBadge(NamedTextColor.RED, NamedTextColor.DARK_RED, "\uD83D\uDEE1").hoverEvent(
+      getRankInfoText(rank)
+    )
+    Rank.BUILDER -> createBadge(NamedTextColor.GREEN, NamedTextColor.DARK_GREEN, "\uD83D\uDEE1").hoverEvent(
+      getRankInfoText(rank)
+    )
+    Rank.SENATOR -> createBadge(TextColor.fromCSSHexString("#efcc00")!!, TextColor.fromCSSHexString("#b89d00")!!, "★").hoverEvent(
+      getRankInfoText(rank)
+    )
     Rank.TRUSTED -> createBadge(NamedTextColor.LIGHT_PURPLE, NamedTextColor.DARK_PURPLE, "⨳").hoverEvent(getRankInfoText(rank))
     Rank.PLAYER -> createBadge(NamedTextColor.GRAY, NamedTextColor.DARK_GRAY, "⨳")
   }

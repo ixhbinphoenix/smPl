@@ -1,17 +1,6 @@
-package me.ixhbinphoenix.smPl.smCore.utils
+package me.ixhbinphoenix.smPl.smChat.utils
 
 import org.bukkit.entity.Player
-
-// GROUPS
-// - Team
-//  - Admin
-//  - Moderator
-//  - Builder
-// - Senate
-//  - Senator
-// - Player
-//  - Trusted
-//  - Default
 
 enum class GroupRanks {
   TEAM,

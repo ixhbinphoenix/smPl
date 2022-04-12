@@ -4,15 +4,12 @@ import com.google.inject.Inject
 import com.velocitypowered.api.event.PostOrder
 import com.velocitypowered.api.event.Subscribe
 import com.velocitypowered.api.event.proxy.ProxyInitializeEvent
-import com.velocitypowered.api.event.proxy.ProxyPingEvent
-import com.velocitypowered.api.event.proxy.ProxyShutdownEvent
 import com.velocitypowered.api.plugin.Plugin
 import com.velocitypowered.api.proxy.ProxyServer
 import me.ixhbinphoenix.smPl.smProxy.commands.broadcastCommand
+import me.ixhbinphoenix.smPl.smProxy.commands.pingCommand
 import me.ixhbinphoenix.smPl.smProxy.commands.scCommand
 import me.ixhbinphoenix.smPl.smProxy.events.Events
-import net.kyori.adventure.text.Component
-import net.kyori.adventure.text.format.NamedTextColor
 import org.slf4j.Logger
 
 @Suppress("unused", "ClassName")
@@ -29,6 +26,7 @@ class smProxy @Inject constructor(val server: ProxyServer, val logger: Logger) {
 
     server.commandManager.register(scCommand().meta, scCommand())
     server.commandManager.register(broadcastCommand().meta, broadcastCommand())
+    server.commandManager.register(pingCommand().meta, pingCommand())
 
     logger.info("smProxy enabled")
   }

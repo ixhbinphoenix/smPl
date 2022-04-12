@@ -1,11 +1,9 @@
 package me.ixhbinphoenix.smPl.smCore.events
 
-import io.papermc.paper.event.player.AsyncChatEvent
-import me.ixhbinphoenix.smPl.smCore.chat.Renderer
-import me.ixhbinphoenix.smPl.smCore.chat.getDisplayName
-import me.ixhbinphoenix.smPl.smCore.chat.getPlayerInfo
-import me.ixhbinphoenix.smPl.smCore.chat.getRankColor
-import me.ixhbinphoenix.smPl.smCore.utils.getPlayerRank
+import me.ixhbinphoenix.smPl.smChat.utils.getDisplayName
+import me.ixhbinphoenix.smPl.smChat.utils.getPlayerInfo
+import me.ixhbinphoenix.smPl.smChat.utils.getRankColor
+import me.ixhbinphoenix.smPl.smChat.utils.getPlayerRank
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.event.HoverEvent
 import net.kyori.adventure.text.format.NamedTextColor
@@ -32,10 +30,5 @@ class Events : Listener {
       Component.text("<< ").color(NamedTextColor.RED)
         .append(Component.text(event.player.name).color(getRankColor(rank)).hoverEvent(HoverEvent.showText(getPlayerInfo(event.player))))
     )
-  }
-
-  @EventHandler
-  fun onChat(event: AsyncChatEvent) {
-    event.renderer(Renderer())
   }
 }

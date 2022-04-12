@@ -1,6 +1,6 @@
 package me.ixhbinphoenix.smPl.smItems.item
 
-import me.ixhbinphoenix.smPl.smCore.chat.createStatText
+import me.ixhbinphoenix.smPl.smChat.utils.createStatText
 import me.ixhbinphoenix.smPl.smItems.ItemCategories
 import me.ixhbinphoenix.smPl.smItems.Rarity
 import me.ixhbinphoenix.smPl.smItems.Types
@@ -14,7 +14,6 @@ import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.bukkit.persistence.PersistentDataContainer
 import org.bukkit.persistence.PersistentDataType
-import kotlin.math.sqrt
 
 open class ItemHandler(val item: ItemStack, private val player: Player) {
     private val setHelper = SetHelper()

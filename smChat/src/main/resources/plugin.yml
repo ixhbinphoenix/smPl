@@ -1,0 +1,8 @@
+main: me.ixhbinphoenix.smPl.smChat.Main
+name: smChat
+version: 0.0.2
+api-version: 1.18
+commands:
+  toggleping:
+    usage: /<command>
+    description: Toggles the ping sound

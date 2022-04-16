@@ -1,5 +1,5 @@
 # smPl
-Stahlmetall plugins is a collection of Paper plugins for a WIP server
+Stahlmetall plugins is a collection of Paper and Velocity plugins for a WIP server
 
 ## Building
 Note: These plugins are not intended for private use.
@@ -10,6 +10,10 @@ To compile, run the following command in the root folder
 ```
 
 You can then copy the compiled Jar from its respective subfolders in /build/libs into your servers plugins folder.
+WARNING: For the Velocity plugin, copy the jar with the -all suffix, or it will not work!
+
+## Setup Guide
+Coming Soon™
 
 ## License
 - Copyright (C) 2022 ixhbinphoenix

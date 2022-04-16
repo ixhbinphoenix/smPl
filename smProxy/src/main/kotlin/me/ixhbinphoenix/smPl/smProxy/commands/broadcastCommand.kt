@@ -9,12 +9,8 @@ import net.kyori.adventure.text.format.NamedTextColor
 import net.kyori.adventure.text.format.TextDecoration
 
 @Suppress("classname")
-class broadcastCommand : SimpleCommand {
+class broadcastCommand : BaseCommand {
   private val instance = getInstance()
-
-  val meta: CommandMeta = instance.server.commandManager.metaBuilder("broadcast")
-    .aliases("bc")
-    .build()
 
   override fun execute(invocation: SimpleCommand.Invocation?) {
     if (invocation is SimpleCommand.Invocation) {

@@ -7,11 +7,8 @@ import me.ixhbinphoenix.smPl.smProxy.getInstance
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
 
-class pingCommand : SimpleCommand {
+class pingCommand : BaseCommand {
   private val instance = getInstance()
-  
-  val meta: CommandMeta = instance.server.commandManager.metaBuilder("ping")
-    .build()
   
   override fun execute(invocation: SimpleCommand.Invocation?) {
     if (invocation is SimpleCommand.Invocation) {

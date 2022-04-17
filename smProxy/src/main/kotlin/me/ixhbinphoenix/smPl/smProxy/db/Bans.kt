@@ -16,6 +16,7 @@ object Bans: IntIdTable() {
     val uuid: Column<String> = char("uuid", 36)
     val moderator: Column<String> = char("moderator", 36)
     val permanent = bool("permanent")
+    val bannedAt = timestamp("bannedAt")
     val expiry = timestamp("expiry").nullable()
     val reason = text("reason").nullable()
     val active = bool("active").default(true)
@@ -26,6 +27,7 @@ class Ban(id: EntityID<Int>): IntEntity(id) {
     var uuid by Bans.uuid
     var moderator by Bans.moderator
     var permanent by Bans.permanent
+    var bannedAt by Bans.bannedAt
     var expiry by Bans.expiry
     var reason by Bans.reason
     var active by Bans.active
@@ -47,6 +49,7 @@ class BanUtils {
                     uuid = playerUUID
                     moderator = moderatorUUID
                     permanent = isPermanent
+                    bannedAt = Instant.now()
                     reason = banReason
                     expiry = banExpiry
                     active = true

@@ -4,13 +4,12 @@ import com.velocitypowered.api.event.PostOrder
 import com.velocitypowered.api.event.Subscribe
 import com.velocitypowered.api.event.player.ServerPreConnectEvent
 import me.ixhbinphoenix.smPl.smProxy.db.BanUtils
-import me.ixhbinphoenix.smPl.smProxy.db.Bans
 import me.ixhbinphoenix.smPl.smProxy.getInstance
 import me.ixhbinphoenix.smPl.smProxy.utils.GroupRanks
 import me.ixhbinphoenix.smPl.smProxy.utils.getPermanentBanMessage
 import me.ixhbinphoenix.smPl.smProxy.utils.getPlayerRank
-import net.kyori.adventure.text.Component
-import net.kyori.adventure.text.format.NamedTextColor
+import me.ixhbinphoenix.smPl.smProxy.utils.getTemporaryBanMessage
+import java.time.Instant
 
 class Events {
   private val instance = getInstance()
@@ -23,7 +22,7 @@ class Events {
       if (ban.permanent) {
         event.player.disconnect(getPermanentBanMessage(ban.reason ?: "No Reason specified", ban.id.value))
       } else {
-        event.player.disconnect(Component.text("Ban Messages for temporary bans have not yet been implemented!").color(NamedTextColor.RED))
+        event.player.disconnect(getTemporaryBanMessage(ban.reason ?: "No Reason specified", ban.id.value, (ban.expiry?.toEpochMilli()?: Instant.now().toEpochMilli()) - Instant.now().toEpochMilli()))
       }
     }
     if (event.originalServer.serverInfo.name == "build") {

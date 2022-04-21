@@ -2,6 +2,7 @@
 plugins {
     kotlin("jvm") version "1.6.20"
     kotlin("kapt")
+    id("org.jetbrains.kotlin.plugin.serialization") version "1.6.20"
     java
     id("com.github.johnrengelman.shadow") version "7.1.2"
 }
@@ -20,6 +21,13 @@ dependencies {
     implementation("com.velocitypowered:velocity-api:3.1.0")
     kapt("com.velocitypowered:velocity-api:3.1.0")
 
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2")
+    implementation("org.jetbrains.exposed:exposed-core:0.38.1")
+    implementation("org.jetbrains.exposed:exposed-dao:0.38.1")
+    implementation("org.jetbrains.exposed:exposed-jdbc:0.38.1")
+    implementation("org.jetbrains.exposed:exposed-java-time:0.38.1")
+    implementation("org.postgresql:postgresql:42.3.3")
+
     implementation(kotlin("stdlib"))
 }
 
@@ -34,6 +42,10 @@ tasks {
     build {
         dependsOn(shadowJar)
     }
+}
+
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
+    kotlinOptions.freeCompilerArgs += "-opt-in=kotlin.RequiresOptIn"
 }
 
 tasks.getByName<Test>("test") {

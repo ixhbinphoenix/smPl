@@ -1,0 +1,4 @@
+db:
+  jdbcConnectionString: "jdbc:postgresql://localhost:5432/minecraft"
+  user: "root"
+  password: "root"

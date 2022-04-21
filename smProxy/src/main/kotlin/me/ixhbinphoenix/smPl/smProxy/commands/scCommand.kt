@@ -10,10 +10,8 @@ import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
 
 @Suppress("classname")
-class scCommand : SimpleCommand {
+class scCommand : BaseCommand {
   private val instance = getInstance()
-
-  val meta: CommandMeta = instance.server.commandManager.metaBuilder("sc").build()
 
   override fun execute(invocation: SimpleCommand.Invocation?) {
     if (invocation is SimpleCommand.Invocation) {

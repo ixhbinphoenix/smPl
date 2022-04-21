@@ -74,6 +74,9 @@ class ItemUtils {
         im.persistentDataContainer.set(NamespacedKey.fromString("smitems:accessory.type.str")!!, PersistentDataType.STRING, Type.name)
       }
     }
+    if (set is SetBonus) {
+      im.persistentDataContainer.set(NamespacedKey.fromString("smitems:item.set.str")!!, PersistentDataType.STRING, set.set)
+    }
     im.persistentDataContainer.set(NamespacedKey.fromString("smitems:item.id.str")!!, PersistentDataType.STRING, id)
     im.persistentDataContainer.set(NamespacedKey.fromString("smitems:item.uuid.str")!!, PersistentDataType.STRING, UUID.randomUUID().toString())
     im.lore(genLore(rarity, Type, statText, 0, 0, set))

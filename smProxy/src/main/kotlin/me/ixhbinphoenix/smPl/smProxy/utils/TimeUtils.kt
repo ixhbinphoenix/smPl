@@ -16,7 +16,11 @@ class TimeUtils {
             val y = w * 365.25
 
             val reg = Regex("^(-?(?:\\d+)?\\.?\\d+) *(milliseconds?|msecs?|ms|seconds?|secs?|s|minutes?|mins?|m|hours?|hrs?|h|days?|d|weeks?|w|years?|yrs?|y)?\$", RegexOption.IGNORE_CASE)
-            val groups = reg.findAll(str).toList().map { it.groups }.first()
+            val matches = reg.findAll(str).toList().map { it.groups }
+            if (matches.isEmpty()) {
+                 return null
+            }
+            val groups = matches.first()
             val n = groups[1]!!.value.toFloat()
             return when (groups[2]!!.value.lowercase()) {
                 "years", "year", "yrs", "yr", "y" -> {

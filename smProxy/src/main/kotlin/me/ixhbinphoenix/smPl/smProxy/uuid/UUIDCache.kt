@@ -33,10 +33,10 @@ class UUIDCache {
      */
     @Suppress("unused")
     fun getUUIDIfExists(name: String): UUID? {
-        return if (uuidCache.containsKey(name)) {
-            uuidCache[name]!!
+        return if (uuidCache.containsKey(name.lowercase())) {
+            uuidCache[name.lowercase()]!!
         } else {
-            fetchUUIDIfExists(name)
+            fetchUUIDIfExists(name.lowercase())
         }
     }
 

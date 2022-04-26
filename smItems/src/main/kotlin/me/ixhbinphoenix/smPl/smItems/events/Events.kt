@@ -12,6 +12,7 @@ import me.ixhbinphoenix.smPl.smItems.item.LoreRefresh
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
 import org.bukkit.*
+import org.bukkit.attribute.Attribute
 import org.bukkit.block.Block
 import org.bukkit.entity.Damageable
 import org.bukkit.entity.Player
@@ -64,11 +65,13 @@ class Events : Listener {
 
   @EventHandler
   fun onEntityHurt(event: EntityDamageEvent){
-    if(event.cause != EntityDamageEvent.DamageCause.ENTITY_ATTACK && event.cause != EntityDamageEvent.DamageCause.ENTITY_SWEEP_ATTACK){
-      showDamage(event.entity as Damageable, event.damage)
-    }
-    if (event.cause == EntityDamageEvent.DamageCause.FIRE_TICK) {
-      event.isCancelled = false
+    if (event.entity is Damageable) {
+      if(event.cause != EntityDamageEvent.DamageCause.ENTITY_ATTACK && event.cause != EntityDamageEvent.DamageCause.ENTITY_SWEEP_ATTACK){
+        showDamage(event.entity as Damageable, event.damage)
+      }
+      if (event.cause == EntityDamageEvent.DamageCause.FIRE_TICK) {
+        event.isCancelled = false
+      }
     }
   }
 
@@ -81,15 +84,13 @@ class Events : Listener {
         PersistentDataType.DOUBLE,
         event.damage
       )
-      var maxHealth = event.entity.persistentDataContainer.getOrDefault(
+      val vanillaMaxHealth = player.getAttribute(Attribute.GENERIC_MAX_HEALTH)?.value?.roundToInt() ?: 20
+      var maxHealth = player.persistentDataContainer.getOrDefault(
         NamespacedKey.fromString("smcore:player.maxhealth.int")!!,
         PersistentDataType.INTEGER,
-        20)
+        vanillaMaxHealth)
       if(maxHealth <= 20) maxHealth = 20
-      event.damage = 20.0 * (damage / maxHealth)
-      player.sendMessage(
-        Component.text("Health: ${((player.health - (20.0 * (damage / maxHealth))) * (maxHealth / 20)).roundToInt()}/$maxHealth")
-        .color(NamedTextColor.RED))
+      event.damage = vanillaMaxHealth.toDouble() * (damage / maxHealth)
     }
     else if (event.damager is Player){
       if (event.cause == EntityDamageEvent.DamageCause.ENTITY_ATTACK) {
@@ -146,13 +147,17 @@ class Events : Listener {
     if (event.hitEntity is Damageable) {
       val location = event.hitEntity!!.location
       val projectile = event.entity
-      val damage = projectile.persistentDataContainer.getOrDefault(NamespacedKey.fromString("smitems:projectile.damage.int")!!, PersistentDataType.INTEGER, 0)
-      damage(event.hitEntity!! as Damageable, damage.toDouble(), null)
-      location.world.spawnParticle(Particle.LAVA, location, 5)
+      if (event.entity.persistentDataContainer.has(NamespacedKey.fromString("smitems:projectile.type.str")!!)) {
+        val damage = projectile.persistentDataContainer.getOrDefault(NamespacedKey.fromString("smitems:projectile.damage.int")!!, PersistentDataType.INTEGER, 0)
+        damage(event.hitEntity!! as Damageable, damage.toDouble(), null)
+        location.world.spawnParticle(Particle.LAVA, location, 5)
+      }
     } else if (event.hitBlock is Block) {
       val location = event.hitBlock!!.location
       location.y += 1
-      location.world.spawnParticle(Particle.LAVA, location, 5)
+      if (event.entity.persistentDataContainer.has(NamespacedKey.fromString("smitems:projectile.type.str")!!)) {
+        location.world.spawnParticle(Particle.LAVA, location, 5)
+      }
     }
   }
 

@@ -44,6 +44,20 @@ class PlayerHandler(player: Player) {
         )
     }
 
+    fun setCurrentMana(mana: Int) {
+        player.persistentDataContainer.set(NamespacedKey.fromString("smcore:player.current.mana.int")!!,
+            PersistentDataType.INTEGER,
+            mana
+        )
+    }
+
+    fun getCurrentMana(): Int {
+        return player.persistentDataContainer.getOrDefault(NamespacedKey.fromString("smcore:player.current.mana.int")!!,
+            PersistentDataType.INTEGER,
+            0
+        )
+    }
+
     fun setDamage(damage: Int){
         player.persistentDataContainer.set(NamespacedKey.fromString("smcore:player.damage.int")!!,
             PersistentDataType.INTEGER,

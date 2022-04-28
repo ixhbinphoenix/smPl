@@ -1,16 +1,12 @@
 package me.ixhbinphoenix.smPl.smItems.events
 
-import com.destroystokyo.paper.event.player.PlayerAttackEntityCooldownResetEvent
 import me.ixhbinphoenix.smPl.smCore.player.PlayerHandler
 import me.ixhbinphoenix.smPl.smEntities.entities.damage
 import me.ixhbinphoenix.smPl.smEntities.entities.showDamage
 import me.ixhbinphoenix.smPl.smItems.Main
 import me.ixhbinphoenix.smPl.smItems.Types
-import me.ixhbinphoenix.smPl.smItems.getInstance
 import me.ixhbinphoenix.smPl.smItems.item.ItemHandler
 import me.ixhbinphoenix.smPl.smItems.item.LoreRefresh
-import net.kyori.adventure.text.Component
-import net.kyori.adventure.text.format.NamedTextColor
 import org.bukkit.*
 import org.bukkit.attribute.Attribute
 import org.bukkit.block.Block
@@ -26,8 +22,6 @@ import org.bukkit.event.entity.EntityPickupItemEvent
 import org.bukkit.event.entity.ProjectileHitEvent
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.player.PlayerDropItemEvent
-import org.bukkit.event.player.PlayerInteractAtEntityEvent
-import org.bukkit.event.player.PlayerInteractEntityEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerItemHeldEvent
 import org.bukkit.inventory.ItemStack
@@ -101,7 +95,7 @@ class Events : Listener {
             event.isCancelled = true
             val projectile = damager.launchProjectile(Snowball::class.java)
             projectile.item = ItemStack(Material.FIRE_CHARGE)
-            projectile.persistentDataContainer.set(NamespacedKey.fromString("smitems:projectile.type.str")!!, PersistentDataType.STRING, "SATANS_TEACHINGS_PRIMARY")
+            projectile.persistentDataContainer.set(NamespacedKey.fromString("smitems:projectile.type.str")!!, PersistentDataType.STRING, "${handler.type}_${handler.rarity}_${handler.element}_PRIMARY")
             projectile.persistentDataContainer.set(NamespacedKey.fromString("smitems:projectile.owner.str")!!, PersistentDataType.STRING, damager.name)
             projectile.persistentDataContainer.set(NamespacedKey.fromString("smitems:projectile.damage.int")!!, PersistentDataType.INTEGER, PlayerHandler(damager).getDamage())
             event.isCancelled = true

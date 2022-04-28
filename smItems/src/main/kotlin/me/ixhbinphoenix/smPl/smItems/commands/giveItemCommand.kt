@@ -29,7 +29,7 @@ class giveItemCommand : BaseCommand {
             "max_health" to dbItem.max_health,
             "defence" to dbItem.defence
           )
-          val item = itemUtils.createEquipment(dbItem.material, dbItem.display_name, dbItem.string_id, dbItem.rarity, dbItem.item_type, stats, set)
+          val item = itemUtils.createEquipment(dbItem.material, dbItem.display_name, dbItem.string_id, dbItem.rarity, dbItem.item_type, stats, dbItem.element, set)
           if (dbItem.rgb is Int) {
             val im = item.itemMeta
             (im as LeatherArmorMeta).setColor(Color.fromRGB(dbItem.rgb!!))

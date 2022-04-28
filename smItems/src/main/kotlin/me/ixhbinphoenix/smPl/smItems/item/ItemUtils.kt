@@ -55,11 +55,16 @@ class ItemUtils {
     StatsCalculation(player).runTaskLater(plugin, 2)
   }
 
-  fun createEquipment(mat: Material, name: String, id: String, rarity: Rarity, Type: Types, stats: HashMap<String, Int>, set: SetBonus?): ItemStack {
+  fun createEquipment(mat: Material, name: String, id: String, rarity: Rarity, Type: Types, stats: HashMap<String, Int>, element: Elements?, set: SetBonus?): ItemStack {
     val item = ItemStack(mat, 1)
     val im = setStats(stats, item.itemMeta)
     im.isUnbreakable = true
     im.displayName(Component.text(name).color(RarityColor.valueOf(rarity.name).color).decoration(TextDecoration.ITALIC, false))
+    if (element is Elements) {
+      im.displayName(im.displayName()!!.append(Component.text(" ")).append(
+        element.comp
+      ))
+    }
     val statText = genStatTexts(stats)
     im.persistentDataContainer.set(NamespacedKey.fromString("smitems:item.rarity.str")!!, PersistentDataType.STRING, rarity.name)
     im.persistentDataContainer.set(NamespacedKey.fromString("smitems:item.type.str")!!, PersistentDataType.STRING, Type.category.name)
@@ -74,12 +79,15 @@ class ItemUtils {
         im.persistentDataContainer.set(NamespacedKey.fromString("smitems:accessory.type.str")!!, PersistentDataType.STRING, Type.name)
       }
     }
+    if (element is Elements) {
+      im.persistentDataContainer.set(NamespacedKey.fromString("smitems:item.element.str")!!, PersistentDataType.STRING, element.toString())
+    }
     if (set is SetBonus) {
       im.persistentDataContainer.set(NamespacedKey.fromString("smitems:item.set.str")!!, PersistentDataType.STRING, set.set)
     }
     im.persistentDataContainer.set(NamespacedKey.fromString("smitems:item.id.str")!!, PersistentDataType.STRING, id)
     im.persistentDataContainer.set(NamespacedKey.fromString("smitems:item.uuid.str")!!, PersistentDataType.STRING, UUID.randomUUID().toString())
-    im.lore(genLore(rarity, Type, statText, 0, 0, set))
+    im.lore(genLore(rarity, Type, statText, 0, 0, element, set))
     im.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
     im.addItemFlags(ItemFlag.HIDE_UNBREAKABLE)
     im.addItemFlags(ItemFlag.HIDE_DYE)
@@ -87,7 +95,7 @@ class ItemUtils {
     return item
   }
 
-  fun genLore(rarity: Rarity, type: Types, stats: ArrayList<Component>, xp: Int, setCompletion: Int = 0, set: SetBonus?): ArrayList<Component> {
+  fun genLore(rarity: Rarity, type: Types, stats: ArrayList<Component>, xp: Int, setCompletion: Int = 0, element: Elements?, set: SetBonus?): ArrayList<Component> {
     val lore = ArrayList<Component>()
     lore.addAll(stats)
     lore.add(Component.text("").decoration(TextDecoration.ITALIC, false))

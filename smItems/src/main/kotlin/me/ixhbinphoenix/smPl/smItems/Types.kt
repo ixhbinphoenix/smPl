@@ -1,7 +1,6 @@
-@file:Suppress("unused")
-
 package me.ixhbinphoenix.smPl.smItems
 
+import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
 import net.kyori.adventure.text.format.TextColor
 
@@ -21,14 +20,6 @@ enum class ItemCategories{
     WEAPON, ARMOR, ACCESSORY
 }
 
-enum class ArmorTypes {
-    HELMET, CHESTPLATE, LEGGINGS, BOOTS
-}
-
-enum class WeaponTypes{
-    SWORD, DAGGER, CROSSBOW, LONGBOW, SHORTBOW, WAND, BOOK
-}
-
 enum class Types(val category: ItemCategories) {
     HELMET(ItemCategories.ARMOR),
     CHESTPLATE(ItemCategories.ARMOR),
@@ -41,4 +32,13 @@ enum class Types(val category: ItemCategories) {
     SHORTBOW(ItemCategories.WEAPON),
     WAND(ItemCategories.WEAPON),
     BOOK(ItemCategories.WEAPON)
+}
+
+enum class Elements(val comp: Component) {
+    WATER(Component.text("\uD83C\uDF0A").color(NamedTextColor.DARK_AQUA)),
+    FIRE(Component.text("\uD83D\uDD25").color(TextColor.fromCSSHexString("#FFA500"))),
+    EARTH(Component.text("⛏").color(TextColor.fromCSSHexString("#8B4513"))),
+    AIR(Component.text("☁").color(NamedTextColor.WHITE)),
+    LIGHTNING(Component.text("⚡").color(NamedTextColor.GOLD)),
+    VOID(Component.text("✹").color(NamedTextColor.DARK_PURPLE))
 }

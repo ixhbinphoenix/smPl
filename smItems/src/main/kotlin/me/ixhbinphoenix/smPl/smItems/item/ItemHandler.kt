@@ -1,6 +1,7 @@
 package me.ixhbinphoenix.smPl.smItems.item
 
 import me.ixhbinphoenix.smPl.smChat.utils.createStatText
+import me.ixhbinphoenix.smPl.smItems.Elements
 import me.ixhbinphoenix.smPl.smItems.ItemCategories
 import me.ixhbinphoenix.smPl.smItems.Rarity
 import me.ixhbinphoenix.smPl.smItems.Types
@@ -20,6 +21,7 @@ open class ItemHandler(val item: ItemStack, private val player: Player) {
     private val itemUtils = ItemUtils()
 
     val rarity: Rarity
+    val element: Elements?
     val mat: Material = item.type
     val pdc: PersistentDataContainer = item.itemMeta.persistentDataContainer
     var category: ItemCategories?
@@ -34,6 +36,7 @@ open class ItemHandler(val item: ItemStack, private val player: Player) {
 
     init{
         this.rarity = getItemRarity()
+        this.element = getItemElement()
         this.category = getItemCategory()
         this.type = getItemType()
         this.set = getItemSet()
@@ -47,12 +50,6 @@ open class ItemHandler(val item: ItemStack, private val player: Player) {
     }
 
     fun updateLore() {
-        val rarity = Rarity.valueOf(pdc.getOrDefault(NamespacedKey.fromString("smitems:item.rarity.str")!!, PersistentDataType.STRING, "COMMON"))
-        val map = StatsCalculation.getAllStats()
-        val stats = HashMap<String, Int>()
-        for (stat in map) {
-            stats[stat.key] = pdc.getOrDefault(NamespacedKey.fromString(stat.value)!!, PersistentDataType.INTEGER, 0)
-        }
         val statTexts = ArrayList<Component>()
         for (stat in stats) {
             if (stat.value > 0) {
@@ -61,12 +58,22 @@ open class ItemHandler(val item: ItemStack, private val player: Player) {
             }
         }
         val im = item.itemMeta
-        im.lore(itemUtils.genLore(rarity, type, statTexts, xp, SetHelper.getCompletion(player, set), setHelper.setObjects[set]))
+        im.lore(itemUtils.genLore(rarity, type, statTexts, xp, SetHelper.getCompletion(player, set), element, setHelper.setObjects[set]))
         item.itemMeta = im
     }
 
     private fun getItemRarity(): Rarity {
         return Rarity.valueOf(pdc.getOrDefault(NamespacedKey.fromString("smitems:item.rarity.str")!!, PersistentDataType.STRING, "COMMON"))
+    }
+
+    private fun getItemElement(): Elements? {
+        return try {
+            Elements.valueOf(pdc.get(NamespacedKey.fromString("smitems:item.element.str")!!, PersistentDataType.STRING)!!)
+        } catch (e: IllegalArgumentException) {
+            null
+        } catch (e: NullPointerException) {
+            null
+        }
     }
 
     private fun getItemType(): Types {

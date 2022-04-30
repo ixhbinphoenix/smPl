@@ -72,9 +72,6 @@ class StatsCalculation(private val player: Player, private val refreshLore: Bool
         handler.setMaxHealth(stats["max_health"]!!)
         handler.setDefence(stats["defence"]!!)
         setHandler.calcSet(armor, player)
-        if (handler.getCurrentMana() > handler.getMana()) {
-            handler.setCurrentMana(handler.getMana())
-        }
     }
 
     companion object {

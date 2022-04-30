@@ -7,7 +7,6 @@ import me.ixhbinphoenix.smPl.smItems.Main
 import me.ixhbinphoenix.smPl.smItems.Types
 import me.ixhbinphoenix.smPl.smItems.item.ItemHandler
 import me.ixhbinphoenix.smPl.smItems.item.LoreRefresh
-import net.kyori.adventure.text.Component
 import org.bukkit.*
 import org.bukkit.attribute.Attribute
 import org.bukkit.block.Block

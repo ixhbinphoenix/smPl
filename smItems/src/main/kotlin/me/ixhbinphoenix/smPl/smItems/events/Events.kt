@@ -109,7 +109,6 @@ class Events : Listener {
         PersistentDataType.INTEGER,
         event.damage.toInt()
       )
-      event.damager.sendMessage(Component.text("${(event.entity as Damageable).health} - ${damage.toDouble()}"))
       damage(event.entity as Damageable, damage.toDouble())
       showDamage(event.entity as Damageable, damage.toDouble())
     }

@@ -1,12 +1,15 @@
 package me.ixhbinphoenix.smPl.smItems.events
 
+import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent
 import me.ixhbinphoenix.smPl.smCore.player.PlayerHandler
 import me.ixhbinphoenix.smPl.smEntities.entities.damage
 import me.ixhbinphoenix.smPl.smEntities.entities.showDamage
 import me.ixhbinphoenix.smPl.smItems.Main
 import me.ixhbinphoenix.smPl.smItems.Types
+import me.ixhbinphoenix.smPl.smItems.item.ArmorLoreRefresh
 import me.ixhbinphoenix.smPl.smItems.item.ItemHandler
-import me.ixhbinphoenix.smPl.smItems.item.LoreRefresh
+import me.ixhbinphoenix.smPl.smItems.item.ClickLoreRefresh
+import net.kyori.adventure.text.Component
 import org.bukkit.*
 import org.bukkit.attribute.Attribute
 import org.bukkit.block.Block
@@ -41,7 +44,7 @@ class Events : Listener {
     // More like event.whoAsked
     StatsCalculation(event.whoClicked as Player, true).runTaskLater(plugin, 1)
     if (event.clickedInventory == event.whoClicked.inventory) {
-      LoreRefresh(event).runTaskLater(plugin, 1)
+      ClickLoreRefresh(event).runTaskLater(plugin, 1)
     }
   }
 
@@ -55,6 +58,12 @@ class Events : Listener {
   @EventHandler
   fun onPlayerDrop(event: PlayerDropItemEvent){
     StatsCalculation(event.player).runTaskLater(plugin, 1)
+  }
+
+  @EventHandler
+  fun onPlayerArmorEquip(event: PlayerArmorChangeEvent) {
+    StatsCalculation(event.player).runTaskLater(plugin, 1)
+    ArmorLoreRefresh(event).runTaskLater(plugin, 1)
   }
 
   @EventHandler

@@ -1,5 +1,6 @@
 package me.ixhbinphoenix.smPl.smItems.item
 
+import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent
 import me.ixhbinphoenix.smPl.smChat.utils.createProgressBar
 import me.ixhbinphoenix.smPl.smChat.utils.createStatText
 import me.ixhbinphoenix.smPl.smItems.*
@@ -30,7 +31,7 @@ object SetBonus {
   var setEffect: ArrayList<Component> = arrayListOf(Component.text("Has no effect!"))
 }
 
-class LoreRefresh(private val event: InventoryClickEvent) : BukkitRunnable() {
+class ClickLoreRefresh(private val event: InventoryClickEvent) : BukkitRunnable() {
   override fun run() {
     val player = event.whoClicked as Player
     val slot = event.slot
@@ -43,6 +44,19 @@ class LoreRefresh(private val event: InventoryClickEvent) : BukkitRunnable() {
       val item = event.currentItem!!
       val handler = ItemHandler(item, player)
       handler.updateLore()
+    }
+  }
+}
+
+class ArmorLoreRefresh(private val event: PlayerArmorChangeEvent) : BukkitRunnable() {
+  override fun run() {
+    val armorSlots = event.player.inventory.armorContents
+    if (armorSlots != null) {
+      for (armor in armorSlots) {
+        if (armor != null) {
+          ItemHandler(armor, event.player).updateLore()
+        }
+      }
     }
   }
 }
@@ -87,7 +101,7 @@ class ItemUtils {
     }
     im.persistentDataContainer.set(NamespacedKey.fromString("smitems:item.id.str")!!, PersistentDataType.STRING, id)
     im.persistentDataContainer.set(NamespacedKey.fromString("smitems:item.uuid.str")!!, PersistentDataType.STRING, UUID.randomUUID().toString())
-    im.lore(genLore(rarity, Type, statText, 0, 0, element, set))
+    im.lore(genLore(rarity, Type, statText, 0, 0, set))
     im.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
     im.addItemFlags(ItemFlag.HIDE_UNBREAKABLE)
     im.addItemFlags(ItemFlag.HIDE_DYE)
@@ -95,7 +109,7 @@ class ItemUtils {
     return item
   }
 
-  fun genLore(rarity: Rarity, type: Types, stats: ArrayList<Component>, xp: Int, setCompletion: Int = 0, element: Elements?, set: SetBonus?): ArrayList<Component> {
+  fun genLore(rarity: Rarity, type: Types, stats: ArrayList<Component>, xp: Int, setCompletion: Int = 0, set: SetBonus?): ArrayList<Component> {
     val lore = ArrayList<Component>()
     lore.addAll(stats)
     lore.add(Component.text("").decoration(TextDecoration.ITALIC, false))

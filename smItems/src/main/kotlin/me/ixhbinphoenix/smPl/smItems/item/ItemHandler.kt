@@ -58,7 +58,7 @@ open class ItemHandler(val item: ItemStack, private val player: Player) {
             }
         }
         val im = item.itemMeta
-        im.lore(itemUtils.genLore(rarity, type, statTexts, xp, SetHelper.getCompletion(player, set), element, setHelper.setObjects[set]))
+        im.lore(itemUtils.genLore(rarity, type, statTexts, xp, SetHelper.getCompletion(player, set), setHelper.setObjects[set]))
         item.itemMeta = im
     }
 

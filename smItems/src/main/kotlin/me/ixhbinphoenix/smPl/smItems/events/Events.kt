@@ -7,6 +7,7 @@ import me.ixhbinphoenix.smPl.smItems.Main
 import me.ixhbinphoenix.smPl.smItems.Types
 import me.ixhbinphoenix.smPl.smItems.item.ItemHandler
 import me.ixhbinphoenix.smPl.smItems.item.LoreRefresh
+import net.kyori.adventure.text.Component
 import org.bukkit.*
 import org.bukkit.attribute.Attribute
 import org.bukkit.block.Block
@@ -71,6 +72,7 @@ class Events : Listener {
 
   @EventHandler
   fun onEntityAttack(event: EntityDamageByEntityEvent){
+    event.damage = 0.0
     if(event.damager !is Player && event.entity is Player){
       val player = event.entity as Player
       val damage = event.damager.persistentDataContainer.getOrDefault(
@@ -84,7 +86,7 @@ class Events : Listener {
         PersistentDataType.INTEGER,
         vanillaMaxHealth)
       if(maxHealth <= 20) maxHealth = 20
-      event.damage = vanillaMaxHealth.toDouble() * (damage / maxHealth)
+      damage(player, vanillaMaxHealth.toDouble() * (damage / maxHealth))
     }
     else if (event.damager is Player){
       if (event.cause == EntityDamageEvent.DamageCause.ENTITY_ATTACK) {
@@ -98,7 +100,6 @@ class Events : Listener {
             projectile.persistentDataContainer.set(NamespacedKey.fromString("smitems:projectile.type.str")!!, PersistentDataType.STRING, "${handler.type}_${handler.rarity}_${handler.element}_PRIMARY")
             projectile.persistentDataContainer.set(NamespacedKey.fromString("smitems:projectile.owner.str")!!, PersistentDataType.STRING, damager.name)
             projectile.persistentDataContainer.set(NamespacedKey.fromString("smitems:projectile.damage.int")!!, PersistentDataType.INTEGER, PlayerHandler(damager).getDamage())
-            event.isCancelled = true
             return
           }
         }
@@ -108,10 +109,12 @@ class Events : Listener {
         PersistentDataType.INTEGER,
         event.damage.toInt()
       )
-      event.damage = damage.toDouble()
-      showDamage(event.entity as Damageable, event.damage)
+      event.damager.sendMessage(Component.text("${(event.entity as Damageable).health} - ${damage.toDouble()}"))
+      damage(event.entity as Damageable, damage.toDouble())
+      showDamage(event.entity as Damageable, damage.toDouble())
     }
     else{
+      damage(event.entity as Damageable, event.damage)
       showDamage(event.entity as Damageable, event.damage)
     }
   }
@@ -143,7 +146,7 @@ class Events : Listener {
       val projectile = event.entity
       if (event.entity.persistentDataContainer.has(NamespacedKey.fromString("smitems:projectile.type.str")!!)) {
         val damage = projectile.persistentDataContainer.getOrDefault(NamespacedKey.fromString("smitems:projectile.damage.int")!!, PersistentDataType.INTEGER, 0)
-        damage(event.hitEntity!! as Damageable, damage.toDouble(), null)
+        damage(event.hitEntity!! as Damageable, damage.toDouble())
         location.world.spawnParticle(Particle.LAVA, location, 5)
       }
     } else if (event.hitBlock is Block) {

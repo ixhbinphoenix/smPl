@@ -82,10 +82,6 @@ fun showDamage(damageable: Damageable, damage: Double){
         "Damageable"
     ))
 }
-fun damage(entity: Damageable, damage: Double, source: Entity?) {
-    if (source is Entity) {
-        entity.damage(damage, source)
-    } else {
-        entity.damage(damage)
-    }
+fun damage(entity: Damageable, damage: Double) {
+    entity.damage(damage)
 }

@@ -39,7 +39,7 @@ private inline fun <reified T: Enum<T>> createEnumIfExists(dbName: String): Stri
   return "DO\n" +
           "$$\n" +
           "BEGIN\n" +
-          "IF NOT EXISTS (SELECT * FROM pg_type WHERE typname = '$dbName') THEN\n" +
+          "IF NOT EXISTS (SELECT * FROM pg_type WHERE typname = '${dbName.lowercase()}') THEN\n" +
           " ${getEnumQuery<T>(dbName)}\n" +
           "END IF;\n" +
           "END;\n" +

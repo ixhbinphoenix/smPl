@@ -69,7 +69,7 @@ class Events : Listener {
   @EventHandler
   fun onEntityHurt(event: EntityDamageEvent){
     if (event.entity is Damageable) {
-      if(event.cause != EntityDamageEvent.DamageCause.ENTITY_ATTACK && event.cause != EntityDamageEvent.DamageCause.ENTITY_SWEEP_ATTACK){
+      if(event.cause != EntityDamageEvent.DamageCause.ENTITY_ATTACK && event.cause != EntityDamageEvent.DamageCause.ENTITY_SWEEP_ATTACK && event.cause != EntityDamageEvent.DamageCause.CUSTOM){
         showDamage(event.entity as Damageable, event.damage)
       }
       if (event.cause == EntityDamageEvent.DamageCause.FIRE_TICK) {
@@ -118,11 +118,9 @@ class Events : Listener {
         event.damage.toInt()
       )
       damage(event.entity as Damageable, damage.toDouble())
-      showDamage(event.entity as Damageable, damage.toDouble())
     }
     else{
       damage(event.entity as Damageable, event.damage)
-      showDamage(event.entity as Damageable, event.damage)
     }
   }
 

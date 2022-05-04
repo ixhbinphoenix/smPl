@@ -4,11 +4,14 @@ version: 0.0.2
 api-version: 1.18
 commands:
   meta:
-    usage: /<command> [self|reset]
+    usage: /<command>
     description: Gives persistentDataContainer information of the held item
   giveitem:
     usage: /<command> item
     description: Gives a test item
+  giveresource:
+    usage: /<command> item [amount]
+    description: Gives one or multiple items of a resource
   setitemxp:
     usage: /<command> xp
     description: Sets xp of the held item

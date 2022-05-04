@@ -16,7 +16,7 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.persistence.PersistentDataContainer
 import org.bukkit.persistence.PersistentDataType
 
-open class ItemHandler(val item: ItemStack, private val player: Player) {
+open class EquipmentHandler(val item: ItemStack, private val player: Player) {
     private val setHelper = SetHelper()
     private val itemUtils = ItemUtils()
 
@@ -58,7 +58,7 @@ open class ItemHandler(val item: ItemStack, private val player: Player) {
             }
         }
         val im = item.itemMeta
-        im.lore(itemUtils.genLore(rarity, type, statTexts, xp, SetHelper.getCompletion(player, set), setHelper.setObjects[set]))
+        im.lore(itemUtils.genEquipmentLore(rarity, type, statTexts, xp, SetHelper.getCompletion(player, set), setHelper.setObjects[set]))
         item.itemMeta = im
     }
 

@@ -1,5 +1,7 @@
 package me.ixhbinphoenix.smPl.smItems.db
 
+import me.ixhbinphoenix.smPl.smCore.db.PGEnum
+import me.ixhbinphoenix.smPl.smCore.db.createEnumIfExists
 import me.ixhbinphoenix.smPl.smItems.Elements
 import me.ixhbinphoenix.smPl.smItems.Rarity
 import me.ixhbinphoenix.smPl.smItems.Types
@@ -12,40 +14,7 @@ import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.exceptions.ExposedSQLException
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.postgresql.util.PGobject
 import java.util.logging.Level
-
-class PGEnum<T: Enum<T>>(enumTypeName: String, enumValue: T?): PGobject() {
-  init {
-    value = enumValue?.name
-    type = enumTypeName
-  }
-}
-
-private inline fun <reified T : Enum<T>> getEnumQuery(dbName: String): String {
-  val names = enumValues<T>().map { it.name }
-  var str = "CREATE TYPE $dbName AS ENUM ("
-  for (name in names) {
-    str += "'$name'"
-    if (names.indexOf(name) != names.size - 1) {
-      str += ", "
-    }
-  }
-  str += ");"
-  return str
-}
-
-private inline fun <reified T: Enum<T>> createEnumIfExists(dbName: String): String {
-  return "DO\n" +
-          "$$\n" +
-          "BEGIN\n" +
-          "IF NOT EXISTS (SELECT * FROM pg_type WHERE typname = '${dbName.lowercase()}') THEN\n" +
-          " ${getEnumQuery<T>(dbName)}\n" +
-          "END IF;\n" +
-          "END;\n" +
-          "$$\n" +
-          "LANGUAGE plpgsql;"
-}
 
 object EquipmentItems : IntIdTable() {
   val string_id = text("string_id").uniqueIndex()
@@ -54,7 +23,7 @@ object EquipmentItems : IntIdTable() {
   val rarity = customEnumeration("rarity", "RarityEnum", {value -> Rarity.valueOf(value as String) }, { PGEnum("RarityEnum", it) })
   val item_type = customEnumeration("item_type", "TypeEnum", { value -> Types.valueOf(value as String) }, { PGEnum("TypeEnum", it) })
   val element = customEnumeration("element", "ElementEnum", { value -> Elements.valueOf(value as String) }, { PGEnum("ElementEnum", it) }).nullable()
-  val set = text("set")
+  val set = text("set").default("NONE")
   val rgb = integer("rgb").nullable()
   val defence = integer("defence").default(0)
   val max_health = integer("max_health").default(0)

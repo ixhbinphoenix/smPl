@@ -7,9 +7,8 @@ import me.ixhbinphoenix.smPl.smEntities.entities.showDamage
 import me.ixhbinphoenix.smPl.smItems.Main
 import me.ixhbinphoenix.smPl.smItems.Types
 import me.ixhbinphoenix.smPl.smItems.item.ArmorLoreRefresh
-import me.ixhbinphoenix.smPl.smItems.item.ItemHandler
+import me.ixhbinphoenix.smPl.smItems.item.EquipmentHandler
 import me.ixhbinphoenix.smPl.smItems.item.ClickLoreRefresh
-import net.kyori.adventure.text.Component
 import org.bukkit.*
 import org.bukkit.attribute.Attribute
 import org.bukkit.block.Block
@@ -100,7 +99,7 @@ class Events : Listener {
       if (event.cause == EntityDamageEvent.DamageCause.ENTITY_ATTACK) {
         val damager = event.damager as Player
         if (damager.inventory.itemInMainHand.hasItemMeta()) {
-          val handler = ItemHandler(damager.inventory.itemInMainHand, damager)
+          val handler = EquipmentHandler(damager.inventory.itemInMainHand, damager)
           if (handler.type == Types.BOOK) {
             event.isCancelled = true
             val projectile = damager.launchProjectile(Snowball::class.java)
@@ -128,7 +127,7 @@ class Events : Listener {
   fun onPlayerClick(event: PlayerInteractEvent) {
     if (event.hasItem()) {
       if (event.item!!.hasItemMeta()) {
-        val handler = ItemHandler(event.item!!, event.player)
+        val handler = EquipmentHandler(event.item!!, event.player)
         val player = PlayerHandler(event.player)
         if (handler.type == Types.BOOK) {
           if (event.action == Action.LEFT_CLICK_AIR || event.action == Action.LEFT_CLICK_BLOCK) {

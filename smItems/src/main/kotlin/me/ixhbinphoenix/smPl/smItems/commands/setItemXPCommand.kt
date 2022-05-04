@@ -1,7 +1,7 @@
 package me.ixhbinphoenix.smPl.smItems.commands
 
 import me.ixhbinphoenix.smPl.smCore.commands.BaseCommand
-import me.ixhbinphoenix.smPl.smItems.item.ItemHandler
+import me.ixhbinphoenix.smPl.smItems.item.EquipmentHandler
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
 import org.bukkit.command.Command
@@ -16,7 +16,7 @@ class setItemXPCommand : BaseCommand {
                 if (num is Int) {
                     val item = sender.inventory.itemInMainHand
                     if (item.hasItemMeta()) {
-                        val handler = ItemHandler(sender.inventory.itemInMainHand, sender)
+                        val handler = EquipmentHandler(sender.inventory.itemInMainHand, sender)
                         handler.setXP(num)
                         sender.sendMessage(
                             Component.text("Set ").color(NamedTextColor.GOLD)

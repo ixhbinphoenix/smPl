@@ -2,9 +2,11 @@ package me.ixhbinphoenix.smPl.smItems
 
 import me.ixhbinphoenix.smPl.smCore.commands.BaseCommand
 import me.ixhbinphoenix.smPl.smItems.commands.giveItemCommand
+import me.ixhbinphoenix.smPl.smItems.commands.giveResourceCommand
 import me.ixhbinphoenix.smPl.smItems.commands.metaCommand
 import me.ixhbinphoenix.smPl.smItems.commands.setItemXPCommand
 import me.ixhbinphoenix.smPl.smItems.db.EquipmentUtils
+import me.ixhbinphoenix.smPl.smItems.db.ResourceUtils
 import me.ixhbinphoenix.smPl.smItems.events.Events
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
@@ -20,11 +22,13 @@ class Main : JavaPlugin() {
         saveDefaultConfig()
         dbConnection = Database.connect(config.getString("db.jdbcConnectionString")!!, driver = "org.postgresql.Driver", user = config.getString("db.user")!!, password = config.getString("db.password")!!)
         EquipmentUtils.setupDB()
+        ResourceUtils.setupDB()
     }
 
     override fun onEnable() {
         val commands: HashMap<String, BaseCommand> = hashMapOf(
             "giveitem" to giveItemCommand(),
+            "giveresource" to giveResourceCommand(),
             "meta" to metaCommand(),
             "setitemxp" to setItemXPCommand()
         )

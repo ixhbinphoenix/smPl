@@ -20,6 +20,8 @@ dependencies {
   paperDevBundle("1.18.2-R0.1-SNAPSHOT")
   compileOnly(project(":smChat"))
 
+  implementation("org.postgresql:postgresql:42.3.3")
+
   implementation(kotlin("stdlib"))
 }
 

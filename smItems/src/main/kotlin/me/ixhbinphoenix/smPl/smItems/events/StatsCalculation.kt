@@ -2,12 +2,14 @@ package me.ixhbinphoenix.smPl.smItems.events
 
 import me.ixhbinphoenix.smPl.smCore.player.PlayerHandler
 import me.ixhbinphoenix.smPl.smItems.ItemCategories
-import me.ixhbinphoenix.smPl.smItems.item.ItemHandler
+import me.ixhbinphoenix.smPl.smItems.item.EquipmentHandler
 import me.ixhbinphoenix.smPl.smItems.item.sets.SetHelper
 import net.kyori.adventure.text.format.NamedTextColor
 import net.kyori.adventure.text.format.TextColor
+import org.bukkit.NamespacedKey
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
+import org.bukkit.persistence.PersistentDataType
 import org.bukkit.scheduler.BukkitRunnable
 
 class StatsCalculation(private val player: Player, private val refreshLore: Boolean = false) : BukkitRunnable() {
@@ -33,10 +35,10 @@ class StatsCalculation(private val player: Player, private val refreshLore: Bool
         statsItems.addAll(armor)
         for(item: ItemStack? in statsItems){
             if(item != null && item.hasItemMeta()){
-                when(ItemHandler(item, player).category){
-                    ItemCategories.WEAPON -> {
+                when(item.itemMeta.persistentDataContainer.getOrDefault(NamespacedKey.fromString("smitems:item.type.str")!!, PersistentDataType.STRING, "???")){
+                    ItemCategories.WEAPON.toString() -> {
                         if (item == inventory.itemInMainHand) {
-                            val itemHandler = ItemHandler(item, player)
+                            val itemHandler = EquipmentHandler(item, player)
                             for (stat in getAllStats()) {
                                 var value = 0
                                 if (stats[stat.key] != null) value = stats[stat.key]!!
@@ -46,14 +48,14 @@ class StatsCalculation(private val player: Player, private val refreshLore: Bool
                             if (refreshLore) itemHandler.updateLore()
                         }
                     }
-                    ItemCategories.ARMOR -> {
+                    ItemCategories.ARMOR.toString() -> {
                         if (
                             item == inventory.helmet ||
                             item == inventory.chestplate ||
                             item == inventory.leggings ||
                             item == inventory.boots
                         ) {
-                            val itemHandler = ItemHandler(item, player)
+                            val itemHandler = EquipmentHandler(item, player)
                             for (stat in getAllStats()) {
                                 var value = 0
                                 if (stats[stat.key] != null) value = stats[stat.key]!!

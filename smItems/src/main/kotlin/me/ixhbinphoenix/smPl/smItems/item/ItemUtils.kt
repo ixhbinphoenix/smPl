@@ -37,12 +37,12 @@ class ClickLoreRefresh(private val event: InventoryClickEvent) : BukkitRunnable(
     val slot = event.slot
     if (player.inventory.getItem(slot) is ItemStack && player.inventory.getItem(slot)!!.hasItemMeta()) {
       val item = player.inventory.getItem(slot)!!
-      val handler = ItemHandler(item, player)
+      val handler = EquipmentHandler(item, player)
       handler.updateLore()
     }
     if (event.currentItem is ItemStack && event.currentItem!!.hasItemMeta()) {
       val item = event.currentItem!!
-      val handler = ItemHandler(item, player)
+      val handler = EquipmentHandler(item, player)
       handler.updateLore()
     }
   }
@@ -54,7 +54,7 @@ class ArmorLoreRefresh(private val event: PlayerArmorChangeEvent) : BukkitRunnab
     if (armorSlots != null) {
       for (armor in armorSlots) {
         if (armor != null) {
-          ItemHandler(armor, event.player).updateLore()
+          EquipmentHandler(armor, event.player).updateLore()
         }
       }
     }
@@ -101,7 +101,7 @@ class ItemUtils {
     }
     im.persistentDataContainer.set(NamespacedKey.fromString("smitems:item.id.str")!!, PersistentDataType.STRING, id)
     im.persistentDataContainer.set(NamespacedKey.fromString("smitems:item.uuid.str")!!, PersistentDataType.STRING, UUID.randomUUID().toString())
-    im.lore(genLore(rarity, Type, statText, 0, 0, set))
+    im.lore(genEquipmentLore(rarity, Type, statText, 0, 0, set))
     im.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
     im.addItemFlags(ItemFlag.HIDE_UNBREAKABLE)
     im.addItemFlags(ItemFlag.HIDE_DYE)
@@ -109,7 +109,7 @@ class ItemUtils {
     return item
   }
 
-  fun genLore(rarity: Rarity, type: Types, stats: ArrayList<Component>, xp: Int, setCompletion: Int = 0, set: SetBonus?): ArrayList<Component> {
+  fun genEquipmentLore(rarity: Rarity, type: Types, stats: ArrayList<Component>, xp: Int, setCompletion: Int = 0, set: SetBonus?): ArrayList<Component> {
     val lore = ArrayList<Component>()
     lore.addAll(stats)
     lore.add(Component.text("").decoration(TextDecoration.ITALIC, false))

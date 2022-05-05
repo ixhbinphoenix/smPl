@@ -76,7 +76,7 @@ abstract class SmEntity {
 }
 
 fun updateName(entity: Damageable, health: Double, name: String){
-    val type = Type.valueOf(entity.persistentDataContainer.getOrDefault(NamespacedKey.fromString("smentities:entity.type.str")!!, PersistentDataType.STRING, "PASSIVE"))
+    val type = Type.valueOf(entity.persistentDataContainer.getOrDefault(NamespacedKey.fromString("smentities:entity.type.str")!!, PersistentDataType.STRING, "HOSTILE"))
     entity.customName(
         Component.text(name).color(type.color)
             .append(Component.text(" ${health.toInt()}").color(NamedTextColor.GREEN)

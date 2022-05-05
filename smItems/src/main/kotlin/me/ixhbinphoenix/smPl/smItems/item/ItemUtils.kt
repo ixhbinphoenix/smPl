@@ -109,6 +109,10 @@ class ItemUtils {
     return item
   }
 
+  fun isEquipment(item: ItemStack): Boolean {
+    return item.itemMeta.persistentDataContainer.has(NamespacedKey.fromString("smitems:item.type.str")!!)
+  }
+
   fun genEquipmentLore(rarity: Rarity, type: Types, stats: ArrayList<Component>, xp: Int, setCompletion: Int = 0, set: SetBonus?): ArrayList<Component> {
     val lore = ArrayList<Component>()
     lore.addAll(stats)

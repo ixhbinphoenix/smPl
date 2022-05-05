@@ -24,6 +24,7 @@ open class EquipmentHandler(val item: ItemStack, private val player: Player) {
     val element: Elements?
     val mat: Material = item.type
     val pdc: PersistentDataContainer = item.itemMeta.persistentDataContainer
+    val id: String
     var category: ItemCategories?
     var type: Types
     var set: String
@@ -37,6 +38,7 @@ open class EquipmentHandler(val item: ItemStack, private val player: Player) {
     init{
         this.rarity = getItemRarity()
         this.element = getItemElement()
+        this.id = getItemID()
         this.category = getItemCategory()
         this.type = getItemType()
         this.set = getItemSet()
@@ -74,6 +76,10 @@ open class EquipmentHandler(val item: ItemStack, private val player: Player) {
         } catch (e: NullPointerException) {
             null
         }
+    }
+
+    private fun getItemID(): String {
+        return pdc.getOrDefault(NamespacedKey.fromString("smitems:item.id.str")!!, PersistentDataType.STRING, "no_id")
     }
 
     private fun getItemType(): Types {

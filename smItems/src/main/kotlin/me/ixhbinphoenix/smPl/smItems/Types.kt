@@ -20,18 +20,18 @@ enum class ItemCategories{
     WEAPON, ARMOR, ACCESSORY
 }
 
-enum class Types(val category: ItemCategories) {
-    HELMET(ItemCategories.ARMOR),
-    CHESTPLATE(ItemCategories.ARMOR),
-    LEGGINGS(ItemCategories.ARMOR),
-    BOOTS(ItemCategories.ARMOR),
-    SWORD(ItemCategories.WEAPON),
-    DAGGER(ItemCategories.WEAPON),
-    CROSSBOW(ItemCategories.WEAPON),
-    LONGBOW(ItemCategories.WEAPON),
-    SHORTBOW(ItemCategories.WEAPON),
-    WAND(ItemCategories.WEAPON),
-    BOOK(ItemCategories.WEAPON)
+enum class Types(val category: ItemCategories, val melee: Boolean) {
+    HELMET(ItemCategories.ARMOR, false),
+    CHESTPLATE(ItemCategories.ARMOR, false),
+    LEGGINGS(ItemCategories.ARMOR, false),
+    BOOTS(ItemCategories.ARMOR, false),
+    SWORD(ItemCategories.WEAPON, true),
+    DAGGER(ItemCategories.WEAPON, true),
+    CROSSBOW(ItemCategories.WEAPON, false),
+    LONGBOW(ItemCategories.WEAPON, false),
+    SHORTBOW(ItemCategories.WEAPON, false),
+    WAND(ItemCategories.WEAPON, false),
+    BOOK(ItemCategories.WEAPON, false)
 }
 
 enum class Elements(val comp: Component) {

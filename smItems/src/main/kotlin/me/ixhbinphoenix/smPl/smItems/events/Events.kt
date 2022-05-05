@@ -1,20 +1,25 @@
 package me.ixhbinphoenix.smPl.smItems.events
 
 import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent
-import me.ixhbinphoenix.smPl.smCore.player.PlayerHandler
 import me.ixhbinphoenix.smPl.smEntities.entities.damage
 import me.ixhbinphoenix.smPl.smEntities.entities.showDamage
-import me.ixhbinphoenix.smPl.smItems.Main
+import me.ixhbinphoenix.smPl.smItems.Elements
 import me.ixhbinphoenix.smPl.smItems.Types
+import me.ixhbinphoenix.smPl.smItems.getInstance
 import me.ixhbinphoenix.smPl.smItems.item.ArmorLoreRefresh
 import me.ixhbinphoenix.smPl.smItems.item.EquipmentHandler
 import me.ixhbinphoenix.smPl.smItems.item.ClickLoreRefresh
+import me.ixhbinphoenix.smPl.smItems.item.ItemUtils
+import me.ixhbinphoenix.smPl.smItems.item.abilities.Abilities
+import me.ixhbinphoenix.smPl.smItems.item.abilities.AbilityHandler
+import me.ixhbinphoenix.smPl.smItems.item.abilities.ProjectileAbilityHandler
+import net.kyori.adventure.text.Component
 import org.bukkit.*
 import org.bukkit.attribute.Attribute
 import org.bukkit.block.Block
 import org.bukkit.entity.Damageable
+import org.bukkit.entity.Entity
 import org.bukkit.entity.Player
-import org.bukkit.entity.Snowball
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.block.Action
@@ -26,12 +31,13 @@ import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.player.PlayerDropItemEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerItemHeldEvent
-import org.bukkit.inventory.ItemStack
 import org.bukkit.persistence.PersistentDataType
 import kotlin.math.roundToInt
 
 class Events : Listener {
-  private val plugin = Bukkit.getPluginManager().getPlugin("smItems") as Main
+  private val plugin = getInstance()
+  private val abilties = Abilities()
+  private val itemUtils = ItemUtils()
 
   @EventHandler
   fun onPlayerEquip(event: PlayerItemHeldEvent) {
@@ -98,15 +104,22 @@ class Events : Listener {
     else if (event.damager is Player){
       if (event.cause == EntityDamageEvent.DamageCause.ENTITY_ATTACK) {
         val damager = event.damager as Player
-        if (damager.inventory.itemInMainHand.hasItemMeta()) {
-          val handler = EquipmentHandler(damager.inventory.itemInMainHand, damager)
-          if (handler.type == Types.BOOK) {
+        if (itemUtils.isEquipment(damager.inventory.itemInMainHand)) {
+          val equip = EquipmentHandler(damager.inventory.itemInMainHand, damager)
+          if (abilties.getHandler(equip.id) is AbilityHandler) {
+            val handler = abilties.getHandler(equip.id)
+            handler!!.onPrimary(damager)
+          } else {
+            val id = if (equip.element is Elements) {
+              "${equip.element}_${equip.type}"
+            } else {
+              "${equip.type}"
+            }
+            val handler = abilties.getHandler(id)
+            handler!!.onPrimary(damager)
+          }
+          if (!equip.type.melee) {
             event.isCancelled = true
-            val projectile = damager.launchProjectile(Snowball::class.java)
-            projectile.item = ItemStack(Material.FIRE_CHARGE)
-            projectile.persistentDataContainer.set(NamespacedKey.fromString("smitems:projectile.type.str")!!, PersistentDataType.STRING, "${handler.type}_${handler.rarity}_${handler.element}_PRIMARY")
-            projectile.persistentDataContainer.set(NamespacedKey.fromString("smitems:projectile.owner.str")!!, PersistentDataType.STRING, damager.name)
-            projectile.persistentDataContainer.set(NamespacedKey.fromString("smitems:projectile.damage.int")!!, PersistentDataType.INTEGER, PlayerHandler(damager).getDamage())
             return
           }
         }
@@ -126,17 +139,38 @@ class Events : Listener {
   @EventHandler
   fun onPlayerClick(event: PlayerInteractEvent) {
     if (event.hasItem()) {
-      if (event.item!!.hasItemMeta()) {
-        val handler = EquipmentHandler(event.item!!, event.player)
-        val player = PlayerHandler(event.player)
-        if (handler.type == Types.BOOK) {
-          if (event.action == Action.LEFT_CLICK_AIR || event.action == Action.LEFT_CLICK_BLOCK) {
-            val projectile = event.player.launchProjectile(Snowball::class.java)
-            projectile.item = ItemStack(Material.FIRE_CHARGE)
-            projectile.persistentDataContainer.set(NamespacedKey.fromString("smitems:projectile.type.str")!!, PersistentDataType.STRING, "SATANS_TEACHINGS_PRIMARY")
-            projectile.persistentDataContainer.set(NamespacedKey.fromString("smitems:projectile.owner.str")!!, PersistentDataType.STRING, event.player.name)
-            projectile.persistentDataContainer.set(NamespacedKey.fromString("smitems:projectile.damage.int")!!, PersistentDataType.INTEGER, player.getDamage())
-            event.isCancelled = true
+      if (event.item!!.hasItemMeta() && itemUtils.isEquipment(event.item!!)) {
+        val equip = EquipmentHandler(event.item!!, event.player)
+        if (event.action == Action.LEFT_CLICK_AIR || event.action == Action.LEFT_CLICK_BLOCK) {
+          if (abilties.getHandler(equip.id) is AbilityHandler) {
+            val handler = abilties.getHandler(equip.id)
+            handler!!.onPrimary(event.player)
+          } else {
+            val id = if (equip.element is Elements) {
+              "${equip.element}_${equip.type}"
+            } else {
+              "${equip.type}"
+            }
+            val handler = abilties.getHandler(id)
+            if (handler is AbilityHandler) {
+              handler.onPrimary(event.player)
+            }
+          }
+          event.isCancelled = true
+        } else if (event.action == Action.RIGHT_CLICK_AIR || event.action == Action.RIGHT_CLICK_BLOCK) {
+          if (abilties.getHandler(equip.id) is AbilityHandler) {
+            val handler = abilties.getHandler(equip.id)
+            handler!!.onSecondary(event.player)
+          } else {
+            val id = if (equip.element is Elements) {
+              "${equip.element}_${equip.type}"
+            } else {
+              "${equip.type}"
+            }
+            val handler = abilties.getHandler(id)
+            if (handler is AbilityHandler) {
+              handler.onSecondary(event.player)
+            }
           }
         }
       }
@@ -145,19 +179,25 @@ class Events : Listener {
 
   @EventHandler
   fun onProjectileCollision(event: ProjectileHitEvent) {
-    if (event.hitEntity is Damageable) {
-      val location = event.hitEntity!!.location
-      val projectile = event.entity
-      if (event.entity.persistentDataContainer.has(NamespacedKey.fromString("smitems:projectile.type.str")!!)) {
-        val damage = projectile.persistentDataContainer.getOrDefault(NamespacedKey.fromString("smitems:projectile.damage.int")!!, PersistentDataType.INTEGER, 0)
-        damage(event.hitEntity!! as Damageable, damage.toDouble())
-        location.world.spawnParticle(Particle.LAVA, location, 5)
-      }
-    } else if (event.hitBlock is Block) {
-      val location = event.hitBlock!!.location
-      location.y += 1
-      if (event.entity.persistentDataContainer.has(NamespacedKey.fromString("smitems:projectile.type.str")!!)) {
-        location.world.spawnParticle(Particle.LAVA, location, 5)
+    val projectile = event.entity
+    if (projectile.persistentDataContainer.has(NamespacedKey.fromString("smitems:projectile.type.str")!!)) {
+      val id = projectile.persistentDataContainer.get(NamespacedKey.fromString("smitems:projectile.type.str")!!, PersistentDataType.STRING)!!.split("_")
+      if (abilties.getHandler(id.dropLast(1).joinToString("_")) is ProjectileAbilityHandler) {
+        if (id.last() == "PRIMARY") {
+          val handler = abilties.getHandler(id.dropLast(1).joinToString("_"))!! as ProjectileAbilityHandler
+          if (event.hitBlock is Block) {
+            handler.onPrimaryCollision(event.hitBlock!!, projectile)
+          } else if (event.hitEntity is Damageable) {
+            handler.onPrimaryCollision(event.hitEntity!! as Damageable, projectile)
+          }
+        } else if (id.last() == "SECONDARY") {
+          val handler = abilties.getHandler(id.dropLast(1).joinToString("_"))!! as ProjectileAbilityHandler
+          if (event.hitBlock is Block) {
+            handler.onSecondaryCollision(event.hitBlock!!, projectile)
+          } else if (event.hitEntity is Damageable) {
+            handler.onSecondaryCollision(event.hitEntity!! as Damageable, projectile)
+          }
+        }
       }
     }
   }

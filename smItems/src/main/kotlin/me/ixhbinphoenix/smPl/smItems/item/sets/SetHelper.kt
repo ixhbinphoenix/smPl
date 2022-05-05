@@ -50,7 +50,7 @@ class SetHelper {
   val setObjects = HashMap<String, SetBonus>()
   init {
     handlers["PROGRAMMER"] = ProgrammerSet()
-    setObjects["PROGRAMMER"] = ProgrammerSet.getBonus()
+    setObjects["PROGRAMMER"] = ProgrammerSet().getBonus()
   }
 
   fun calcSet(armor: ArrayList<ItemStack?>, player: Player): Boolean {

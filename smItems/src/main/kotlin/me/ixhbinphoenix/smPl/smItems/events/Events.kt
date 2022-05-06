@@ -4,7 +4,6 @@ import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent
 import me.ixhbinphoenix.smPl.smEntities.entities.damage
 import me.ixhbinphoenix.smPl.smEntities.entities.showDamage
 import me.ixhbinphoenix.smPl.smItems.Elements
-import me.ixhbinphoenix.smPl.smItems.Types
 import me.ixhbinphoenix.smPl.smItems.getInstance
 import me.ixhbinphoenix.smPl.smItems.item.ArmorLoreRefresh
 import me.ixhbinphoenix.smPl.smItems.item.EquipmentHandler
@@ -13,12 +12,10 @@ import me.ixhbinphoenix.smPl.smItems.item.ItemUtils
 import me.ixhbinphoenix.smPl.smItems.item.abilities.Abilities
 import me.ixhbinphoenix.smPl.smItems.item.abilities.AbilityHandler
 import me.ixhbinphoenix.smPl.smItems.item.abilities.ProjectileAbilityHandler
-import net.kyori.adventure.text.Component
 import org.bukkit.*
 import org.bukkit.attribute.Attribute
 import org.bukkit.block.Block
 import org.bukkit.entity.Damageable
-import org.bukkit.entity.Entity
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -116,7 +113,9 @@ class Events : Listener {
               "${equip.type}"
             }
             val handler = abilties.getHandler(id)
-            handler!!.onPrimary(damager)
+            if (handler is AbilityHandler) {
+              handler.onPrimary(damager)
+            }
           }
           if (!equip.type.melee) {
             event.isCancelled = true

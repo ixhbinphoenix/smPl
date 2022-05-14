@@ -1,8 +1,8 @@
 package me.ixhbinphoenix.smPl.smItems.item.abilities.normal
 
 import me.ixhbinphoenix.smPl.smCore.player.PlayerHandler
-import me.ixhbinphoenix.smPl.smEntities.entities.damage
 import me.ixhbinphoenix.smPl.smItems.item.abilities.ProjectileAbilityHandler
+import me.ixhbinphoenix.smPl.smEntities.entities.EntityHandler
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
 import org.bukkit.Particle
@@ -27,7 +27,11 @@ class FireBook : ProjectileAbilityHandler() {
   override fun onPrimaryCollision(hit: Damageable, projectile: Projectile) {
     val location = hit.location
     val damage = projectile.persistentDataContainer.getOrDefault(NamespacedKey.fromString("smitems:projectile.damage.int")!!, PersistentDataType.INTEGER, 0)
-    damage(hit, damage.toDouble())
+    try {
+      EntityHandler(hit).damage(damage.toDouble())
+    } catch (e: Exception) {
+      hit.damage(damage.toDouble())
+    }
     location.world.spawnParticle(Particle.LAVA, location, 5)
     projectile.remove()
   }

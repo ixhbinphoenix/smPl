@@ -1,7 +1,7 @@
 package me.ixhbinphoenix.smPl.smEntities
 
 import me.ixhbinphoenix.smPl.smCore.commands.BaseCommand
-import me.ixhbinphoenix.smPl.smEntities.commands.ZombieCommand
+import me.ixhbinphoenix.smPl.smEntities.commands.SpawnEntityCommand
 import me.ixhbinphoenix.smPl.smEntities.events.Events
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
@@ -13,7 +13,7 @@ class Main : JavaPlugin() {
     }
     override fun onEnable() {
         val commands: HashMap<String, BaseCommand> = hashMapOf(
-            "zombie" to ZombieCommand()
+            "spawnentity" to SpawnEntityCommand()
         )
         for(cmd in commands){
             getCommand(cmd.key)?.setExecutor(cmd.value)

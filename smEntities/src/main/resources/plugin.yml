@@ -3,8 +3,8 @@ name: smEntities
 version: 0.0.2
 api-version: 1.18
 commands:
-  zombie:
-    usage: /<command>
-    description: Summons a Zombie at your location
+  spawnentity:
+    usage: /<command> <entity id>
+    description: Summons a Custom Entity at your location
 depend:
   - smCore

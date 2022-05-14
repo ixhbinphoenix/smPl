@@ -1,8 +1,6 @@
 package me.ixhbinphoenix.smPl.smItems.events
 
 import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent
-import me.ixhbinphoenix.smPl.smEntities.entities.damage
-import me.ixhbinphoenix.smPl.smEntities.entities.showDamage
 import me.ixhbinphoenix.smPl.smItems.Elements
 import me.ixhbinphoenix.smPl.smItems.getInstance
 import me.ixhbinphoenix.smPl.smItems.item.ArmorLoreRefresh
@@ -12,6 +10,7 @@ import me.ixhbinphoenix.smPl.smItems.item.ItemUtils
 import me.ixhbinphoenix.smPl.smItems.item.abilities.Abilities
 import me.ixhbinphoenix.smPl.smItems.item.abilities.AbilityHandler
 import me.ixhbinphoenix.smPl.smItems.item.abilities.ProjectileAbilityHandler
+import me.ixhbinphoenix.smPl.smEntities.entities.EntityHandler
 import org.bukkit.*
 import org.bukkit.attribute.Attribute
 import org.bukkit.block.Block
@@ -29,6 +28,7 @@ import org.bukkit.event.player.PlayerDropItemEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerItemHeldEvent
 import org.bukkit.persistence.PersistentDataType
+import net.kyori.adventure.text.Component
 import kotlin.math.roundToInt
 
 class Events : Listener {
@@ -72,7 +72,7 @@ class Events : Listener {
   fun onEntityHurt(event: EntityDamageEvent){
     if (event.entity is Damageable) {
       if(event.cause != EntityDamageEvent.DamageCause.ENTITY_ATTACK && event.cause != EntityDamageEvent.DamageCause.ENTITY_SWEEP_ATTACK && event.cause != EntityDamageEvent.DamageCause.CUSTOM){
-        showDamage(event.entity as Damageable, event.damage)
+        EntityHandler(event.entity as Damageable).updateName()
       }
       if (event.cause == EntityDamageEvent.DamageCause.FIRE_TICK) {
         event.isCancelled = false
@@ -96,7 +96,7 @@ class Events : Listener {
         PersistentDataType.INTEGER,
         vanillaMaxHealth)
       if(maxHealth <= 20) maxHealth = 20
-      damage(player, vanillaMaxHealth.toDouble() * (damage / maxHealth))
+      player.damage(vanillaMaxHealth.toDouble() * (damage / maxHealth))
     }
     else if (event.damager is Player){
       if (event.cause == EntityDamageEvent.DamageCause.ENTITY_ATTACK) {
@@ -128,10 +128,10 @@ class Events : Listener {
         PersistentDataType.INTEGER,
         event.damage.toInt()
       )
-      damage(event.entity as Damageable, damage.toDouble())
+      EntityHandler(event.entity as Damageable).damage(damage.toDouble())
     }
     else{
-      damage(event.entity as Damageable, event.damage)
+      EntityHandler(event.entity as Damageable).damage(event.damage)
     }
   }
 

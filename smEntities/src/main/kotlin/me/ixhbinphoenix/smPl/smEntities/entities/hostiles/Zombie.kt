@@ -1,33 +1,18 @@
 package me.ixhbinphoenix.smPl.smEntities.entities.hostiles
 
-import me.ixhbinphoenix.smPl.smEntities.entities.updateName
-import org.bukkit.Location
-import org.bukkit.NamespacedKey
-import org.bukkit.World
-import org.bukkit.attribute.Attribute
-import org.bukkit.entity.Damageable
-import org.bukkit.entity.Entity
 import org.bukkit.entity.EntityType
-import org.bukkit.persistence.PersistentDataType
+import me.ixhbinphoenix.smPl.smEntities.entities.BaseEntityHandler
+import me.ixhbinphoenix.smPl.smEntities.entities.CustomEntity
+import me.ixhbinphoenix.smPl.smEntities.Type
 
-class Zombie : Hostiles() {
-    override val name = "Zombie"
-    override val damage = 100.0
-    override val grantingXp = 10
-    override var health = 1000.0
-    override val entityType = EntityType.ZOMBIE
-    override var entity: Entity? = null
-
-    override fun spawn(world: World, location: Location) {
-        entity = world.spawnEntity(location, entityType)
-        val zombie = entity as org.bukkit.entity.Zombie
-        zombie.getAttribute(Attribute.GENERIC_MAX_HEALTH)!!.baseValue = health
-        zombie.health = health
-        zombie.setShouldBurnInDay(false)
-        zombie.persistentDataContainer.set(NamespacedKey.fromString("smentities:entity.type.str")!!, PersistentDataType.STRING, "HOSTILE")
-        saveDamage(damage)
-        saveHealth(health)
-        saveName(name)
-        updateName(zombie, health, name)
-    }
+class Zombie : BaseEntityHandler() {
+    override val data = CustomEntity(
+        "zombie",
+       1000.0,
+       100.0,
+       10,
+       Type.HOSTILE,
+       "Zombie",
+       EntityType.ZOMBIE
+    )
 }

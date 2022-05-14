@@ -1,7 +1,7 @@
 package me.ixhbinphoenix.smPl.smItems.item.abilities.normal
 
 import me.ixhbinphoenix.smPl.smCore.player.PlayerHandler
-import me.ixhbinphoenix.smPl.smEntities.entities.damage
+import me.ixhbinphoenix.smPl.smEntities.entities.EntityHandler
 import me.ixhbinphoenix.smPl.smItems.item.abilities.AbilityHandler
 import org.bukkit.FluidCollisionMode
 import org.bukkit.Sound
@@ -20,7 +20,11 @@ class VoidDagger : AbilityHandler() {
         val handler = PlayerHandler(player)
         val entity = res.hitEntity as Damageable
         val entloc = entity.location
-        damage(entity, handler.getDamage().toDouble())
+        try {
+          EntityHandler(entity).damage(handler.getDamage().toDouble())
+        } catch (e: Exception) {
+          entity.damage(handler.getDamage().toDouble())
+        }
         player.teleport(entloc)
         player.playSound(entloc, Sound.ENTITY_ENDERMAN_TELEPORT, 1.0f, 1.0f)
         player.playSound(entloc, Sound.ENTITY_PLAYER_ATTACK_CRIT, 1.0f, 1.0f)

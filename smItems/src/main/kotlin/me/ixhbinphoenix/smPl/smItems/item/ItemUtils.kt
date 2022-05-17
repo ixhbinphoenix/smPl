@@ -110,7 +110,11 @@ class ItemUtils {
   }
 
   fun isEquipment(item: ItemStack): Boolean {
-    return item.itemMeta.persistentDataContainer.has(NamespacedKey.fromString("smitems:item.type.str")!!)
+    return if (item.hasItemMeta()) {
+      item.itemMeta.persistentDataContainer.has(NamespacedKey.fromString("smitems:item.type.str")!!)
+    } else {
+      false
+    }
   }
 
   fun genEquipmentLore(rarity: Rarity, type: Types, stats: ArrayList<Component>, xp: Int, setCompletion: Int = 0, set: SetBonus?): ArrayList<Component> {

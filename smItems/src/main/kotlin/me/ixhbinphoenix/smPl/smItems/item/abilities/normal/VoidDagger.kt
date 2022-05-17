@@ -11,24 +11,28 @@ import org.bukkit.entity.Player
 import org.bukkit.util.RayTraceResult
 
 class VoidDagger : AbilityHandler() {
-  override fun onPrimary(player: Player) {}
+  override fun onPrimary(player: Player): Boolean {return false}
 
-  override fun onSecondary(player: Player) {
+  override fun onSecondary(player: Player): Boolean {
     val res = player.world.rayTrace(player.eyeLocation, player.eyeLocation.direction, 20.0, FluidCollisionMode.NEVER, true, 1.0) { e -> e.type != EntityType.PLAYER && e is Damageable }
     if (res is RayTraceResult) {
       if (res.hitEntity is Damageable) {
         val handler = PlayerHandler(player)
         val entity = res.hitEntity as Damageable
         val entloc = entity.location
+        var ret: Boolean
         try {
-          EntityHandler(entity).damage(handler.getDamage().toDouble())
+          ret = EntityHandler(entity).damage(handler.getDamage().toDouble())
         } catch (e: Exception) {
+          ret = entity.health <= handler.getDamage()
           entity.damage(handler.getDamage().toDouble())
         }
         player.teleport(entloc)
         player.playSound(entloc, Sound.ENTITY_ENDERMAN_TELEPORT, 1.0f, 1.0f)
         player.playSound(entloc, Sound.ENTITY_PLAYER_ATTACK_CRIT, 1.0f, 1.0f)
+        return ret
       }
     }
+    return false
   }
 }

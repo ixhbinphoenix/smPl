@@ -3,14 +3,12 @@ package me.ixhbinphoenix.smPl.smItems.events
 import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent
 import me.ixhbinphoenix.smPl.smItems.Elements
 import me.ixhbinphoenix.smPl.smItems.getInstance
-import me.ixhbinphoenix.smPl.smItems.item.ArmorLoreRefresh
-import me.ixhbinphoenix.smPl.smItems.item.EquipmentHandler
-import me.ixhbinphoenix.smPl.smItems.item.ClickLoreRefresh
-import me.ixhbinphoenix.smPl.smItems.item.ItemUtils
 import me.ixhbinphoenix.smPl.smItems.item.abilities.Abilities
 import me.ixhbinphoenix.smPl.smItems.item.abilities.AbilityHandler
 import me.ixhbinphoenix.smPl.smItems.item.abilities.ProjectileAbilityHandler
 import me.ixhbinphoenix.smPl.smEntities.entities.EntityHandler
+import me.ixhbinphoenix.smPl.smEntities.entities.EntityUtils
+import me.ixhbinphoenix.smPl.smItems.item.*
 import org.bukkit.*
 import org.bukkit.attribute.Attribute
 import org.bukkit.block.Block
@@ -128,10 +126,22 @@ class Events : Listener {
         PersistentDataType.INTEGER,
         event.damage.toInt()
       )
-      EntityHandler(event.entity as Damageable).damage(damage.toDouble())
+      if (EntityUtils.isCustomEntity(event.entity as Damageable)) {
+        if (EntityHandler(event.entity as Damageable).damage(damage.toDouble())) {
+          PlayerEquipHandler(event.damager as Player).grantXP(EntityHandler(event.entity as Damageable).xp)
+        }
+      } else {
+        (event.entity as Damageable).damage(damage.toDouble())
+      }
     }
     else{
-      EntityHandler(event.entity as Damageable).damage(event.damage)
+      if (EntityUtils.isCustomEntity(event.entity as Damageable)) {
+        if (EntityHandler(event.entity as Damageable).damage(event.damage)) {
+          PlayerEquipHandler(event.damager as Player).grantXP(EntityHandler(event.entity as Damageable).xp)
+        }
+      } else {
+        (event.entity as Damageable).damage(event.damage)
+      }
     }
   }
 
@@ -187,14 +197,28 @@ class Events : Listener {
           if (event.hitBlock is Block) {
             handler.onPrimaryCollision(event.hitBlock!!, projectile)
           } else if (event.hitEntity is Damageable) {
-            handler.onPrimaryCollision(event.hitEntity!! as Damageable, projectile)
+            if (handler.onPrimaryCollision(event.hitEntity!! as Damageable, projectile)) {
+              if (EntityUtils.isCustomEntity(event.hitEntity!! as Damageable)) {
+                val player = plugin.server.getPlayerExact(projectile.persistentDataContainer.getOrDefault(NamespacedKey.fromString("smitems:projectile.owner.str")!!, PersistentDataType.STRING, ""))
+                if (player is Player) {
+                  PlayerEquipHandler(player).grantXP(EntityHandler(event.hitEntity!! as Damageable).xp)
+                }
+              }
+            }
           }
         } else if (id.last() == "SECONDARY") {
           val handler = abilties.getHandler(id.dropLast(1).joinToString("_"))!! as ProjectileAbilityHandler
           if (event.hitBlock is Block) {
             handler.onSecondaryCollision(event.hitBlock!!, projectile)
           } else if (event.hitEntity is Damageable) {
-            handler.onSecondaryCollision(event.hitEntity!! as Damageable, projectile)
+            if (handler.onSecondaryCollision(event.hitEntity!! as Damageable, projectile)) {
+              if (EntityUtils.isCustomEntity(event.hitEntity!! as Damageable)) {
+                val player = plugin.server.getPlayerExact(projectile.persistentDataContainer.getOrDefault(NamespacedKey.fromString("smitems:projectile.owner.str")!!, PersistentDataType.STRING, ""))
+                if (player is Player) {
+                  PlayerEquipHandler(player).grantXP(EntityHandler(event.hitEntity!! as Damageable).xp)
+                }
+              }
+            }
           }
         }
       }

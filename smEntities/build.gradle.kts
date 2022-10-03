@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
     java
     idea
@@ -39,9 +41,8 @@ tasks {
 
         options.release.set(17)
     }
-}
 
-tasks.getByName<Test>("test") {
-    useJUnitPlatform()
+    jar {
+        destinationDirectory.set(file("../output/paper"))
+    }
 }
-

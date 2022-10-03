@@ -30,8 +30,8 @@ tasks {
   assemble {
     dependsOn(reobfJar)
   }
-}
 
-tasks.getByName<Test>("test") {
-  useJUnitPlatform()
+  jar {
+    destinationDirectory.set(file("../output/paper/"))
+  }
 }

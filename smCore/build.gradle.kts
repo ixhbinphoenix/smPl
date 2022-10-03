@@ -20,7 +20,7 @@ dependencies {
   paperDevBundle("1.18.2-R0.1-SNAPSHOT")
   compileOnly(project(":smChat"))
 
-  implementation("org.postgresql:postgresql:42.3.3")
+  implementation("org.postgresql:postgresql:42.5.0")
 
   implementation(kotlin("stdlib"))
 }
@@ -39,9 +39,8 @@ tasks {
 
     options.release.set(17)
   }
-}
 
-tasks.getByName<Test>("test") {
-  useJUnitPlatform()
+  jar {
+    destinationDirectory.set(file("../output/paper"))
+  }
 }
-

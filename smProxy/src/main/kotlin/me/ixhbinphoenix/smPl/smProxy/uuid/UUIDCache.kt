@@ -14,14 +14,19 @@ import kotlin.collections.HashMap
 data class UUIDResponse(val name: String, val id: String)
 
 @Serializable
-data class Name(val name: String, val changedToAt: Long)
+data class NameReponse(
+    val name: String,
+    val id: String,
+    @Polymorphic
+    val properties: Any
+)
 
 @Suppress("OPT_IN_IS_NOT_ENABLED")
 @OptIn(ExperimentalSerializationApi::class)
 class UUIDCache {
 
-    private val uuidURL = "https://api.mojang.com/users/profiles/minecraft/%s?at=%d"
-    private val nameURL = "https://api.mojang.com/user/profile/%s/names"
+    private val uuidURL = "https://api.mojang.com/users/profiles/minecraft/%s"
+    private val nameURL = "https://sessionserver.mojang.com/session/minecraft/profile/%s"
 
     private val uuidCache = HashMap<String, UUID>()
     private val nameCache = HashMap<UUID, String>()
@@ -41,8 +46,8 @@ class UUIDCache {
     }
 
 
-    private fun fetchUUIDIfExists(name: String, timestamp: Instant = Instant.now()): UUID? {
-        val connection = URL(String.format(uuidURL, name.lowercase(), timestamp.epochSecond * 1000)).openConnection()
+    private fun fetchUUIDIfExists(name: String): UUID? {
+        val connection = URL(String.format(uuidURL, name.lowercase())).openConnection()
         connection.readTimeout = 5000
         return try {
             val uuid = UuidUtils.fromUndashed(Json.decodeFromStream<UUIDResponse>(connection.getInputStream()).id)
@@ -72,13 +77,17 @@ class UUIDCache {
     private fun fetchName(uuid: UUID): String {
         val connection = URL(String.format(nameURL, UuidUtils.toUndashed(uuid))).openConnection()
         connection.readTimeout = 5000
-        val nameResponse: List<Name> = Json.decodeFromStream(connection.getInputStream())
+        val nameResponse: List<NameReponse> = Json.decodeFromStream(connection.getInputStream())
         val name = nameResponse.last().name.lowercase()
         uuidCache[name] = uuid
         nameCache[uuid] = name
         return name
     }
 
+    /**
+     * Adds connected player to the UUID and Name Cache
+     * @param player The connected player
+     */
     fun addPlayer(player: Player) {
         val name = player.username.lowercase()
         val uuid = player.uniqueId

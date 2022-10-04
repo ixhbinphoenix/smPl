@@ -4,7 +4,7 @@
 # Relative paths, absolute ones would work too
 PAPER_OUT_DIR="./output/paper/"
 PAPER_WORKSPACE=".test/.papermc/"
-VELOCITY_OUT_DIR="./smProxy/build/libs/"
+VELOCITY_OUT_DIR="./output/velocity/"
 VELOCITY_WORKSPACE=".test/.velocity/"
 # shellcheck disable=SC2034
 PAPER_VERSION="1.18"
@@ -90,7 +90,6 @@ function setupServer {
   fi
 
   # Copy all built plugins to the plugin folder of the paper server
-  # shellcheck disable=SC2034
   for file in *.jar; do
     cp "$file" "$PLUGINS_DIR"
   done;
@@ -117,10 +116,9 @@ function setupServer {
     cd "$OLD_PATH" || exit
     cd $VELOCITY_OUT_DIR || exit
 
+    # Copy all built plugins to the plugin folder of the velocity proxy
     for file in *.jar; do
-      if [[ $file == *"-all.jar" ]]; then
-        cp "$file" "$PLUGINS_DIR"
-      fi
+      cp "$file" "$PLUGINS_DIR"
     done;
 
     cd "$ABSOLUTE_VELOCITY_WORKSPACE" || exit

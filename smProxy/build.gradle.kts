@@ -42,6 +42,9 @@ tasks {
     build {
         dependsOn(shadowJar)
     }
+    shadowJar {
+        destinationDirectory.set(file("../output/velocity/"))
+    }
 }
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {

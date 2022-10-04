@@ -1,5 +1,5 @@
 # smPl
-Stahlmetall plugins is a collection of Paper and Velocity plugins for a WIP server
+smPl is the monorepo for the velocity and paper Plugins used for the Keltra minecraft server
 
 ## Building
 Note: These plugins are not intended for private use.
@@ -9,11 +9,30 @@ To compile, run the following command in the root folder
 ./gradlew assemble
 ```
 
-You can then copy the compiled Jar from its respective subfolders in /build/libs into your servers plugins folder.
-WARNING: For the Velocity plugin, copy the jar with the -all suffix, or it will not work!
+You can then copy either the paper plugins from the output/paper/ folder, or the velocity plugin from output/velocity
 
-## Setup Guide
-Coming Soon™
+## Test setup (linux only)
+Requires:
+- curl
+- jq
+- java 17
+
+To download and run test paper and velocity servers, run
+```shell
+./run.sh
+```
+
+Then, configure the velocity proxy (located in .test/.velocity) to use modern forwarding to the paper server (located in .test/.papermc) following [this guide](https://docs.papermc.io/velocity/player-information-forwarding) for 1.18.2 servers.
+
+Currently the plugins also require a Postgres database to be running.
+Run one yourself either natively on your machine, on a server or in a docker container and configure the plugins in their respective config.json and config.yml.
+This requirement will probably be lifted from the paper plugins, but will remain for smProxy
+
+After you have configured everything, you can run
+```shell
+./run.sh
+```
+again to compile the plugins, copy them over and start the paper server and velocity proxy
 
 ## License
 - Copyright (C) 2022 ixhbinphoenix

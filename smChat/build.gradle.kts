@@ -31,7 +31,7 @@ tasks {
     dependsOn(reobfJar)
   }
 
-  jar {
-    destinationDirectory.set(file("../output/paper/"))
+  reobfJar {
+    outputJar.set(file("../output/paper/smChat.jar"))
   }
 }

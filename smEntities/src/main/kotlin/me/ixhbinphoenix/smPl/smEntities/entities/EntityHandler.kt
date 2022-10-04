@@ -12,7 +12,6 @@ import org.bukkit.attribute.Attribute
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
 import me.ixhbinphoenix.smPl.smEntities.Type
-import me.ixhbinphoenix.smPl.smEntities.entities.CustomEntity
 
 open class EntityHandler(val entity: Damageable) {
     val id: String

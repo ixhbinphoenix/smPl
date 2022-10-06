@@ -1,9 +1,8 @@
-package me.ixhbinphoenix.smPl.smEntities.commands
+package me.ixhbinphoenix.smPl.smCore.commands.entities
 
 import me.ixhbinphoenix.smPl.smCore.commands.BaseCommand
-import me.ixhbinphoenix.smPl.smEntities.entities.hostiles.Zombie
-import me.ixhbinphoenix.smPl.smEntities.entities.EntityUtils
-import me.ixhbinphoenix.smPl.smEntities.entities.EntityHandler
+import me.ixhbinphoenix.smPl.smCore.entities.EntityUtils
+import me.ixhbinphoenix.smPl.smCore.entities.EntityHandler
 import me.ixhbinphoenix.smPl.smEntities.entities.BaseEntityHandler
 import org.bukkit.command.Command
 import org.bukkit.command.CommandSender

@@ -1,5 +1,6 @@
-package me.ixhbinphoenix.smPl.smCore.commands
+package me.ixhbinphoenix.smPl.smCore.commands.stats
 
+import me.ixhbinphoenix.smPl.smCore.commands.BaseCommand
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.TextComponent
 import net.kyori.adventure.text.format.NamedTextColor

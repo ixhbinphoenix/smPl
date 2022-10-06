@@ -1,7 +1,7 @@
-package me.ixhbinphoenix.smPl.smEntities.entities
+package me.ixhbinphoenix.smPl.smCore.entities
 
-import me.ixhbinphoenix.smPl.smEntities.entities.hostiles.Zombie
-import me.ixhbinphoenix.smPl.smEntities.Type
+import me.ixhbinphoenix.smPl.smCore.entities.hostiles.Zombie
+import me.ixhbinphoenix.smPl.smEntities.EntityPosition
 import me.ixhbinphoenix.smPl.smEntities.entities.BaseEntityHandler
 import org.bukkit.NamespacedKey
 import org.bukkit.entity.Damageable
@@ -9,7 +9,7 @@ import org.bukkit.entity.EntityType
 import org.bukkit.persistence.PersistentDataType
 
 
-data class CustomEntity(val id: String, val health: Double, val damage: Double, val xp: Int, val type: Type, val name: String, val entityType: EntityType)
+data class CustomEntity(val id: String, val health: Double, val damage: Double, val xp: Int, val type: EntityPosition, val name: String, val entityType: EntityType)
 
 class EntityUtils {
     companion object {

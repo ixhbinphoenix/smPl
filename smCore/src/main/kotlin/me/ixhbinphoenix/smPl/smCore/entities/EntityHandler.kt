@@ -1,4 +1,4 @@
-package me.ixhbinphoenix.smPl.smEntities.entities
+package me.ixhbinphoenix.smPl.smCore.entities
 
 import org.bukkit.entity.Damageable
 import org.bukkit.entity.EntityType
@@ -11,12 +11,12 @@ import org.bukkit.Location
 import org.bukkit.attribute.Attribute
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
-import me.ixhbinphoenix.smPl.smEntities.Type
+import me.ixhbinphoenix.smPl.smEntities.EntityPosition
 
 open class EntityHandler(val entity: Damageable) {
     val id: String
     val xp: Int
-    val type: Type
+    val type: EntityPosition
     val name: String
 
     init {
@@ -28,7 +28,7 @@ open class EntityHandler(val entity: Damageable) {
     }
 
     companion object {
-        fun spawn(id: String, health: Double, damage: Double, xp: Int, type: Type, name: String, entityType: EntityType, world: World, location: Location): EntityHandler {
+        fun spawn(id: String, health: Double, damage: Double, xp: Int, type: EntityPosition, name: String, entityType: EntityType, world: World, location: Location): EntityHandler {
             val entity = world.spawnEntity(location, entityType) as LivingEntity
             entity.getAttribute(Attribute.GENERIC_MAX_HEALTH)!!.baseValue = health
             entity.health = health
@@ -90,7 +90,7 @@ open class EntityHandler(val entity: Damageable) {
         return entity.persistentDataContainer.getOrDefault(NamespacedKey.fromString("smentities:entity.xp.int")!!, PersistentDataType.INTEGER, 0)
     }
 
-    private fun getEntityType(): Type {
-        return Type.valueOf(entity.persistentDataContainer.getOrDefault(NamespacedKey.fromString("smentities:entity.type.str")!!, PersistentDataType.STRING, "HOSTILE"))
+    private fun getEntityType(): EntityPosition {
+        return EntityPosition.valueOf(entity.persistentDataContainer.getOrDefault(NamespacedKey.fromString("smentities:entity.type.str")!!, PersistentDataType.STRING, "HOSTILE"))
     }
 }

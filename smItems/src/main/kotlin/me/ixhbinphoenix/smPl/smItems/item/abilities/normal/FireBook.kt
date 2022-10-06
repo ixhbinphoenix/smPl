@@ -2,7 +2,7 @@ package me.ixhbinphoenix.smPl.smItems.item.abilities.normal
 
 import me.ixhbinphoenix.smPl.smCore.player.PlayerHandler
 import me.ixhbinphoenix.smPl.smItems.item.abilities.ProjectileAbilityHandler
-import me.ixhbinphoenix.smPl.smEntities.entities.EntityHandler
+import me.ixhbinphoenix.smPl.smCore.entities.EntityHandler
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
 import org.bukkit.Particle

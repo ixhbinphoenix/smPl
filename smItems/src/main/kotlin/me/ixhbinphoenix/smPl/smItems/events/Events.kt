@@ -6,8 +6,8 @@ import me.ixhbinphoenix.smPl.smItems.getInstance
 import me.ixhbinphoenix.smPl.smItems.item.abilities.Abilities
 import me.ixhbinphoenix.smPl.smItems.item.abilities.AbilityHandler
 import me.ixhbinphoenix.smPl.smItems.item.abilities.ProjectileAbilityHandler
-import me.ixhbinphoenix.smPl.smEntities.entities.EntityHandler
-import me.ixhbinphoenix.smPl.smEntities.entities.EntityUtils
+import me.ixhbinphoenix.smPl.smCore.entities.EntityHandler
+import me.ixhbinphoenix.smPl.smCore.entities.EntityUtils
 import me.ixhbinphoenix.smPl.smItems.item.*
 import org.bukkit.*
 import org.bukkit.attribute.Attribute
@@ -26,7 +26,6 @@ import org.bukkit.event.player.PlayerDropItemEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerItemHeldEvent
 import org.bukkit.persistence.PersistentDataType
-import net.kyori.adventure.text.Component
 import kotlin.math.roundToInt
 
 class Events : Listener {

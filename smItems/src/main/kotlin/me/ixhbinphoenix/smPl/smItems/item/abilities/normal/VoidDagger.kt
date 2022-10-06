@@ -1,7 +1,7 @@
 package me.ixhbinphoenix.smPl.smItems.item.abilities.normal
 
 import me.ixhbinphoenix.smPl.smCore.player.PlayerHandler
-import me.ixhbinphoenix.smPl.smEntities.entities.EntityHandler
+import me.ixhbinphoenix.smPl.smCore.entities.EntityHandler
 import me.ixhbinphoenix.smPl.smItems.item.abilities.AbilityHandler
 import org.bukkit.FluidCollisionMode
 import org.bukkit.Sound

@@ -12,6 +12,9 @@ commands:
   delstat:
     usage: /<command> key
     description: deletes psdc info
+  spawnentity:
+    usage: /<command> <entity id>
+    description: Summons a Custom Entity at your location
 depend:
   - smChat
 permissions:

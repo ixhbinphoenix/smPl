@@ -18,4 +18,3 @@ commands:
 depend:
   - smCore
   - smChat
-  - smEntities

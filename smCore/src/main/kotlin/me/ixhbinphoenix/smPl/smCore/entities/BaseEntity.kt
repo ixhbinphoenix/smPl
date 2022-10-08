@@ -1,4 +1,4 @@
-package me.ixhbinphoenix.smPl.smEntities.entities
+package me.ixhbinphoenix.smPl.smCore.entities
 
 import me.ixhbinphoenix.smPl.smCore.entities.CustomEntity
 

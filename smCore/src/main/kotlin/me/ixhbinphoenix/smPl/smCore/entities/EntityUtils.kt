@@ -1,8 +1,6 @@
 package me.ixhbinphoenix.smPl.smCore.entities
 
 import me.ixhbinphoenix.smPl.smCore.entities.hostiles.Zombie
-import me.ixhbinphoenix.smPl.smEntities.EntityPosition
-import me.ixhbinphoenix.smPl.smEntities.entities.BaseEntityHandler
 import org.bukkit.NamespacedKey
 import org.bukkit.entity.Damageable
 import org.bukkit.entity.EntityType

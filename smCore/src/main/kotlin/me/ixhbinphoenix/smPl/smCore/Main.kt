@@ -1,6 +1,7 @@
 package me.ixhbinphoenix.smPl.smCore
 
 import me.ixhbinphoenix.smPl.smCore.commands.*
+import me.ixhbinphoenix.smPl.smCore.commands.entities.SpawnEntityCommand
 import me.ixhbinphoenix.smPl.smCore.commands.stats.delstatCommand
 import me.ixhbinphoenix.smPl.smCore.commands.stats.pstatsCommand
 import me.ixhbinphoenix.smPl.smCore.commands.stats.setstatCommand
@@ -20,6 +21,7 @@ class Main : JavaPlugin() {
     commands["pstats"] = pstatsCommand()
     commands["setstat"] = setstatCommand()
     commands["delstat"] = delstatCommand()
+    commands["spawnentity"] = SpawnEntityCommand()
     for (cmd in commands) {
       getCommand(cmd.key)?.setExecutor(cmd.value)
       getCommand(cmd.key)?.tabCompleter = cmd.value

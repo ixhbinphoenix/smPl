@@ -1,9 +1,9 @@
 package me.ixhbinphoenix.smPl.smCore.entities.hostiles
 
 import org.bukkit.entity.EntityType
-import me.ixhbinphoenix.smPl.smEntities.entities.BaseEntityHandler
+import me.ixhbinphoenix.smPl.smCore.entities.BaseEntityHandler
 import me.ixhbinphoenix.smPl.smCore.entities.CustomEntity
-import me.ixhbinphoenix.smPl.smEntities.EntityPosition
+import me.ixhbinphoenix.smPl.smCore.entities.EntityPosition
 
 class Zombie : BaseEntityHandler() {
     override val data = CustomEntity(

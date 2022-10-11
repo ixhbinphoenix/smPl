@@ -63,13 +63,15 @@ class ClickLoreRefresh(private val event: InventoryClickEvent) : BukkitRunnable(
  * BukkitRunnable that refreshes Armor during a ArmorChangeEvent
  */
 class ArmorLoreRefresh(private val event: PlayerArmorChangeEvent) : BukkitRunnable() {
+  @Suppress("SAFE_CALL_WILL_CHANGE_NULLABILITY")
   override fun run() {
     val armorSlots = event.player.inventory.armorContents
-    for (armor in armorSlots) {
+    // Ignore your IDE here, the compiler will complain without the safe call
+    armorSlots?.forEach { armor -> (
       if (armor != null) {
         EquipmentHandler(armor, event.player).updateLore()
       }
-    }
+    )}
   }
 }
 

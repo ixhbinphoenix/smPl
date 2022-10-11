@@ -7,6 +7,12 @@ import org.bukkit.inventory.ItemStack
 
 class SetHelper {
   companion object {
+    /**
+     * Gets currently active set of the Player
+     * @param armor
+     * @param player
+     * @return The active Set
+     */
     @JvmStatic
     fun getSet(armor: ArrayList<ItemStack?>, player: Player): String {
       var sets = "NONE"
@@ -28,6 +34,13 @@ class SetHelper {
       }
       return sets
     }
+
+    /**
+     * Gets how completed the set is
+     * @param player
+     * @param set
+     * @return Amount of pieces equipped
+     */
     @JvmStatic
     fun getCompletion(player: Player, set: String): Int {
       var comp = 0
@@ -53,6 +66,12 @@ class SetHelper {
     setObjects["PROGRAMMER"] = ProgrammerSet().getBonus()
   }
 
+  /**
+   * Trigger recalculate events on equipped sets
+   * @param armor
+   * @param player
+   * @return If a recalculate trigger was executed
+   */
   fun calcSet(armor: ArrayList<ItemStack?>, player: Player): Boolean {
     val set = getSet(armor, player)
     return if (handlers.containsKey(set)) {

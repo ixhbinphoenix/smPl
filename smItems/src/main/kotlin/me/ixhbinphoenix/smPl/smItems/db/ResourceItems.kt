@@ -3,7 +3,6 @@ package me.ixhbinphoenix.smPl.smItems.db
 import me.ixhbinphoenix.smPl.smCore.db.PGEnum
 import me.ixhbinphoenix.smPl.smCore.db.createEnumIfExists
 import me.ixhbinphoenix.smPl.smItems.Rarity
-import me.ixhbinphoenix.smPl.smItems.RarityColor
 import me.ixhbinphoenix.smPl.smItems.getInstance
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.TextDecoration
@@ -69,9 +68,9 @@ class ResourceUtils {
         val im = item.itemMeta
         im.persistentDataContainer.set(NamespacedKey.fromString("smitems:resource.type.str")!!, PersistentDataType.STRING, dbItem.string_id)
         im.persistentDataContainer.set(NamespacedKey.fromString("smitems:item.rarity.str")!!, PersistentDataType.STRING, dbItem.rarity.toString())
-        im.displayName(Component.text(dbItem.display_name).color(RarityColor.valueOf(dbItem.rarity.toString()).color).decoration(TextDecoration.ITALIC, false))
+        im.displayName(Component.text(dbItem.display_name).color(dbItem.rarity.color).decoration(TextDecoration.ITALIC, false))
         val lore = ArrayList<Component>()
-        lore.add(Component.text(dbItem.rarity.toString() + " RESOURCE").color(RarityColor.valueOf(dbItem.rarity.toString()).color).decoration(TextDecoration.ITALIC, false))
+        lore.add(Component.text(dbItem.rarity.toString() + " RESOURCE").color(dbItem.rarity.color).decoration(TextDecoration.ITALIC, false))
         im.lore(lore)
         item.itemMeta = im
         cache[id] = item

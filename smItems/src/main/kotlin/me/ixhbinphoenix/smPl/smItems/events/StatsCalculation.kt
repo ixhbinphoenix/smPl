@@ -1,7 +1,7 @@
 package me.ixhbinphoenix.smPl.smItems.events
 
 import me.ixhbinphoenix.smPl.smCore.player.PlayerHandler
-import me.ixhbinphoenix.smPl.smItems.ItemCategories
+import me.ixhbinphoenix.smPl.smItems.EquipmentCategories
 import me.ixhbinphoenix.smPl.smItems.item.EquipmentHandler
 import me.ixhbinphoenix.smPl.smItems.item.sets.SetHelper
 import net.kyori.adventure.text.format.NamedTextColor
@@ -36,7 +36,7 @@ class StatsCalculation(private val player: Player, private val refreshLore: Bool
         for(item: ItemStack? in statsItems){
             if(item != null && item.hasItemMeta()){
                 when(item.itemMeta.persistentDataContainer.getOrDefault(NamespacedKey.fromString("smitems:item.type.str")!!, PersistentDataType.STRING, "???")){
-                    ItemCategories.WEAPON.toString() -> {
+                    EquipmentCategories.WEAPON.toString() -> {
                         if (item == inventory.itemInMainHand) {
                             val itemHandler = EquipmentHandler(item, player)
                             for (stat in getAllStats()) {
@@ -48,7 +48,7 @@ class StatsCalculation(private val player: Player, private val refreshLore: Bool
                             if (refreshLore) itemHandler.updateLore()
                         }
                     }
-                    ItemCategories.ARMOR.toString() -> {
+                    EquipmentCategories.ARMOR.toString() -> {
                         if (
                             item == inventory.helmet ||
                             item == inventory.chestplate ||

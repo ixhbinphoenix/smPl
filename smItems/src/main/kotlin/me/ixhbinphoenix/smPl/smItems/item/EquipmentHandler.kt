@@ -2,9 +2,9 @@ package me.ixhbinphoenix.smPl.smItems.item
 
 import me.ixhbinphoenix.smPl.smChat.utils.createStatText
 import me.ixhbinphoenix.smPl.smItems.Elements
-import me.ixhbinphoenix.smPl.smItems.ItemCategories
+import me.ixhbinphoenix.smPl.smItems.EquipmentCategories
 import me.ixhbinphoenix.smPl.smItems.Rarity
-import me.ixhbinphoenix.smPl.smItems.Types
+import me.ixhbinphoenix.smPl.smItems.EquipmentTypes
 import me.ixhbinphoenix.smPl.smItems.events.StatsCalculation
 import me.ixhbinphoenix.smPl.smItems.item.sets.SetHelper
 import net.kyori.adventure.text.Component
@@ -18,15 +18,14 @@ import org.bukkit.persistence.PersistentDataType
 
 open class EquipmentHandler(val item: ItemStack, private val player: Player) {
     private val setHelper = SetHelper()
-    private val itemUtils = ItemUtils()
 
     val rarity: Rarity
     val element: Elements?
     val mat: Material = item.type
     val pdc: PersistentDataContainer = item.itemMeta.persistentDataContainer
     val id: String
-    var category: ItemCategories?
-    var type: Types
+    var category: EquipmentCategories?
+    var type: EquipmentTypes
     var set: String
 
     // Stats
@@ -48,7 +47,7 @@ open class EquipmentHandler(val item: ItemStack, private val player: Player) {
             this.stats[stat.key] = pdc.getOrDefault(NamespacedKey.fromString(stat.value)!!, PersistentDataType.INTEGER, 0)
         }
         this.xp = getItemXP()
-        this.level = itemUtils.calcRarityLevel(xp, itemUtils.getRarityMultiplier(rarity))
+        this.level = ItemUtils.calcRarityLevel(xp, rarity.multiplier)
     }
 
     fun updateLore() {
@@ -60,7 +59,7 @@ open class EquipmentHandler(val item: ItemStack, private val player: Player) {
             }
         }
         val im = item.itemMeta
-        im.lore(itemUtils.genEquipmentLore(rarity, type, statTexts, xp, SetHelper.getCompletion(player, set), setHelper.setObjects[set]))
+        im.lore(ItemUtils.genEquipmentLore(rarity, type, statTexts, xp, SetHelper.getCompletion(player, set), setHelper.setObjects[set]))
         item.itemMeta = im
     }
 
@@ -82,23 +81,23 @@ open class EquipmentHandler(val item: ItemStack, private val player: Player) {
         return pdc.getOrDefault(NamespacedKey.fromString("smitems:item.id.str")!!, PersistentDataType.STRING, "no_id")
     }
 
-    private fun getItemType(): Types {
+    private fun getItemType(): EquipmentTypes {
         when (category) {
-            ItemCategories.WEAPON -> {
+            EquipmentCategories.WEAPON -> {
                 val stringType = pdc.getOrDefault(
                     NamespacedKey.fromString("smitems:weapon.type.str")!!,
                     PersistentDataType.STRING,
                     ""
                 )
-                return Types.valueOf(stringType)
+                return EquipmentTypes.valueOf(stringType)
             }
-            ItemCategories.ARMOR -> {
+            EquipmentCategories.ARMOR -> {
                 val stringType = pdc.getOrDefault(
                     NamespacedKey.fromString("smitems:armor.type.str")!!,
                     PersistentDataType.STRING,
                     ""
                 )
-                return Types.valueOf(stringType)
+                return EquipmentTypes.valueOf(stringType)
             }
             else -> {
                 throw NotImplementedError("Only WEAPON and ARMOR is Implemented")
@@ -107,7 +106,7 @@ open class EquipmentHandler(val item: ItemStack, private val player: Player) {
 
     }
 
-    private fun getItemCategory(): ItemCategories? {
+    private fun getItemCategory(): EquipmentCategories? {
         val stringType = pdc.getOrDefault(
             NamespacedKey.fromString("smitems:item.type.str")!!,
             PersistentDataType.STRING,
@@ -115,13 +114,13 @@ open class EquipmentHandler(val item: ItemStack, private val player: Player) {
         )
         when (stringType) {
             "WEAPON" -> {
-                return ItemCategories.WEAPON
+                return EquipmentCategories.WEAPON
             }
             "ARMOR" -> {
-                return ItemCategories.ARMOR
+                return EquipmentCategories.ARMOR
             }
             "ACCESSORY" -> {
-                return ItemCategories.ACCESSORY
+                return EquipmentCategories.ACCESSORY
             }
         }
         return null
@@ -152,7 +151,7 @@ open class EquipmentHandler(val item: ItemStack, private val player: Player) {
         )
         item.itemMeta = im
         this.xp = xp
-        this.level = itemUtils.calcRarityLevel(xp, itemUtils.getRarityMultiplier(rarity))
+        this.level = ItemUtils.calcRarityLevel(xp, rarity.multiplier)
         updateLore()
     }
 }

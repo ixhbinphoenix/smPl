@@ -4,7 +4,7 @@ import me.ixhbinphoenix.smPl.smCore.db.PGEnum
 import me.ixhbinphoenix.smPl.smCore.db.createEnumIfExists
 import me.ixhbinphoenix.smPl.smItems.Elements
 import me.ixhbinphoenix.smPl.smItems.Rarity
-import me.ixhbinphoenix.smPl.smItems.Types
+import me.ixhbinphoenix.smPl.smItems.EquipmentTypes
 import me.ixhbinphoenix.smPl.smItems.getInstance
 import org.bukkit.Material
 import org.jetbrains.exposed.dao.IntEntity
@@ -21,7 +21,7 @@ object EquipmentItems : IntIdTable() {
   val display_name = text("display_name")
   val material = customEnumeration("material", "MaterialEnum", { value -> Material.valueOf(value as String) }, { PGEnum("MaterialEnum", it) })
   val rarity = customEnumeration("rarity", "RarityEnum", {value -> Rarity.valueOf(value as String) }, { PGEnum("RarityEnum", it) })
-  val item_type = customEnumeration("item_type", "TypeEnum", { value -> Types.valueOf(value as String) }, { PGEnum("TypeEnum", it) })
+  val item_type = customEnumeration("item_type", "TypeEnum", { value -> EquipmentTypes.valueOf(value as String) }, { PGEnum("TypeEnum", it) })
   val element = customEnumeration("element", "ElementEnum", { value -> Elements.valueOf(value as String) }, { PGEnum("ElementEnum", it) }).nullable()
   val set = text("set").default("NONE")
   val rgb = integer("rgb").nullable()
@@ -55,7 +55,7 @@ class EquipmentUtils {
       transaction (db) {
         exec(createEnumIfExists<Material>("materialenum"))
         exec(createEnumIfExists<Rarity>("rarityenum"))
-        exec(createEnumIfExists<Types>("typeenum"))
+        exec(createEnumIfExists<EquipmentTypes>("typeenum"))
         exec(createEnumIfExists<Elements>("elementenum"))
         try {
           SchemaUtils.createMissingTablesAndColumns(EquipmentItems)

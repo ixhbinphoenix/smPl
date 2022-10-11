@@ -10,6 +10,10 @@ import org.bukkit.persistence.PersistentDataType
 import org.bukkit.scheduler.BukkitRunnable
 import kotlin.math.roundToInt
 
+/**
+ * BukkitRunnable that runs every second for every player
+ * @param player
+ */
 class PlayerSecond(val player: Player) : BukkitRunnable() {
   override fun run() {
     val handler = PlayerHandler(player)
@@ -17,6 +21,7 @@ class PlayerSecond(val player: Player) : BukkitRunnable() {
     if (handler.getMana() > handler.getCurrentMana()) {
       var diff = handler.getMana() - handler.getCurrentMana()
       // TODO: Replace this
+      // Limits the mana regen to a max of 20/s. This should instead scale to max mana and maybe a mana regen buff/stat?
       if (diff > 20) diff = 20
       handler.setCurrentMana(handler.getCurrentMana() + diff)
     }

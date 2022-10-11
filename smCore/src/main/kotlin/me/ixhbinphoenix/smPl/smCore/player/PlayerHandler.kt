@@ -4,11 +4,14 @@ import org.bukkit.NamespacedKey
 import org.bukkit.entity.Player
 import org.bukkit.persistence.PersistentDataType
 
-class PlayerHandler(player: Player) {
-    private val player: Player
+/**
+ * Gets and sets the data of a Player
+ * @param player
+ */
+class PlayerHandler(private val player: Player) {
+    @Suppress("JoinDeclarationAndAssignment")
     private val stats: ArrayList<String>
     init{
-        this.player = player
         this.stats = arrayListOf(
             "smcore:player.mana.int",
             "smcore:player.damage.int",
@@ -17,6 +20,9 @@ class PlayerHandler(player: Player) {
         )
     }
 
+    /**
+     * Resets numerical stats of the player
+     */
     fun reset() {
         for (stat in stats) {
             val keys = stat.split('.')
@@ -30,6 +36,11 @@ class PlayerHandler(player: Player) {
         }
     }
 
+    // TODO: Make this actually an internal function by merging smItems
+    /**
+     * Sets the MAXIMUM mana of a Player, for internal use
+     * @param mana
+     */
     fun setMana(mana: Int){
         player.persistentDataContainer.set(NamespacedKey.fromString("smcore:player.mana.int")!!,
             PersistentDataType.INTEGER,
@@ -37,6 +48,10 @@ class PlayerHandler(player: Player) {
         )
     }
 
+    /**
+     * Gets the MAXIMUM mana of a Player
+     * @return mana
+     */
     fun getMana(): Int{
         return player.persistentDataContainer.getOrDefault(NamespacedKey.fromString("smcore:player.mana.int")!!,
             PersistentDataType.INTEGER,

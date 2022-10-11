@@ -4,7 +4,6 @@ import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 
 open class PlayerEquipHandler(val player: Player) {
-  private val itemUtils = ItemUtils()
 
   val head: EquipmentHandler? = getHandler(player.inventory.helmet, player)
   val chestplate: EquipmentHandler? = getHandler(player.inventory.chestplate, player)
@@ -15,7 +14,7 @@ open class PlayerEquipHandler(val player: Player) {
 
   private fun getHandler(item: ItemStack?, player: Player): EquipmentHandler? {
     if (item is ItemStack) {
-      if (itemUtils.isEquipment(item)) {
+      if (ItemUtils.isEquipment(item)) {
         return EquipmentHandler(item, player)
       }
     }

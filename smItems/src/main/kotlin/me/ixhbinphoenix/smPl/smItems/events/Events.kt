@@ -98,7 +98,7 @@ class Events : Listener {
     else if (event.damager is Player){
       if (event.cause == EntityDamageEvent.DamageCause.ENTITY_ATTACK) {
         val damager = event.damager as Player
-        if (itemUtils.isEquipment(damager.inventory.itemInMainHand)) {
+        if (ItemUtils.isEquipment(damager.inventory.itemInMainHand)) {
           val equip = EquipmentHandler(damager.inventory.itemInMainHand, damager)
           if (abilties.getHandler(equip.id) is AbilityHandler) {
             val handler = abilties.getHandler(equip.id)
@@ -147,7 +147,7 @@ class Events : Listener {
   @EventHandler
   fun onPlayerClick(event: PlayerInteractEvent) {
     if (event.hasItem()) {
-      if (event.item!!.hasItemMeta() && itemUtils.isEquipment(event.item!!)) {
+      if (event.item!!.hasItemMeta() && ItemUtils.isEquipment(event.item!!)) {
         val equip = EquipmentHandler(event.item!!, event.player)
         if (event.action == Action.LEFT_CLICK_AIR || event.action == Action.LEFT_CLICK_BLOCK) {
           if (abilties.getHandler(equip.id) is AbilityHandler) {

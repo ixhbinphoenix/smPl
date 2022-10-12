@@ -1,18 +1,18 @@
-package me.ixhbinphoenix.smPl.smItems.item
+package me.ixhbinphoenix.smPl.smCore.items
 
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 
 open class PlayerEquipHandler(val player: Player) {
 
-  val head: EquipmentHandler? = getHandler(player.inventory.helmet, player)
-  val chestplate: EquipmentHandler? = getHandler(player.inventory.chestplate, player)
-  val leggings: EquipmentHandler? = getHandler(player.inventory.leggings, player)
-  val boots: EquipmentHandler? = getHandler(player.inventory.boots, player)
-  val mainHand: EquipmentHandler? = getHandler(player.inventory.itemInMainHand, player)
-  val offHand: EquipmentHandler? = getHandler(player.inventory.itemInOffHand, player)
+  val head: EquipmentHandler? = getHandler(player.inventory.helmet)
+  val chestplate: EquipmentHandler? = getHandler(player.inventory.chestplate)
+  val leggings: EquipmentHandler? = getHandler(player.inventory.leggings)
+  val boots: EquipmentHandler? = getHandler(player.inventory.boots)
+  val mainHand: EquipmentHandler? = getHandler(player.inventory.itemInMainHand)
+  val offHand: EquipmentHandler? = getHandler(player.inventory.itemInOffHand)
 
-  private fun getHandler(item: ItemStack?, player: Player): EquipmentHandler? {
+  private fun getHandler(item: ItemStack?): EquipmentHandler? {
     if (item is ItemStack) {
       if (ItemUtils.isEquipment(item)) {
         return EquipmentHandler(item, player)

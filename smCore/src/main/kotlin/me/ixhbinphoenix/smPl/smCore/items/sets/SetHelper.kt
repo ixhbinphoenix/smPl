@@ -1,7 +1,7 @@
-package me.ixhbinphoenix.smPl.smItems.item.sets
+package me.ixhbinphoenix.smPl.smCore.items.sets
 
-import me.ixhbinphoenix.smPl.smItems.item.EquipmentHandler
-import me.ixhbinphoenix.smPl.smItems.item.SetBonus
+import me.ixhbinphoenix.smPl.smCore.items.EquipmentHandler
+import me.ixhbinphoenix.smPl.smCore.items.SetBonus
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 
@@ -59,8 +59,10 @@ class SetHelper {
       return comp
     }
   }
+
   private val handlers = HashMap<String, BaseSetHandler>()
   val setObjects = HashMap<String, SetBonus>()
+
   init {
     handlers["PROGRAMMER"] = ProgrammerSet()
     setObjects["PROGRAMMER"] = ProgrammerSet().getBonus()

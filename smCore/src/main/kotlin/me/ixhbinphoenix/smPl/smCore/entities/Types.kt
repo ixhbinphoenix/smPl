@@ -9,7 +9,7 @@ import net.kyori.adventure.text.format.TextColor
  * @param color The namecolor of the entity
  */
 enum class EntityStance(val color: TextColor) {
-    HOSTILE(NamedTextColor.RED),
-    NEUTRAL(NamedTextColor.YELLOW),
-    PASSIVE(NamedTextColor.GREEN)
+  HOSTILE(NamedTextColor.RED),
+  NEUTRAL(NamedTextColor.YELLOW),
+  PASSIVE(NamedTextColor.GREEN)
 }

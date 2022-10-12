@@ -1,4 +1,4 @@
-package me.ixhbinphoenix.smPl.smItems.item.abilities
+package me.ixhbinphoenix.smPl.smCore.items.abilities
 
 import org.bukkit.entity.Player
 

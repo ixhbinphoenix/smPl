@@ -1,11 +1,9 @@
-package me.ixhbinphoenix.smPl.smItems.db
+package me.ixhbinphoenix.smPl.smCore.db
 
-import me.ixhbinphoenix.smPl.smCore.db.PGEnum
-import me.ixhbinphoenix.smPl.smCore.db.createEnumIfExists
-import me.ixhbinphoenix.smPl.smItems.Elements
-import me.ixhbinphoenix.smPl.smItems.Rarity
-import me.ixhbinphoenix.smPl.smItems.EquipmentTypes
-import me.ixhbinphoenix.smPl.smItems.getInstance
+import me.ixhbinphoenix.smPl.smCore.items.Elements
+import me.ixhbinphoenix.smPl.smCore.items.Rarity
+import me.ixhbinphoenix.smPl.smCore.items.EquipmentTypes
+import me.ixhbinphoenix.smPl.smCore.getInstance
 import org.bukkit.Material
 import org.jetbrains.exposed.dao.IntEntity
 import org.jetbrains.exposed.dao.IntEntityClass
@@ -19,10 +17,26 @@ import java.util.logging.Level
 object EquipmentItems : IntIdTable() {
   val string_id = text("string_id").uniqueIndex()
   val display_name = text("display_name")
-  val material = customEnumeration("material", "MaterialEnum", { value -> Material.valueOf(value as String) }, { PGEnum("MaterialEnum", it) })
-  val rarity = customEnumeration("rarity", "RarityEnum", {value -> Rarity.valueOf(value as String) }, { PGEnum("RarityEnum", it) })
-  val item_type = customEnumeration("item_type", "TypeEnum", { value -> EquipmentTypes.valueOf(value as String) }, { PGEnum("TypeEnum", it) })
-  val element = customEnumeration("element", "ElementEnum", { value -> Elements.valueOf(value as String) }, { PGEnum("ElementEnum", it) }).nullable()
+  val material = customEnumeration(
+    "material",
+    "MaterialEnum",
+    { value -> Material.valueOf(value as String) },
+    { PGEnum("MaterialEnum", it) })
+  val rarity = customEnumeration(
+    "rarity",
+    "RarityEnum",
+    { value -> Rarity.valueOf(value as String) },
+    { PGEnum("RarityEnum", it) })
+  val item_type = customEnumeration(
+    "item_type",
+    "TypeEnum",
+    { value -> EquipmentTypes.valueOf(value as String) },
+    { PGEnum("TypeEnum", it) })
+  val element = customEnumeration(
+    "element",
+    "ElementEnum",
+    { value -> Elements.valueOf(value as String) },
+    { PGEnum("ElementEnum", it) }).nullable()
   val set = text("set").default("NONE")
   val rgb = integer("rgb").nullable()
   val defence = integer("defence").default(0)
@@ -31,8 +45,9 @@ object EquipmentItems : IntIdTable() {
   val mana = integer("mana").default(0)
 }
 
-class EquipmentItem(id: EntityID<Int>): IntEntity(id) {
+class EquipmentItem(id: EntityID<Int>) : IntEntity(id) {
   companion object : IntEntityClass<EquipmentItem>(EquipmentItems)
+
   var string_id by EquipmentItems.string_id
   var display_name by EquipmentItems.display_name
   var material: Material by EquipmentItems.material
@@ -52,7 +67,7 @@ class EquipmentUtils {
     fun setupDB() {
       val db = getInstance().dbConnection
 
-      transaction (db) {
+      transaction(db) {
         exec(createEnumIfExists<Material>("materialenum"))
         exec(createEnumIfExists<Rarity>("rarityenum"))
         exec(createEnumIfExists<EquipmentTypes>("typeenum"))
@@ -60,7 +75,10 @@ class EquipmentUtils {
         try {
           SchemaUtils.createMissingTablesAndColumns(EquipmentItems)
         } catch (e: ExposedSQLException) {
-          getInstance().logger.log(Level.WARNING, "Creating missing Tables/Columns failed! You'll need to do this manually!")
+          getInstance().logger.log(
+            Level.WARNING,
+            "Creating missing Tables/Columns failed! You'll need to do this manually!"
+          )
           throw e
         }
       }
@@ -69,7 +87,7 @@ class EquipmentUtils {
     fun getItem(stringID: String): EquipmentItem? {
       val db = getInstance().dbConnection
 
-      return transaction (db) {
+      return transaction(db) {
         val item = EquipmentItem.find { EquipmentItems.string_id eq stringID }
 
         try {
@@ -83,7 +101,7 @@ class EquipmentUtils {
     fun getItem(ID: Int): EquipmentItem? {
       val db = getInstance().dbConnection
 
-      return transaction (db) {
+      return transaction(db) {
         val item = EquipmentItem.find { EquipmentItems.id eq ID }
 
         try {
@@ -98,7 +116,8 @@ class EquipmentUtils {
       val db = getInstance().dbConnection
 
       return transaction(db) {
-        return@transaction EquipmentItem.find { EquipmentItems.string_id like "${startsWith}%" }.map { it.string_id }.toMutableList()
+        return@transaction EquipmentItem.find { EquipmentItems.string_id like "${startsWith}%" }.map { it.string_id }
+          .toMutableList()
       }
     }
   }

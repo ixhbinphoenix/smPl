@@ -1,8 +1,8 @@
-package me.ixhbinphoenix.smPl.smItems.commands
+package me.ixhbinphoenix.smPl.smCore.commands.items
 
 import me.ixhbinphoenix.smPl.smCore.commands.BaseCommand
-import me.ixhbinphoenix.smPl.smItems.db.ResourceUtils
-import me.ixhbinphoenix.smPl.smItems.item.ItemUtils
+import me.ixhbinphoenix.smPl.smCore.db.ResourceUtils
+import me.ixhbinphoenix.smPl.smCore.items.ItemUtils
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
 import org.bukkit.command.Command
@@ -17,8 +17,8 @@ class giveResourceCommand : BaseCommand {
   override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
     if (sender is Player) {
       if (args.isNotEmpty()) {
-        if (resourceUtils.getItem(args[0]) is ItemStack) {
-          val item = resourceUtils.getItem(args[0])!!
+        val item = resourceUtils.getItem(args[0])
+        if (item is ItemStack) {
           if (args.size > 1) {
             if (args[1].toIntOrNull() != null) {
               item.amount = args[1].toInt()
@@ -37,7 +37,12 @@ class giveResourceCommand : BaseCommand {
     return true
   }
 
-  override fun onTabComplete(sender: CommandSender, command: Command, label: String, args: Array<out String>): MutableList<String>? {
+  override fun onTabComplete(
+    sender: CommandSender,
+    command: Command,
+    label: String,
+    args: Array<out String>
+  ): MutableList<String>? {
     if (args.size == 1) {
       return resourceUtils.getRecomms(args[0])
     }

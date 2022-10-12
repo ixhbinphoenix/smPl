@@ -2,7 +2,7 @@ package me.ixhbinphoenix.smPl.smCore.db
 
 import org.postgresql.util.PGobject
 
-class PGEnum<T: Enum<T>>(enumTypeName: String, enumValue: T?): PGobject() {
+class PGEnum<T : Enum<T>>(enumTypeName: String, enumValue: T?) : PGobject() {
   init {
     value = enumValue?.name
     type = enumTypeName
@@ -22,7 +22,7 @@ inline fun <reified T : Enum<T>> getEnumQuery(dbName: String): String {
   return str
 }
 
-inline fun <reified T: Enum<T>> createEnumIfExists(dbName: String): String {
+inline fun <reified T : Enum<T>> createEnumIfExists(dbName: String): String {
   return "DO\n" +
           "$$\n" +
           "BEGIN\n" +

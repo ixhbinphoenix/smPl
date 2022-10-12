@@ -1,4 +1,4 @@
-package me.ixhbinphoenix.smPl.smItems.commands
+package me.ixhbinphoenix.smPl.smCore.commands.items
 
 import me.ixhbinphoenix.smPl.smCore.commands.BaseCommand
 import net.kyori.adventure.text.Component
@@ -25,6 +25,7 @@ class metaCommand : BaseCommand {
               key.toString().endsWith("int") -> {
                 keyVal = im.persistentDataContainer.getOrDefault(key, PersistentDataType.INTEGER, -1)
               }
+
               key.toString().endsWith("str") -> {
                 keyVal = im.persistentDataContainer.getOrDefault(key, PersistentDataType.STRING, "-1")
               }
@@ -44,7 +45,12 @@ class metaCommand : BaseCommand {
     return true
   }
 
-  override fun onTabComplete(sender: CommandSender, command: Command, label: String, args: Array<out String>): MutableList<String>? {
+  override fun onTabComplete(
+    sender: CommandSender,
+    command: Command,
+    label: String,
+    args: Array<out String>
+  ): MutableList<String>? {
     if (args.size == 1) {
       val list = ArrayList<String>()
       list.add("self")

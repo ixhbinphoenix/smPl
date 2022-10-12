@@ -1,6 +1,6 @@
-package me.ixhbinphoenix.smPl.smItems.item.sets
+package me.ixhbinphoenix.smPl.smCore.items.sets
 
-import me.ixhbinphoenix.smPl.smItems.item.SetBonus
+import me.ixhbinphoenix.smPl.smCore.items.SetBonus
 import org.bukkit.entity.Player
 
 /**

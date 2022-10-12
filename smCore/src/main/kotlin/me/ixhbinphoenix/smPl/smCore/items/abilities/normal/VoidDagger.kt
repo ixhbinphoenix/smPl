@@ -1,8 +1,8 @@
-package me.ixhbinphoenix.smPl.smItems.item.abilities.normal
+package me.ixhbinphoenix.smPl.smCore.items.abilities.normal
 
-import me.ixhbinphoenix.smPl.smCore.player.PlayerHandler
 import me.ixhbinphoenix.smPl.smCore.entities.EntityHandler
-import me.ixhbinphoenix.smPl.smItems.item.abilities.AbilityHandler
+import me.ixhbinphoenix.smPl.smCore.items.abilities.AbilityHandler
+import me.ixhbinphoenix.smPl.smCore.player.PlayerHandler
 import org.bukkit.FluidCollisionMode
 import org.bukkit.Sound
 import org.bukkit.entity.Damageable
@@ -11,10 +11,19 @@ import org.bukkit.entity.Player
 import org.bukkit.util.RayTraceResult
 
 class VoidDagger : AbilityHandler() {
-  override fun onPrimary(player: Player): Boolean {return false}
+  override fun onPrimary(player: Player): Boolean {
+    return false
+  }
 
   override fun onSecondary(player: Player): Boolean {
-    val res = player.world.rayTrace(player.eyeLocation, player.eyeLocation.direction, 20.0, FluidCollisionMode.NEVER, true, 1.0) { e -> e.type != EntityType.PLAYER && e is Damageable }
+    val res = player.world.rayTrace(
+      player.eyeLocation,
+      player.eyeLocation.direction,
+      20.0,
+      FluidCollisionMode.NEVER,
+      true,
+      1.0
+    ) { e -> e.type != EntityType.PLAYER && e is Damageable }
     if (res is RayTraceResult) {
       if (res.hitEntity is Damageable) {
         val handler = PlayerHandler(player)

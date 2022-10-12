@@ -21,7 +21,12 @@ class delstatCommand : BaseCommand {
     return true
   }
 
-  override fun onTabComplete(sender: CommandSender, command: Command, label: String, args: Array<out String>): MutableList<String>? {
+  override fun onTabComplete(
+    sender: CommandSender,
+    command: Command,
+    label: String,
+    args: Array<out String>
+  ): MutableList<String>? {
     if (args.size == 1 && sender is Player) {
       val list = ArrayList<String>()
       for (key in sender.persistentDataContainer.keys) {

@@ -19,6 +19,7 @@ class pstatsCommand : BaseCommand {
           key.toString().endsWith("int") -> {
             keyVal = sender.persistentDataContainer.getOrDefault(key, PersistentDataType.INTEGER, -1)
           }
+
           key.toString().endsWith("str") -> {
             keyVal = sender.persistentDataContainer.getOrDefault(key, PersistentDataType.STRING, "-1")
           }
@@ -30,7 +31,12 @@ class pstatsCommand : BaseCommand {
     return true
   }
 
-  override fun onTabComplete(sender: CommandSender, command: Command, label: String, args: Array<out String>): MutableList<String>? {
+  override fun onTabComplete(
+    sender: CommandSender,
+    command: Command,
+    label: String,
+    args: Array<out String>
+  ): MutableList<String>? {
     return null
   }
 }

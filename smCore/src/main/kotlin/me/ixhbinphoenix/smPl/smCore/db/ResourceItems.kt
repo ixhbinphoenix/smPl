@@ -1,9 +1,7 @@
-package me.ixhbinphoenix.smPl.smItems.db
+package me.ixhbinphoenix.smPl.smCore.db
 
-import me.ixhbinphoenix.smPl.smCore.db.PGEnum
-import me.ixhbinphoenix.smPl.smCore.db.createEnumIfExists
-import me.ixhbinphoenix.smPl.smItems.Rarity
-import me.ixhbinphoenix.smPl.smItems.getInstance
+import me.ixhbinphoenix.smPl.smCore.items.Rarity
+import me.ixhbinphoenix.smPl.smCore.getInstance
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.TextDecoration
 import org.bukkit.Material
@@ -22,12 +20,21 @@ import java.util.logging.Level
 object ResourceItems : IntIdTable() {
   val string_id = text("string_id").uniqueIndex()
   val display_name = text("display_name")
-  val material = customEnumeration("material", "MaterialEnum", { value -> Material.valueOf(value as String) }, { PGEnum("MaterialEnum", it) })
-  val rarity = customEnumeration("rarity", "RarityEnum", {value -> Rarity.valueOf(value as String) }, { PGEnum("RarityEnum", it) })
+  val material = customEnumeration(
+    "material",
+    "MaterialEnum",
+    { value -> Material.valueOf(value as String) },
+    { PGEnum("MaterialEnum", it) })
+  val rarity = customEnumeration(
+    "rarity",
+    "RarityEnum",
+    { value -> Rarity.valueOf(value as String) },
+    { PGEnum("RarityEnum", it) })
 }
 
 class ResourceItem(id: EntityID<Int>) : IntEntity(id) {
   companion object : IntEntityClass<ResourceItem>(ResourceItems)
+
   var string_id by ResourceItems.string_id
   var display_name by ResourceItems.display_name
   var material by ResourceItems.material
@@ -46,12 +53,16 @@ class ResourceUtils {
         try {
           SchemaUtils.createMissingTablesAndColumns(ResourceItems)
         } catch (e: ExposedSQLException) {
-          getInstance().logger.log(Level.WARNING, "Creating missing Tables/Columns failed! You'll need to do this manually!")
+          getInstance().logger.log(
+            Level.WARNING,
+            "Creating missing Tables/Columns failed! You'll need to do this manually!"
+          )
           throw e
         }
       }
     }
   }
+
   private val db = getInstance().dbConnection
   private val cache = HashMap<String, ItemStack>()
 
@@ -66,11 +77,24 @@ class ResourceUtils {
         val dbItem = items[0]
         val item = ItemStack(dbItem.material)
         val im = item.itemMeta
-        im.persistentDataContainer.set(NamespacedKey.fromString("smitems:resource.type.str")!!, PersistentDataType.STRING, dbItem.string_id)
-        im.persistentDataContainer.set(NamespacedKey.fromString("smitems:item.rarity.str")!!, PersistentDataType.STRING, dbItem.rarity.toString())
-        im.displayName(Component.text(dbItem.display_name).color(dbItem.rarity.color).decoration(TextDecoration.ITALIC, false))
+        im.persistentDataContainer.set(
+          NamespacedKey.fromString("smcore:resource.type.str")!!,
+          PersistentDataType.STRING,
+          dbItem.string_id
+        )
+        im.persistentDataContainer.set(
+          NamespacedKey.fromString("smcore:item.rarity.str")!!,
+          PersistentDataType.STRING,
+          dbItem.rarity.toString()
+        )
+        im.displayName(
+          Component.text(dbItem.display_name).color(dbItem.rarity.color).decoration(TextDecoration.ITALIC, false)
+        )
         val lore = ArrayList<Component>()
-        lore.add(Component.text(dbItem.rarity.toString() + " RESOURCE").color(dbItem.rarity.color).decoration(TextDecoration.ITALIC, false))
+        lore.add(
+          Component.text(dbItem.rarity.toString() + " RESOURCE").color(dbItem.rarity.color)
+            .decoration(TextDecoration.ITALIC, false)
+        )
         im.lore(lore)
         item.itemMeta = im
         cache[id] = item

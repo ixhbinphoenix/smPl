@@ -20,21 +20,40 @@ class setstatCommand : BaseCommand {
               val im = item.itemMeta
               when {
                 args[1].endsWith("int") -> {
-                  im?.persistentDataContainer?.set(NamespacedKey.fromString(args[1])!!, PersistentDataType.INTEGER, args[2].toInt())
+                  im?.persistentDataContainer?.set(
+                    NamespacedKey.fromString(args[1])!!,
+                    PersistentDataType.INTEGER,
+                    args[2].toInt()
+                  )
                 }
+
                 args[1].endsWith("str") -> {
-                  im?.persistentDataContainer?.set(NamespacedKey.fromString(args[1])!!, PersistentDataType.STRING, args[2])
+                  im?.persistentDataContainer?.set(
+                    NamespacedKey.fromString(args[1])!!,
+                    PersistentDataType.STRING,
+                    args[2]
+                  )
                 }
               }
             }
           }
+
           args[0] == "player" -> {
             when {
               args[1].endsWith("int") -> {
-                sender.persistentDataContainer.set(NamespacedKey.fromString(args[1])!!, PersistentDataType.INTEGER, args[2].toInt())
+                sender.persistentDataContainer.set(
+                  NamespacedKey.fromString(args[1])!!,
+                  PersistentDataType.INTEGER,
+                  args[2].toInt()
+                )
               }
+
               args[1].endsWith("str") -> {
-                sender.persistentDataContainer.set(NamespacedKey.fromString(args[1])!!, PersistentDataType.STRING, args[2])
+                sender.persistentDataContainer.set(
+                  NamespacedKey.fromString(args[1])!!,
+                  PersistentDataType.STRING,
+                  args[2]
+                )
               }
             }
           }
@@ -47,7 +66,12 @@ class setstatCommand : BaseCommand {
     return true
   }
 
-  override fun onTabComplete(sender: CommandSender, command: Command, label: String, args: Array<out String>): MutableList<String>? {
+  override fun onTabComplete(
+    sender: CommandSender,
+    command: Command,
+    label: String,
+    args: Array<out String>
+  ): MutableList<String>? {
     if (args.size == 1) {
       val list = ArrayList<String>()
       list.add("hand")

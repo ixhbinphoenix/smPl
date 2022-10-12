@@ -29,12 +29,14 @@ class PlayerSecond(val player: Player) : BukkitRunnable() {
     var maxHealth = player.persistentDataContainer.getOrDefault(
       NamespacedKey.fromString("smcore:player.maxhealth.int")!!,
       PersistentDataType.INTEGER,
-      vanillaMaxHealth)
+      vanillaMaxHealth
+    )
     if (maxHealth < 20) maxHealth = 20
     player.sendActionBar(
       Component.text("${(player.health * (maxHealth / 20)).roundToInt()}/$maxHealth ♥").color(NamedTextColor.RED)
-        .append(Component.text(" ${handler.getCurrentMana()}/${handler.getMana()}").color(NamedTextColor.AQUA)
-          .append(Component.text(" ⚡").color(NamedTextColor.GOLD))
+        .append(
+          Component.text(" ${handler.getCurrentMana()}/${handler.getMana()}").color(NamedTextColor.AQUA)
+            .append(Component.text(" ⚡").color(NamedTextColor.GOLD))
         )
         .append(Component.text(" ${handler.getDefence()} ⛨").color(NamedTextColor.GREEN))
     )

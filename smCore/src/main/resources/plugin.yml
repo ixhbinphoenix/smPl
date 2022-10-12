@@ -15,6 +15,18 @@ commands:
   spawnentity:
     usage: /<command> <entity id>
     description: Summons a Custom Entity at your location
+  meta:
+    usage: /<command>
+    description: Gives persistentDataContainer information of the held item
+  giveitem:
+    usage: /<command> item
+    description: Gives a test item
+  giveresource:
+    usage: /<command> item [amount]
+    description: Gives one or multiple items of a resource
+  setitemxp:
+    usage: /<command> xp
+    description: Sets xp of the held item
 depend:
   - smChat
 permissions:

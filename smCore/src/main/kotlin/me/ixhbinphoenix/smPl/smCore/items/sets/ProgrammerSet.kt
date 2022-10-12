@@ -1,7 +1,8 @@
-package me.ixhbinphoenix.smPl.smItems.item.sets
+package me.ixhbinphoenix.smPl.smCore.items.sets
 
 import me.ixhbinphoenix.smPl.smCore.player.PlayerHandler
-import me.ixhbinphoenix.smPl.smItems.item.SetBonus
+import me.ixhbinphoenix.smPl.smCore.items.SetBonus
+import me.ixhbinphoenix.smPl.smCore.items.sets.BaseSetHandler
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
 import net.kyori.adventure.text.format.TextDecoration

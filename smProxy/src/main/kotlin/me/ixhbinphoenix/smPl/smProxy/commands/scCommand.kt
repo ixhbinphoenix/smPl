@@ -1,11 +1,9 @@
 package me.ixhbinphoenix.smPl.smProxy.commands
 
-import com.velocitypowered.api.command.CommandMeta
 import com.velocitypowered.api.command.SimpleCommand
 import com.velocitypowered.api.proxy.Player
 import me.ixhbinphoenix.smPl.smProxy.getInstance
 import me.ixhbinphoenix.smPl.smProxy.utils.getPlayerRank
-import me.ixhbinphoenix.smPl.smProxy.utils.getRankColor
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
 
@@ -25,7 +23,7 @@ class scCommand : BaseCommand {
       } else {
         if (source is Player) {
           var msg = Component.text("[SC] ").color(NamedTextColor.DARK_PURPLE)
-            .append(Component.text(source.username).color(getRankColor(getPlayerRank(source))))
+            .append(Component.text(source.username).color(getPlayerRank(source).color))
             .append(Component.text(" >> ").color(NamedTextColor.DARK_PURPLE))
 
           for (word in args) {

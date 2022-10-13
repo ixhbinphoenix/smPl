@@ -21,13 +21,13 @@ enum class GroupRanks {
   PLAYER
 }
 
-enum class Rank(val rank: GroupRanks) {
-  ADMIN(GroupRanks.TEAM),
-  MODERATOR(GroupRanks.TEAM),
-  BUILDER(GroupRanks.TEAM),
-  SENATOR(GroupRanks.SENATE),
-  TRUSTED(GroupRanks.PLAYER),
-  PLAYER(GroupRanks.PLAYER)
+enum class Rank(val rank: GroupRanks, val color: TextColor) {
+  ADMIN(GroupRanks.TEAM, TextColor.fromCSSHexString("#21abcd")!!),
+  MODERATOR(GroupRanks.TEAM, NamedTextColor.RED),
+  BUILDER(GroupRanks.TEAM, NamedTextColor.GREEN),
+  SENATOR(GroupRanks.SENATE, TextColor.fromCSSHexString("#efcc00")!!),
+  TRUSTED(GroupRanks.PLAYER, NamedTextColor.LIGHT_PURPLE),
+  PLAYER(GroupRanks.PLAYER, NamedTextColor.GRAY)
 }
 
 fun isPlayerInRank(player: Player, group: String): Boolean {
@@ -41,15 +41,4 @@ fun getPlayerRank(player: Player): Rank {
     }
   }
   return Rank.PLAYER
-}
-
-fun getRankColor(rank: Rank): TextColor {
-  return when(rank) {
-    Rank.ADMIN -> TextColor.fromCSSHexString("#21abcd")!!
-    Rank.MODERATOR -> NamedTextColor.RED
-    Rank.BUILDER -> NamedTextColor.GREEN
-    Rank.SENATOR -> TextColor.fromCSSHexString("#efcc00")!!
-    Rank.TRUSTED -> NamedTextColor.LIGHT_PURPLE
-    Rank.PLAYER -> NamedTextColor.GRAY
-  }
 }

@@ -22,7 +22,13 @@ class Events {
       if (ban.permanent) {
         event.player.disconnect(getPermanentBanMessage(ban.reason ?: "No Reason specified", ban.id.value))
       } else {
-        event.player.disconnect(getTemporaryBanMessage(ban.reason ?: "No Reason specified", ban.id.value, (ban.expiry?.toEpochMilli()?: Instant.now().toEpochMilli()) - Instant.now().toEpochMilli()))
+        event.player.disconnect(
+          getTemporaryBanMessage(
+            ban.reason ?: "No Reason specified",
+            ban.id.value,
+            (ban.expiry?.toEpochMilli() ?: Instant.now().toEpochMilli()) - Instant.now().toEpochMilli()
+          )
+        )
       }
     }
     if (event.originalServer.serverInfo.name == "build") {

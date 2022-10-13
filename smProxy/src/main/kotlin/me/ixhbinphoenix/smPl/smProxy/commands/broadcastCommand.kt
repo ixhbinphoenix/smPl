@@ -1,8 +1,6 @@
 package me.ixhbinphoenix.smPl.smProxy.commands
 
-import com.velocitypowered.api.command.CommandMeta
 import com.velocitypowered.api.command.SimpleCommand
-import com.velocitypowered.api.proxy.Player
 import me.ixhbinphoenix.smPl.smProxy.getInstance
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor

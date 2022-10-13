@@ -8,14 +8,14 @@ import com.velocitypowered.api.plugin.Plugin
 import com.velocitypowered.api.plugin.annotation.DataDirectory
 import com.velocitypowered.api.proxy.ProxyServer
 import kotlinx.serialization.ExperimentalSerializationApi
-import me.ixhbinphoenix.smPl.smProxy.commands.*
-import me.ixhbinphoenix.smPl.smProxy.events.Events
-import me.ixhbinphoenix.smPl.smProxy.uuid.UUIDCache
-import org.jetbrains.exposed.sql.Database
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromStream
+import me.ixhbinphoenix.smPl.smProxy.commands.*
+import me.ixhbinphoenix.smPl.smProxy.events.Events
+import me.ixhbinphoenix.smPl.smProxy.uuid.UUIDCache
+import org.jetbrains.exposed.sql.Database
 import org.slf4j.Logger
 import java.io.File
 import java.io.IOException
@@ -25,7 +25,14 @@ import java.nio.file.Path
 data class PluginConfig(val jdbcConnectionString: String, val postgresUser: String, val postgresPassword: String)
 
 @Suppress("unused", "ClassName")
-@Plugin(id = "smproxy", name = "smProxy", version = "0.0.2", url = "https://github.com/ixhbinphoenix/smPl", description = "Stahlmetall plugins", authors = ["ixhbinphoenix", "renkertm"])
+@Plugin(
+  id = "smproxy",
+  name = "smProxy",
+  version = "0.0.2",
+  url = "https://github.com/ixhbinphoenix/smPl",
+  description = "Stahlmetall plugins",
+  authors = ["ixhbinphoenix", "renkertm"]
+)
 class smProxy @Inject constructor(val server: ProxyServer, val logger: Logger, @DataDirectory val folder: Path) {
 
   val pluginConfig = loadConfig()
@@ -74,9 +81,19 @@ class smProxy @Inject constructor(val server: ProxyServer, val logger: Logger, @
 
   private fun loadDatabase(): Database {
     return if (pluginConfig.jdbcConnectionString == "") {
-      Database.connect("jdbc:postgresql://localhost:5432/minecraft", driver = "org.postgresql.Driver", user = pluginConfig.postgresUser, password = pluginConfig.postgresPassword)
+      Database.connect(
+        "jdbc:postgresql://localhost:5432/minecraft",
+        driver = "org.postgresql.Driver",
+        user = pluginConfig.postgresUser,
+        password = pluginConfig.postgresPassword
+      )
     } else {
-      Database.connect(pluginConfig.jdbcConnectionString, driver = "org.postgresql.Driver", user = pluginConfig.postgresUser, password = pluginConfig.postgresPassword)
+      Database.connect(
+        pluginConfig.jdbcConnectionString,
+        driver = "org.postgresql.Driver",
+        user = pluginConfig.postgresUser,
+        password = pluginConfig.postgresPassword
+      )
     }
   }
 

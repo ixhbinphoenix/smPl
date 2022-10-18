@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Run Server" type="ShConfigurationType">
+  <configuration default="false" name="Run Proxy" type="ShConfigurationType">
     <option name="SCRIPT_TEXT" value="" />
     <option name="INDEPENDENT_SCRIPT_PATH" value="true" />
     <option name="SCRIPT_PATH" value="$PROJECT_DIR$/run.sh" />
@@ -12,7 +12,7 @@
     <option name="EXECUTE_IN_TERMINAL" value="true" />
     <option name="EXECUTE_SCRIPT_FILE" value="true" />
     <envs>
-      <env name="DISABLE_VELOCITY" value="1" />
+      <env name="DISABLE_PAPER" value="1" />
     </envs>
     <method v="2" />
   </configuration>

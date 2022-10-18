@@ -1,3 +1,4 @@
+#!/usr/bin/bash
 # inspired by github.com/alexpado/papermc-plugin-starter
 
 ### ENV Variables
@@ -12,7 +13,7 @@ PAPER_VERSION="1.18"
 ROOT_PATH=$(pwd)
 
 # shellcheck disable=SC2120
-function downloadPaper {
+downloadPaper() {
   if [[ -z "$PAPER_VERSION" ]]; then
     if [[ -z "$1" ]]; then
       echo "Please set PAPER_VERSION to the version group you want to use"
@@ -49,7 +50,7 @@ function downloadPaper {
 }
 
 # shellcheck disable=SC2120
-function downloadVelocity {
+downloadVelocity() {
   curl --silent "https://api.papermc.io/v2/projects/velocity/version_group/3.0.0/builds" | jq '.builds' > /tmp/builds.json
 
   if [[ -z "$VELOCITY_BUILD" ]]; then
@@ -77,7 +78,7 @@ function downloadVelocity {
   echo "velocity jar $VELOCITY_NAME downloaded"
 }
 
-function setupServer {
+setupServer() {
   OLD_PATH=$(pwd)
 
   cd $PAPER_OUT_DIR || exit
@@ -156,13 +157,20 @@ if [[ -n "$INTERVENTION" ]]; then
 else
   # The server is already set up, so we can start it
   if [[ -z "$DISABLE_VELOCITY" ]]; then
-    if [[ $1 == "velocity" ]]; then
-      (trap 'kill 0' SIGINT EXIT; (cd $PAPER_WORKSPACE && ./start.sh) & (cd $VELOCITY_WORKSPACE && ./start.sh))
+    if [[ -z "$DISABLE_PAPER" ]]; then
+      if [[ $1 == "velocity" ]]; then
+        (trap 'kill 0' SIGINT EXIT; (cd $PAPER_WORKSPACE && ./start.sh) & (cd $VELOCITY_WORKSPACE && ./start.sh))
+      else
+        (trap 'kill 0' SIGINT EXIT; (cd $VELOCITY_WORKSPACE && ./start.sh) & (cd $PAPER_WORKSPACE && ./start.sh))
+      fi
     else
-      (trap 'kill 0' SIGINT EXIT; (cd $VELOCITY_WORKSPACE && ./start.sh) & (cd $PAPER_WORKSPACE && ./start.sh))
+      cd $VELOCITY_WORKSPACE || exit
+      ./start.sh
     fi
-  else
+  elif [[ -z "$DISABLE_PAPER" ]]; then
     cd $PAPER_WORKSPACE || exit
     ./start.sh
+  else
+    exit 0
   fi
 fi

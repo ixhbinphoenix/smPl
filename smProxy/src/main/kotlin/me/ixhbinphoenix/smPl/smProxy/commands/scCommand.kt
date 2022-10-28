@@ -2,6 +2,7 @@ package me.ixhbinphoenix.smPl.smProxy.commands
 
 import com.velocitypowered.api.command.SimpleCommand
 import com.velocitypowered.api.proxy.Player
+import me.ixhbinphoenix.smPl.smProxy.chat.ActiveChannel
 import me.ixhbinphoenix.smPl.smProxy.getInstance
 import me.ixhbinphoenix.smPl.smProxy.utils.getPlayerRank
 import net.kyori.adventure.text.Component
@@ -9,46 +10,22 @@ import net.kyori.adventure.text.format.NamedTextColor
 
 @Suppress("classname")
 class scCommand : BaseCommand {
-  private val instance = getInstance()
+  private val handler = getInstance().channelManager.handlers[ActiveChannel.STAFF]!!
 
   override fun execute(invocation: SimpleCommand.Invocation?) {
     if (invocation is SimpleCommand.Invocation) {
       val source = invocation.source()
       val args = invocation.arguments()
-      if (args.isEmpty()) {
-        source.sendMessage(
-          Component.text("[SC] ").color(NamedTextColor.DARK_PURPLE)
-            .append(Component.text("Can't send an empty message!").color(NamedTextColor.RED))
-        )
-      } else {
-        if (source is Player) {
-          var msg = Component.text("[SC] ").color(NamedTextColor.DARK_PURPLE)
-            .append(Component.text(source.username).color(getPlayerRank(source).color))
-            .append(Component.text(" >> ").color(NamedTextColor.DARK_PURPLE))
+      val msg = args.joinToString(" ")
 
-          for (word in args) {
-            msg = msg.append(Component.text("$word ").color(NamedTextColor.LIGHT_PURPLE))
-          }
-          for (player in instance.server.allPlayers) {
-            if (player.hasPermission("smproxy.staffchat")) {
-              player.sendMessage(msg)
-            }
-          }
-          instance.server.consoleCommandSource.sendMessage(msg)
+      if (source is Player) {
+        if (handler.fulfillsRequirement(source)) {
+          handler.handleMessage(source, msg)
         } else {
-          var msg = Component.text("[SC] ").color(NamedTextColor.DARK_PURPLE)
-            .append(Component.text("CONSOLE").color(NamedTextColor.DARK_RED))
-            .append(Component.text(" >> ").color(NamedTextColor.DARK_PURPLE))
-          for (word in args) {
-            msg = msg.append(Component.text("$word ").color(NamedTextColor.LIGHT_PURPLE))
-          }
-          for (player in instance.server.allPlayers) {
-            if (player.hasPermission("smproxy.staffchat")) {
-              player.sendMessage(msg)
-            }
-          }
-          instance.server.consoleCommandSource.sendMessage(msg)
+          source.sendMessage(Component.text("Insufficient Permissions!").color(NamedTextColor.RED))
         }
+      } else {
+        handler.handleMessage(msg)
       }
     }
   }
@@ -59,6 +36,7 @@ class scCommand : BaseCommand {
 
   override fun hasPermission(invocation: SimpleCommand.Invocation?): Boolean {
     return if (invocation is SimpleCommand.Invocation) {
+      // Normally, this should be handled by the fulfillsRequirement check, but since staffchat can be used by the console, we can't perform this check
       invocation.source().hasPermission("smproxy.staffchat")
     } else {
       false

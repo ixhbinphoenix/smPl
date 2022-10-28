@@ -2,7 +2,9 @@ package me.ixhbinphoenix.smPl.smProxy.events
 
 import com.velocitypowered.api.event.PostOrder
 import com.velocitypowered.api.event.Subscribe
+import com.velocitypowered.api.event.player.PlayerChatEvent
 import com.velocitypowered.api.event.player.ServerPreConnectEvent
+import me.ixhbinphoenix.smPl.smProxy.chat.ActiveChannel
 import me.ixhbinphoenix.smPl.smProxy.db.BanUtils
 import me.ixhbinphoenix.smPl.smProxy.getInstance
 import me.ixhbinphoenix.smPl.smProxy.utils.GroupRanks
@@ -35,6 +37,16 @@ class Events {
       if (getPlayerRank(event.player).rank != GroupRanks.TEAM) {
         event.result = ServerPreConnectEvent.ServerResult.denied()
       }
+    }
+  }
+
+  @Subscribe(order = PostOrder.FIRST)
+  fun onPlayerChat(event: PlayerChatEvent) {
+    val userChannel = instance.channelManager.getUserChannel(event.player)
+    if (userChannel != ActiveChannel.ALL) {
+      event.result = PlayerChatEvent.ChatResult.denied()
+      val handler = instance.channelManager.handlers[userChannel]!!
+      handler.handleMessage(event.player, event.message)
     }
   }
 }

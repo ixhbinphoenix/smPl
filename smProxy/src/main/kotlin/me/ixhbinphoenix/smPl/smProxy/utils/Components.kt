@@ -30,3 +30,20 @@ fun getTemporaryBanMessage(reason: String, banID: Int, duration: Long): Componen
         .append(Component.text("#$banID").color(NamedTextColor.YELLOW))
     )
 }
+
+/**
+ * Creates a list with bullet points and a title
+ *
+ * @param title Title of the list
+ * @param options List points
+ */
+fun createPointList(title: Component, options: ArrayList<Component>): Component {
+  var ret = title
+  for ( comp in options ) {
+    ret = ret.append(
+      Component.text("\n• ").color(NamedTextColor.GRAY)
+        .append(comp)
+    )
+  }
+  return ret
+}

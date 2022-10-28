@@ -12,6 +12,7 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromStream
+import me.ixhbinphoenix.smPl.smProxy.chat.ChannelManager
 import me.ixhbinphoenix.smPl.smProxy.commands.*
 import me.ixhbinphoenix.smPl.smProxy.events.Events
 import me.ixhbinphoenix.smPl.smProxy.uuid.UUIDCache
@@ -38,6 +39,7 @@ class smProxy @Inject constructor(val server: ProxyServer, val logger: Logger, @
   val pluginConfig = loadConfig()
   val dbConnection: Database = loadDatabase()
   val uuidCache = UUIDCache()
+  lateinit var channelManager: ChannelManager
 
   init {
     instance = this
@@ -45,9 +47,11 @@ class smProxy @Inject constructor(val server: ProxyServer, val logger: Logger, @
 
   @Subscribe(order = PostOrder.FIRST)
   fun onInit(event: ProxyInitializeEvent) {
+    channelManager = ChannelManager()
     server.eventManager.register(this, Events())
 
     server.commandManager.register("sc", scCommand())
+    server.commandManager.register("channel", channelCommand(), "chat")
     server.commandManager.register("broadcast", broadcastCommand(), "bc")
     server.commandManager.register("ping", pingCommand())
     server.commandManager.register("ban", banCommand())

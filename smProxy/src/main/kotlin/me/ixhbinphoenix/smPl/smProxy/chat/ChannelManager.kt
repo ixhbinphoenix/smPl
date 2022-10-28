@@ -6,6 +6,7 @@ import java.util.UUID
 class ChannelManager {
   private val cache = HashMap<UUID, ActiveChannel>()
   val handlers: HashMap<ActiveChannel, AbstractChannel> = hashMapOf(
+    ActiveChannel.SENATE to SenateChannel(),
     ActiveChannel.STAFF to StaffChannel()
   )
 

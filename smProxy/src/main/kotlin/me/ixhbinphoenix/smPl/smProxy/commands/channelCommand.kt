@@ -32,6 +32,8 @@ class channelCommand : BaseCommand {
                     .append(Component.text("✔").color(NamedTextColor.GREEN))
                     .append(Component.text("]").color(NamedTextColor.DARK_GRAY))
                 )
+                .clickEvent(ClickEvent.runCommand("/channel $channelName"))
+                .hoverEvent(HoverEvent.showText(Component.text("/channel $channelName").color(NamedTextColor.GOLD)))
             } else {
               Component.text(channelName).color(channel.color)
                 .clickEvent(ClickEvent.runCommand("/channel $channelName"))

@@ -3,7 +3,6 @@ package me.ixhbinphoenix.smPl.smProxy.chat
 import com.velocitypowered.api.proxy.Player
 import me.ixhbinphoenix.smPl.smProxy.getInstance
 import me.ixhbinphoenix.smPl.smProxy.utils.getPlayerRank
-import net.kyori.adventure.audience.Audience
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
 
@@ -16,7 +15,7 @@ class StaffChannel : AbstractChannel() {
     val msg = Component.text("[SC] ").color(NamedTextColor.DARK_PURPLE)
       .append(Component.text("CONSOLE").color(NamedTextColor.DARK_RED))
       .append(Component.text(" >> ").color(NamedTextColor.DARK_PURPLE))
-      .append(Component.text(message).color(NamedTextColor.LIGHT_PURPLE))
+      .append(Component.text(message).color(NamedTextColor.WHITE))
     for (receiver in instance.server.allPlayers) {
       if (fulfillsRequirement(receiver)) {
         receiver.sendMessage(msg)
@@ -31,7 +30,7 @@ class StaffChannel : AbstractChannel() {
         val msg = Component.text("[SC] ").color(NamedTextColor.DARK_PURPLE)
             .append(Component.text(player.username).color(getPlayerRank(player).color))
             .append(Component.text(" >> ").color(NamedTextColor.DARK_PURPLE))
-            .append(Component.text(message).color(NamedTextColor.LIGHT_PURPLE))
+            .append(Component.text(message).color(NamedTextColor.WHITE))
         for (receiver in instance.server.allPlayers) {
           if (fulfillsRequirement(receiver)) {
             receiver.sendMessage(msg)
@@ -48,6 +47,6 @@ class StaffChannel : AbstractChannel() {
   }
 
   override fun fulfillsRequirement(player: Player): Boolean {
-    return player.hasPermission("smproxy.staffchat")
+    return player.hasPermission("smproxy.chat.staff")
   }
 }

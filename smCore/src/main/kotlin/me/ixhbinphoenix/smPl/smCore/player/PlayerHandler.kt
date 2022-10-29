@@ -127,4 +127,20 @@ class PlayerHandler(private val player: Player) {
       0
     )
   }
+
+  fun setBoundNpc(id: Int){
+    player.persistentDataContainer.set(
+      NamespacedKey.fromString("smentities:player.npc.int")!!,
+      PersistentDataType.INTEGER,
+      id
+    )
+  }
+
+  fun getBoundNpc(): Int{
+    return player.persistentDataContainer.getOrDefault(
+      NamespacedKey.fromString("smentities:player.npc.int")!!,
+      PersistentDataType.INTEGER,
+      -1
+    )
+  }
 }

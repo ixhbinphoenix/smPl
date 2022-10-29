@@ -56,6 +56,8 @@ class smProxy @Inject constructor(val server: ProxyServer, val logger: Logger, @
     server.commandManager.register("ping", pingCommand())
     server.commandManager.register("ban", banCommand())
     server.commandManager.register("unban", unbanCommand())
+    server.commandManager.register("unmute", unmuteCommand())
+    server.commandManager.register("mute", muteCommand())
 
     logger.info("smProxy enabled")
   }

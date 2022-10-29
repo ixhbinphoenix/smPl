@@ -7,6 +7,8 @@ import me.ixhbinphoenix.smPl.smProxy.getInstance
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
 import java.util.*
+import java.util.concurrent.CompletableFuture
+import java.util.function.Supplier
 
 class unbanCommand : BaseCommand {
   private val instance = getInstance()
@@ -35,7 +37,7 @@ class unbanCommand : BaseCommand {
               source.sendMessage(Component.text("Ban with ID $banID does not exist!").color(NamedTextColor.RED))
             }
           } else {
-            source.sendMessage(Component.text("${args[0]} is not a valid Ban ID!").color(NamedTextColor.RED))
+            source.sendMessage(Component.text("${args[0]} is not a valid Player!").color(NamedTextColor.RED))
           }
         }
       } else {
@@ -44,14 +46,16 @@ class unbanCommand : BaseCommand {
     }
   }
 
-  override fun suggest(invocation: SimpleCommand.Invocation?): MutableList<String> {
-    if (invocation is SimpleCommand.Invocation) {
-      val args = invocation.arguments()
-      if (args.size == 1) {
-        return instance.server.allPlayers.map { it.username }.toMutableList()
+  override fun suggestAsync(invocation: SimpleCommand.Invocation?): CompletableFuture<MutableList<String>> {
+    return CompletableFuture.supplyAsync(Supplier {
+      if (invocation is SimpleCommand.Invocation) {
+        val args = invocation.arguments()
+        if (args.size <= 1) {
+          return@Supplier instance.server.allPlayers.map { it.username }.toMutableList()
+        }
       }
-    }
-    return mutableListOf()
+      return@Supplier mutableListOf<String>()
+    })
   }
 
   override fun hasPermission(invocation: SimpleCommand.Invocation?): Boolean {

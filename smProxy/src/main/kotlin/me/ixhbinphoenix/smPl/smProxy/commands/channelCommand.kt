@@ -9,6 +9,8 @@ import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.event.ClickEvent
 import net.kyori.adventure.text.event.HoverEvent
 import net.kyori.adventure.text.format.NamedTextColor
+import java.util.concurrent.CompletableFuture
+import java.util.function.Supplier
 
 class channelCommand : BaseCommand {
   private val channelManager = getInstance().channelManager
@@ -63,18 +65,20 @@ class channelCommand : BaseCommand {
     }
   }
 
-  override fun suggest(invocation: SimpleCommand.Invocation?): MutableList<String> {
-    if (invocation is SimpleCommand.Invocation) {
-      if (invocation.source() is Player) {
-        val player = invocation.source() as Player
-        val channels = channelManager.getAvailableChannels(player)
-        val active = channelManager.getUserChannel(player)
+  override fun suggestAsync(invocation: SimpleCommand.Invocation?): CompletableFuture<MutableList<String>> {
+    return CompletableFuture.supplyAsync(Supplier {
+      if (invocation is SimpleCommand.Invocation) {
+        if (invocation.source() is Player) {
+          val player = invocation.source() as Player
+          val channels = channelManager.getAvailableChannels(player)
+          val active = channelManager.getUserChannel(player)
 
-        channels.remove(active)
-        return channels.map { value -> value.name.lowercase() }.toMutableList()
+          channels.remove(active)
+          return@Supplier channels.map { value -> value.name.lowercase() }.toMutableList()
+        }
       }
-    }
-    return mutableListOf()
+      return@Supplier mutableListOf<String>()
+    })
   }
 
   override fun hasPermission(invocation: SimpleCommand.Invocation?): Boolean {

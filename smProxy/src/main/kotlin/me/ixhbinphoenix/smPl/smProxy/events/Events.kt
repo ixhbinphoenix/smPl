@@ -6,11 +6,9 @@ import com.velocitypowered.api.event.player.PlayerChatEvent
 import com.velocitypowered.api.event.player.ServerPreConnectEvent
 import me.ixhbinphoenix.smPl.smProxy.chat.ActiveChannel
 import me.ixhbinphoenix.smPl.smProxy.db.BanUtils
+import me.ixhbinphoenix.smPl.smProxy.db.MuteUtils
 import me.ixhbinphoenix.smPl.smProxy.getInstance
-import me.ixhbinphoenix.smPl.smProxy.utils.GroupRanks
-import me.ixhbinphoenix.smPl.smProxy.utils.getPermanentBanMessage
-import me.ixhbinphoenix.smPl.smProxy.utils.getPlayerRank
-import me.ixhbinphoenix.smPl.smProxy.utils.getTemporaryBanMessage
+import me.ixhbinphoenix.smPl.smProxy.utils.*
 import java.time.Instant
 
 class Events {
@@ -42,11 +40,28 @@ class Events {
 
   @Subscribe(order = PostOrder.FIRST)
   fun onPlayerChat(event: PlayerChatEvent) {
-    val userChannel = instance.channelManager.getUserChannel(event.player)
-    if (userChannel != ActiveChannel.ALL) {
-      event.result = PlayerChatEvent.ChatResult.denied()
-      val handler = instance.channelManager.handlers[userChannel]!!
-      handler.handleMessage(event.player, event.message)
+    if (MuteUtils.hasActiveMute(event.player.uniqueId)) {
+      val mute = MuteUtils.getSeverestMute(MuteUtils.getActiveMutes(event.player.uniqueId))
+      if (mute.permanent) {
+        event.player.sendMessage(getPermanentMuteMessage(mute.reason ?: "No Reason specified", mute.id.value))
+        event.result = PlayerChatEvent.ChatResult.denied()
+      } else {
+        event.player.sendMessage(
+          getTemporaryMuteMessage(
+            mute.reason ?: "No Reason specified",
+            mute.id.value,
+            (mute.expiry?.toEpochMilli() ?: Instant.now().toEpochMilli()) - Instant.now().toEpochMilli()
+          )
+        )
+        event.result = PlayerChatEvent.ChatResult.denied()
+      }
+    } else {
+      val userChannel = instance.channelManager.getUserChannel(event.player)
+      if (userChannel != ActiveChannel.ALL) {
+        event.result = PlayerChatEvent.ChatResult.denied()
+        val handler = instance.channelManager.handlers[userChannel]!!
+        handler.handleMessage(event.player, event.message)
+      }
     }
   }
 }

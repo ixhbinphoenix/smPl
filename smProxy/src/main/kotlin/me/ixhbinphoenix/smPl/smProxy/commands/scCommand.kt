@@ -3,10 +3,13 @@ package me.ixhbinphoenix.smPl.smProxy.commands
 import com.velocitypowered.api.command.SimpleCommand
 import com.velocitypowered.api.proxy.Player
 import me.ixhbinphoenix.smPl.smProxy.chat.ActiveChannel
+import me.ixhbinphoenix.smPl.smProxy.db.MuteUtils
 import me.ixhbinphoenix.smPl.smProxy.getInstance
-import me.ixhbinphoenix.smPl.smProxy.utils.getPlayerRank
+import me.ixhbinphoenix.smPl.smProxy.utils.getPermanentMuteMessage
+import me.ixhbinphoenix.smPl.smProxy.utils.getTemporaryMuteMessage
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
+import java.time.Instant
 
 @Suppress("classname")
 class scCommand : BaseCommand {
@@ -20,7 +23,16 @@ class scCommand : BaseCommand {
 
       if (source is Player) {
         if (handler.fulfillsRequirement(source)) {
-          handler.handleMessage(source, msg)
+          if (MuteUtils.hasActiveMute(source.uniqueId)) {
+            val mute = MuteUtils.getSeverestMute(MuteUtils.getActiveMutes(source.uniqueId))
+            if (mute.permanent) {
+              source.sendMessage(getPermanentMuteMessage(mute.reason ?: "No reason specified", mute.id.value))
+            } else {
+              source.sendMessage(getTemporaryMuteMessage(mute.reason ?: "No reason specified", mute.id.value, (mute.expiry?.toEpochMilli() ?: Instant.now().toEpochMilli()) - Instant.now().toEpochMilli()))
+            }
+          } else {
+            handler.handleMessage(source, msg)
+          }
         } else {
           source.sendMessage(Component.text("Insufficient Permissions!").color(NamedTextColor.RED))
         }
@@ -28,10 +40,6 @@ class scCommand : BaseCommand {
         handler.handleMessage(msg)
       }
     }
-  }
-
-  override fun suggest(invocation: SimpleCommand.Invocation?): MutableList<String> {
-    return mutableListOf()
   }
 
   override fun hasPermission(invocation: SimpleCommand.Invocation?): Boolean {

@@ -31,6 +31,34 @@ fun getTemporaryBanMessage(reason: String, banID: Int, duration: Long): Componen
     )
 }
 
+fun getPermanentMuteMessage(reason: String, muteID: Int): Component {
+  return Component.text("You have been permanently muted!\n").color(NamedTextColor.RED)
+    .append(
+      Component.text("Reason: ").color(NamedTextColor.RED)
+        .append(Component.text("$reason\n").color(NamedTextColor.YELLOW))
+    )
+    .append(
+      Component.text("Mute ID: ").color(NamedTextColor.RED)
+        .append(Component.text("#$muteID").color(NamedTextColor.YELLOW))
+    )
+}
+
+fun getTemporaryMuteMessage(reason: String, muteID: Int, duration: Long): Component {
+  return Component.text("You have been temporarily muted!\n").color(NamedTextColor.RED)
+    .append(
+      Component.text("Reason: ").color(NamedTextColor.RED)
+        .append(Component.text("$reason\n").color(NamedTextColor.YELLOW))
+    )
+    .append(
+      Component.text("Remaining Time: ").color(NamedTextColor.RED)
+        .append(Component.text("${TimeUtils.timeString(duration)}\n").color(NamedTextColor.YELLOW))
+    )
+    .append(
+      Component.text("Mute ID: ").color(NamedTextColor.RED)
+        .append(Component.text("#$muteID").color(NamedTextColor.YELLOW))
+    )
+}
+
 /**
  * Creates a list with bullet points and a title
  *

@@ -36,7 +36,8 @@ class VoidDagger : AbilityHandler() {
   }
 
   override fun onSecondary(player: Player): Boolean {
-    val res = player.world.rayTrace(
+    val handler = PlayerHandler(player)
+    if (handler.getCurrentMana() >= 100) {val res = player.world.rayTrace(
       player.eyeLocation,
       player.eyeLocation.direction,
       20.0,
@@ -44,23 +45,28 @@ class VoidDagger : AbilityHandler() {
       true,
       1.0
     ) { e -> e.type != EntityType.PLAYER && e is Damageable }
-    if (res is RayTraceResult) {
-      if (res.hitEntity is Damageable) {
-        val handler = PlayerHandler(player)
-        val entity = res.hitEntity as Damageable
-        val entloc = entity.location
-        var ret: Boolean
-        try {
-          ret = EntityHandler(entity).damage(handler.getDamage().toDouble())
-        } catch (e: Exception) {
-          ret = entity.health <= handler.getDamage()
-          entity.damage(handler.getDamage().toDouble() * 1.5)
+      if (res is RayTraceResult) {
+        if (res.hitEntity is Damageable) {
+          val entity = res.hitEntity as Damageable
+          val entloc = entity.location
+          var ret: Boolean
+          try {
+            ret = EntityHandler(entity).damage(handler.getDamage().toDouble())
+          } catch (e: Exception) {
+            ret = entity.health <= handler.getDamage()
+            entity.damage(handler.getDamage().toDouble() * 1.5)
+          }
+          player.teleport(entloc)
+          handler.setCurrentMana(handler.getCurrentMana() - 100)
+          player.playSound(entloc, Sound.ENTITY_ENDERMAN_TELEPORT, 1.0f, 1.0f)
+          player.playSound(entloc, Sound.ENTITY_PLAYER_ATTACK_CRIT, 1.0f, 1.0f)
+          return ret
         }
-        player.teleport(entloc)
-        player.playSound(entloc, Sound.ENTITY_ENDERMAN_TELEPORT, 1.0f, 1.0f)
-        player.playSound(entloc, Sound.ENTITY_PLAYER_ATTACK_CRIT, 1.0f, 1.0f)
-        return ret
       }
+    } else {
+      player.sendMessage(Component.text("You don't have enough mana!").color(NamedTextColor.RED))
+      player.playSound(player.location, Sound.ENTITY_ENDER_EYE_DEATH, 1.0f, 0.5f)
+      return false
     }
     return false
   }

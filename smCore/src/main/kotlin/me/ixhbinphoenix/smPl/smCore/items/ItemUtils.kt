@@ -6,6 +6,10 @@ import me.ixhbinphoenix.smPl.smChat.utils.createStatText
 import me.ixhbinphoenix.smPl.smCore.Main
 import me.ixhbinphoenix.smPl.smCore.getInstance
 import me.ixhbinphoenix.smPl.smCore.items.*
+import me.ixhbinphoenix.smPl.smCore.items.abilities.Abilities
+import me.ixhbinphoenix.smPl.smCore.items.abilities.AbilityDescription
+import me.ixhbinphoenix.smPl.smCore.items.abilities.AbilityHandler
+import me.ixhbinphoenix.smPl.smCore.items.abilities.genAbilityComponent
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
 import net.kyori.adventure.text.format.TextDecoration
@@ -73,7 +77,7 @@ class ArmorLoreRefresh(private val event: PlayerArmorChangeEvent) : BukkitRunnab
               if (armor != null) {
                 EquipmentHandler(armor, event.player).updateLore()
               }
-              )
+      )
     }
   }
 }
@@ -181,7 +185,7 @@ class ItemUtils {
         PersistentDataType.STRING,
         UUID.randomUUID().toString()
       )
-      im.lore(genEquipmentLore(rarity, Type, statText, 0, 0, set))
+      im.lore(genEquipmentLore(id, rarity, Type, statText, 0, element, 0, set))
       im.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
       im.addItemFlags(ItemFlag.HIDE_UNBREAKABLE)
       im.addItemFlags(ItemFlag.HIDE_DYE)
@@ -286,10 +290,12 @@ class ItemUtils {
      * @return Complete Lore
      */
     fun genEquipmentLore(
+      id: String,
       rarity: Rarity,
       type: EquipmentTypes,
       stats: ArrayList<Component>,
       xp: Int,
+      element: Elements?,
       setCompletion: Int = 0,
       set: SetBonus?
     ): ArrayList<Component> {
@@ -314,6 +320,32 @@ class ItemUtils {
         )
       }
       lore.add(levelprog.decoration(TextDecoration.ITALIC, false))
+      lore.add(Component.text(""))
+      val abilities = Abilities()
+      if (abilities.getHandler(id) is AbilityHandler) {
+        val handler = abilities.getHandler(id)!!
+        if (handler.primaryDescription is AbilityDescription) {
+          lore.addAll(genAbilityComponent(true, handler.primaryDescription!!, element))
+        }
+        if (handler.secondaryDescription is AbilityDescription) {
+          lore.addAll(genAbilityComponent(false, handler.secondaryDescription!!, element))
+        }
+      } else {
+        val abilityID = if (element is Elements) {
+          "${element}_${type}"
+        } else {
+          "$type"
+        }
+        val handler = abilities.getHandler(abilityID)
+        if (handler is AbilityHandler) {
+          if (handler.primaryDescription is AbilityDescription) {
+            lore.addAll(genAbilityComponent(true, handler.primaryDescription!!, element).map { it.decoration(TextDecoration.ITALIC, false) })
+          }
+          if (handler.secondaryDescription is AbilityDescription) {
+            lore.addAll(genAbilityComponent(false, handler.secondaryDescription!!, element).map { it.decoration(TextDecoration.ITALIC, false) })
+          }
+        }
+      }
       lore.add(Component.text(""))
       if (set is SetBonus) {
         if (setCompletion == 4) {

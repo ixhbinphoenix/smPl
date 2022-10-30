@@ -63,10 +63,12 @@ open class EquipmentHandler(val item: ItemStack, private val player: Player) {
     val im = item.itemMeta
     im.lore(
       ItemUtils.genEquipmentLore(
+        id,
         rarity,
         type,
         statTexts,
         xp,
+        element,
         SetHelper.getCompletion(player, set),
         setHelper.setObjects[set]
       )

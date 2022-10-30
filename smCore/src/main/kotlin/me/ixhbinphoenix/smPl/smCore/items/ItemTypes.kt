@@ -48,11 +48,11 @@ enum class EquipmentTypes(val category: EquipmentCategories, val melee: Boolean)
  * Elements
  * @param comp Symbol of the Element
  */
-enum class Elements(val comp: Component) {
-  WATER(Component.text("\uD83C\uDF0A").color(NamedTextColor.DARK_AQUA)),
-  FIRE(Component.text("\uD83D\uDD25").color(TextColor.fromCSSHexString("#FFA500"))),
-  EARTH(Component.text("⛏").color(TextColor.fromCSSHexString("#8B4513"))),
-  AIR(Component.text("☁").color(NamedTextColor.WHITE)),
-  LIGHTNING(Component.text("⚡").color(NamedTextColor.GOLD)),
-  VOID(Component.text("✹").color(NamedTextColor.DARK_PURPLE))
+enum class Elements(val color: TextColor, val comp: Component) {
+  WATER(NamedTextColor.DARK_AQUA, Component.text("\uD83C\uDF0A").color(NamedTextColor.DARK_AQUA)),
+  FIRE(TextColor.fromCSSHexString("#FFA500")!!, Component.text("\uD83D\uDD25").color(TextColor.fromCSSHexString("#FFA500"))),
+  EARTH(TextColor.fromCSSHexString("#8B4513")!!, Component.text("⛏").color(TextColor.fromCSSHexString("#8B4513"))),
+  AIR(NamedTextColor.WHITE, Component.text("☁").color(NamedTextColor.WHITE)),
+  LIGHTNING(NamedTextColor.GOLD, Component.text("⚡").color(NamedTextColor.GOLD)),
+  VOID(NamedTextColor.DARK_PURPLE, Component.text("✹").color(NamedTextColor.DARK_PURPLE))
 }

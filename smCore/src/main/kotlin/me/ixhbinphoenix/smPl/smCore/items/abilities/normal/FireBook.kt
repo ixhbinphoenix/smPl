@@ -1,8 +1,12 @@
 package me.ixhbinphoenix.smPl.smCore.items.abilities.normal
 
 import me.ixhbinphoenix.smPl.smCore.entities.EntityHandler
+import me.ixhbinphoenix.smPl.smCore.items.Elements
+import me.ixhbinphoenix.smPl.smCore.items.abilities.AbilityDescription
 import me.ixhbinphoenix.smPl.smCore.items.abilities.ProjectileAbilityHandler
 import me.ixhbinphoenix.smPl.smCore.player.PlayerHandler
+import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.format.NamedTextColor
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
 import org.bukkit.Particle
@@ -15,6 +19,17 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.persistence.PersistentDataType
 
 class FireBook : ProjectileAbilityHandler() {
+  override val primaryDescription: AbilityDescription = AbilityDescription(
+    "Bikeshedding fireball",
+    arrayListOf(
+      Component.text("Shoots a fireball infused with the").color(NamedTextColor.GRAY),
+      Component.text("un-ability of naming things dealing ").color(NamedTextColor.GRAY),
+      Component.text("100% ").color(NamedTextColor.RED).append(Elements.FIRE.comp).append(Component.text(" damage.").color(NamedTextColor.GRAY))
+    ),
+    0
+  )
+
+  override val secondaryDescription: AbilityDescription? = null
 
   override fun onPrimary(player: Player): Boolean {
     val handler = PlayerHandler(player)

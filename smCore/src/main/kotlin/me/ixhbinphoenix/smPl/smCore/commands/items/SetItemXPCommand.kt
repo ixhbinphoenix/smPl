@@ -8,7 +8,7 @@ import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 
-class setItemXPCommand : BaseCommand {
+class SetItemXPCommand : BaseCommand {
   override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
     if (sender is Player) {
       if (args.isNotEmpty()) {

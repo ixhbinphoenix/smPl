@@ -8,7 +8,7 @@ import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import org.bukkit.persistence.PersistentDataType
 
-class togglepingCommand : BaseCommand {
+class TogglePingCommand : BaseCommand {
   override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
     if (sender is Player) {
       val pingtoggle = sender.persistentDataContainer.getOrDefault(NamespacedKey.fromString("smchat:ping.toggle.str")!!, PersistentDataType.STRING, "true")

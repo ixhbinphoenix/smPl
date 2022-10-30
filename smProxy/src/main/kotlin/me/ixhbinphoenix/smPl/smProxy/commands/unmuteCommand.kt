@@ -13,6 +13,7 @@ import java.util.function.Supplier
 class unmuteCommand : BaseCommand {
   private val instance = getInstance()
 
+  // unmute <username | muteID>
   override fun execute(invocation: SimpleCommand.Invocation?) {
     if (invocation is SimpleCommand.Invocation) {
       val source = invocation.source()

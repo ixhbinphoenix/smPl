@@ -13,7 +13,7 @@ import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import org.bukkit.inventory.meta.LeatherArmorMeta
 
-class giveItemCommand : BaseCommand {
+class GiveItemCommand : BaseCommand {
   private val itemUtils = ItemUtils()
   private val setHelper = SetHelper()
 

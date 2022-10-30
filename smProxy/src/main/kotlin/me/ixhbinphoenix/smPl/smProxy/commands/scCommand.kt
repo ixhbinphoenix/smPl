@@ -45,7 +45,7 @@ class scCommand : BaseCommand {
   override fun hasPermission(invocation: SimpleCommand.Invocation?): Boolean {
     return if (invocation is SimpleCommand.Invocation) {
       // Normally, this should be handled by the fulfillsRequirement check, but since staffchat can be used by the console, we can't perform this check
-      invocation.source().hasPermission("smproxy.staffchat")
+      invocation.source().hasPermission("smproxy.chat.staff")
     } else {
       false
     }

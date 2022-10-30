@@ -10,7 +10,7 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.ItemMeta
 import org.bukkit.persistence.PersistentDataType
 
-class metaCommand : BaseCommand {
+class MetaCommand : BaseCommand {
   override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
     if (sender is Player) {
       val item = sender.inventory.getItem(sender.inventory.heldItemSlot)

@@ -2,13 +2,13 @@ package me.ixhbinphoenix.smPl.smCore
 
 import me.ixhbinphoenix.smPl.smCore.commands.*
 import me.ixhbinphoenix.smPl.smCore.commands.entities.SpawnEntityCommand
-import me.ixhbinphoenix.smPl.smCore.commands.items.giveItemCommand
-import me.ixhbinphoenix.smPl.smCore.commands.items.giveResourceCommand
-import me.ixhbinphoenix.smPl.smCore.commands.items.metaCommand
-import me.ixhbinphoenix.smPl.smCore.commands.items.setItemXPCommand
-import me.ixhbinphoenix.smPl.smCore.commands.stats.delstatCommand
-import me.ixhbinphoenix.smPl.smCore.commands.stats.pstatsCommand
-import me.ixhbinphoenix.smPl.smCore.commands.stats.setstatCommand
+import me.ixhbinphoenix.smPl.smCore.commands.items.GiveItemCommand
+import me.ixhbinphoenix.smPl.smCore.commands.items.GiveResourceCommand
+import me.ixhbinphoenix.smPl.smCore.commands.items.MetaCommand
+import me.ixhbinphoenix.smPl.smCore.commands.items.SetItemXPCommand
+import me.ixhbinphoenix.smPl.smCore.commands.stats.DelstatCommand
+import me.ixhbinphoenix.smPl.smCore.commands.stats.PstatsCommand
+import me.ixhbinphoenix.smPl.smCore.commands.stats.SetStatCommand
 import me.ixhbinphoenix.smPl.smCore.events.Events
 import me.ixhbinphoenix.smPl.smCore.db.EquipmentUtils
 import me.ixhbinphoenix.smPl.smCore.db.ResourceUtils
@@ -37,14 +37,14 @@ class Main : JavaPlugin() {
 
   override fun onEnable() {
     val commands = hashMapOf(
-      "pstats" to pstatsCommand(),
-      "setstat" to setstatCommand(),
-      "delstat" to delstatCommand(),
+      "pstats" to PstatsCommand(),
+      "setstat" to SetStatCommand(),
+      "delstat" to DelstatCommand(),
       "spawnentity" to SpawnEntityCommand(),
-      "giveitem" to giveItemCommand(),
-      "giveresource" to giveResourceCommand(),
-      "meta" to metaCommand(),
-      "setitemxp" to setItemXPCommand()
+      "giveitem" to GiveItemCommand(),
+      "giveresource" to GiveResourceCommand(),
+      "meta" to MetaCommand(),
+      "setitemxp" to SetItemXPCommand()
     )
     for (cmd in commands) {
       getCommand(cmd.key)?.setExecutor(cmd.value)

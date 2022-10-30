@@ -10,7 +10,7 @@ import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 
-class giveResourceCommand : BaseCommand {
+class GiveResourceCommand : BaseCommand {
   private val itemUtils = ItemUtils()
   private val resourceUtils = ResourceUtils()
 
